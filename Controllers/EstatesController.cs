@@ -2,11 +2,13 @@ using EstateManager.Entities;
 using EstateManager.Models;
 using EstateManager.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EstateManager.Controllers;
 
 [ApiController]
 [Route("[controller]")]
+[Authorize]
 public class EstatesController : ControllerBase
 {
     private readonly ILogger<EstatesController> _logger;

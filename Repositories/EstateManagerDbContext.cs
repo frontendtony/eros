@@ -1,9 +1,12 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+
 namespace EstateManager.Repositories
 {
     using Microsoft.EntityFrameworkCore;
     using EstateManager.Entities;
 
-    public class EstateManagerDbContext : DbContext
+    public class EstateManagerDbContext : IdentityUserContext<IdentityUser>
     {
         public EstateManagerDbContext(DbContextOptions<EstateManagerDbContext> options) : base(options)
         {
