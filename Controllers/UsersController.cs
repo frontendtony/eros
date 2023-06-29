@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using EstateManager.Models;
+using EstateManager.Services;
 
 namespace EstateManager.Controllers;
 
@@ -10,11 +11,13 @@ public class UsersController : ControllerBase
 {
     private readonly ILogger<UsersController> _logger;
     private readonly UserManager<IdentityUser> _userManager;
+    private readonly JwtService _jwtService;
 
-    public UsersController(ILogger<UsersController> logger, UserManager<IdentityUser> userManager)
+    public UsersController(ILogger<UsersController> logger, UserManager<IdentityUser> userManager, JwtService jwtService)
     {
         _logger = logger;
         _userManager = userManager;
+        _jwtService = jwtService;
     }
 
     [HttpPost(Name = "CreateUser")]
