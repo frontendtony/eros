@@ -1,5 +1,6 @@
 using EstateManager.Models;
 using EstateManager.Services;
+using EstateManager.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,10 +11,10 @@ namespace EstateManager.Controllers;
 public class AuthController : ControllerBase
 {
     private readonly ILogger<AuthController> _logger;
-    private readonly UserManager<IdentityUser> _userManager;
+    private readonly UserManager<ApplicationUser> _userManager;
     private readonly JwtService _jwtService;
 
-    public AuthController(ILogger<AuthController> logger, UserManager<IdentityUser> userManager, JwtService jwtService)
+    public AuthController(ILogger<AuthController> logger, UserManager<ApplicationUser> userManager, JwtService jwtService)
     {
         _logger = logger;
         _userManager = userManager;

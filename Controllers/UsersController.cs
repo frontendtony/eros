@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using EstateManager.Models;
+using EstateManager.Entities;
 using EstateManager.Services;
 
 namespace EstateManager.Controllers;
@@ -10,10 +11,10 @@ namespace EstateManager.Controllers;
 public class UsersController : ControllerBase
 {
     private readonly ILogger<UsersController> _logger;
-    private readonly UserManager<IdentityUser> _userManager;
+    private readonly UserManager<ApplicationUser> _userManager;
     private readonly JwtService _jwtService;
 
-    public UsersController(ILogger<UsersController> logger, UserManager<IdentityUser> userManager, JwtService jwtService)
+    public UsersController(ILogger<UsersController> logger, UserManager<ApplicationUser> userManager, JwtService jwtService)
     {
         _logger = logger;
         _userManager = userManager;
@@ -21,15 +22,21 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost(Name = "CreateUser")]
-    public async Task<IActionResult> Create(UserModel user)
+    public async Task<IActionResult> Create(CreateUserRequestModel user)
     {
-        if (!ModelState.IsValid || user.Password == null)
+        if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
 
         var result = await _userManager.CreateAsync(
-            new IdentityUser() { Email = user.Email, UserName = user.Email },
+            new ApplicationUser()
+            {
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                UserName = user.Email
+            },
             user.Password
         );
 
@@ -38,13 +45,20 @@ public class UsersController : ControllerBase
             return BadRequest(result.Errors);
         }
 
-        user.Password = null;
-        return Created("", user);
+        var CreatedUser = new UserResponseModel(
+            user.Email,
+            user.FirstName,
+            user.LastName,
+            user.PhoneNumber,
+            user.Avatar
+        );
+
+        return Created("", CreatedUser);
     }
 
     [HttpGet("{emailOrId}", Name = "GetUser")]
-    [ProducesResponseType(typeof(UserModel), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(UserModel), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(UserResponseModel), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(UserResponseModel), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Get(string emailOrId)
     {
         var user = await _userManager.FindByEmailAsync(emailOrId);
@@ -58,10 +72,12 @@ public class UsersController : ControllerBase
             return NotFound();
         }
 
-        return Ok(new UserModel()
-        {
-            Email = user.Email,
-            UserName = user.UserName
-        });
+        return Ok(new UserResponseModel(
+            user.Email!,
+            user.FirstName,
+            user.LastName,
+            user.PhoneNumber,
+            user.Avatar
+        ));
     }
 }
