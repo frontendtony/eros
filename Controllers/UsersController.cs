@@ -3,11 +3,13 @@ using Microsoft.AspNetCore.Identity;
 using EstateManager.Models;
 using EstateManager.Entities;
 using EstateManager.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EstateManager.Controllers;
 
 [ApiController]
 [Route("[controller]")]
+[Authorize]
 public class UsersController : ControllerBase
 {
     private readonly ILogger<UsersController> _logger;
