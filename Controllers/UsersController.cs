@@ -24,36 +24,54 @@ public class UsersController : ControllerBase
     [HttpPost(Name = "CreateUser")]
     public async Task<IActionResult> Create(CreateUserRequestModel user)
     {
-        if (!ModelState.IsValid)
+        try
         {
-            return BadRequest(ModelState);
-        }
-
-        var result = await _userManager.CreateAsync(
-            new ApplicationUser()
+            if (!ModelState.IsValid)
             {
-                Email = user.Email,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                UserName = user.Email
-            },
-            user.Password
-        );
+                return BadRequest(ModelState);
+            }
 
-        if (!result.Succeeded)
-        {
-            return BadRequest(result.Errors);
+            var result = await _userManager.CreateAsync(
+                new ApplicationUser()
+                {
+                    Email = user.Email,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    UserName = user.Email
+                },
+                user.Password
+            );
+
+            if (!result.Succeeded)
+            {
+                return BadRequest(result.Errors);
+            }
+
+            // fetch the newly created user
+            var CreatedUser = await _userManager.FindByEmailAsync(user.Email);
+
+            if (CreatedUser == null)
+            {
+                return StatusCode(500);
+            }
+
+            var Response = new UserResponseModel()
+            {
+                Id = CreatedUser.Id,
+                Email = CreatedUser.Email!,
+                FirstName = CreatedUser.FirstName,
+                LastName = CreatedUser.LastName,
+                PhoneNumber = CreatedUser.PhoneNumber,
+                Avatar = CreatedUser.Avatar
+            };
+
+            return CreatedAtRoute("CreateUser", new { id = Response.Id }, CreatedUser);
         }
-
-        var CreatedUser = new UserResponseModel(
-            user.Email,
-            user.FirstName,
-            user.LastName,
-            user.PhoneNumber,
-            user.Avatar
-        );
-
-        return Created("", CreatedUser);
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error creating user");
+            return StatusCode(500);
+        }
     }
 
     [HttpGet("{emailOrId}", Name = "GetUser")]
@@ -61,23 +79,33 @@ public class UsersController : ControllerBase
     [ProducesResponseType(typeof(UserResponseModel), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Get(string emailOrId)
     {
-        var user = await _userManager.FindByEmailAsync(emailOrId);
-        if (user == null)
+        try
         {
-            user = await _userManager.FindByIdAsync(emailOrId);
-        }
+            var user = await _userManager.FindByEmailAsync(emailOrId);
+            if (user == null)
+            {
+                user = await _userManager.FindByIdAsync(emailOrId);
+            }
 
-        if (user == null)
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(new UserResponseModel()
+            {
+                Id = user.Id,
+                Email = user.Email!,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                PhoneNumber = user.PhoneNumber,
+                Avatar = user.Avatar
+            });
+        }
+        catch (Exception ex)
         {
-            return NotFound();
+            _logger.LogError(ex, "Error fetching user");
+            return StatusCode(StatusCodes.Status500InternalServerError, "Error fetching user");
         }
-
-        return Ok(new UserResponseModel(
-            user.Email!,
-            user.FirstName,
-            user.LastName,
-            user.PhoneNumber,
-            user.Avatar
-        ));
     }
 }

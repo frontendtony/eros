@@ -3,6 +3,7 @@ using EstateManager.Models;
 using EstateManager.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace EstateManager.Controllers;
 
@@ -21,130 +22,186 @@ public class EstatesController : ControllerBase
     }
 
     [HttpGet(Name = "GetEstates")]
-    public IEnumerable<EstateModel> Get()
+    [ProducesResponseType(typeof(List<EstateResponseModel>), StatusCodes.Status200OK)]
+    public IActionResult Get()
     {
-        return _dbContext.Estates.Select(e => new EstateModel(
-            e.Id,
-            e.Name,
-            e.Country,
-            e.StateProvince,
-            e.City,
-            e.Address,
-            e.ZipCode,
-            e.LatLng
+        var estates = _dbContext.Estates.ToList();
+        return Ok(estates.Select(estate => new EstateResponseModel()
+        {
+            Id = estate.Id.ToString(),
+            Name = estate.Name,
+            Country = estate.Country,
+            StateProvince = estate.StateProvince,
+            City = estate.City,
+            Address = estate.Address,
+            ZipCode = estate.ZipCode,
+            LatLng = estate.LatLng,
+            CreatedBy = estate.CreatedBy
+        }
         ));
     }
 
     [HttpGet("{id}", Name = "GetEstate")]
-    [ProducesResponseType(typeof(EstateModel), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(EstateModel), StatusCodes.Status404NotFound)]
-    public IActionResult Get(Guid id)
+    [ProducesResponseType(typeof(EstateResponseModel), StatusCodes.Status200OK)]
+    public async Task<IActionResult> Get(Guid id)
     {
-        var estate = _dbContext.Estates.Find(id);
+        var estate = await _dbContext.Estates.FindAsync(id);
         if (estate == null)
         {
             return NotFound();
         }
 
-        return Ok(new EstateModel(
-            estate.Id,
-            estate.Name,
-            estate.Country,
-            estate.StateProvince,
-            estate.City,
-            estate.Address,
-            estate.ZipCode,
-            estate.LatLng
-        ));
+        return Ok(new EstateResponseModel()
+        {
+            Id = estate.Id.ToString(),
+            Name = estate.Name,
+            Country = estate.Country,
+            StateProvince = estate.StateProvince,
+            City = estate.City,
+            Address = estate.Address,
+            ZipCode = estate.ZipCode,
+            LatLng = estate.LatLng,
+            CreatedBy = estate.CreatedBy
+        }
+        );
     }
 
     [HttpPost(Name = "CreateEstate")]
-    public ActionResult<EstateModel> Post(EstateModel model)
+    public IActionResult Post(CreateEstateModel request)
     {
-        var estate = new Estate
-        {
-            Id = Guid.NewGuid(),
-            Name = model.Name,
-            Country = model.Country,
-            StateProvince = model.StateProvince,
-            City = model.City,
-            Address = model.Address,
-            ZipCode = model.ZipCode,
-            LatLng = model.LatLng ?? string.Empty
-        };
-
         try
         {
-            _dbContext.Estates.Add(estate);
-            _dbContext.SaveChanges();
+            // get the current user id;
+            var currentUserId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (currentUserId == null)
+            {
+                return Unauthorized();
+            }
+
+            var estate = new Estate
+            {
+                Id = Guid.NewGuid(),
+                CreatedBy = Guid.Parse(currentUserId),
+                Name = request.Name,
+                Country = request.Country,
+                StateProvince = request.State,
+                City = request.City,
+                Address = request.Address,
+                ZipCode = request.ZipCode,
+                LatLng = request.LatLng ?? string.Empty
+            };
+
+            try
+            {
+                _dbContext.Estates.Add(estate);
+                _dbContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to create estate.");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Failed to create estate.");
+            }
+
+            return CreatedAtRoute("CreateEstate", new { id = estate.Id }, new EstateResponseModel()
+            {
+                Id = estate.Id.ToString(),
+                Name = estate.Name,
+                Country = estate.Country,
+                StateProvince = estate.StateProvince,
+                City = estate.City,
+                Address = estate.Address,
+                ZipCode = estate.ZipCode,
+                LatLng = estate.LatLng,
+                CreatedBy = estate.CreatedBy
+            }
+            );
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            _logger.LogError(ex, "Failed to create estate.");
             return StatusCode(StatusCodes.Status500InternalServerError, "Failed to create estate.");
         }
-
-        return CreatedAtRoute("GetEstate", new { id = estate.Id }, new EstateModel(
-            estate.Id,
-            estate.Name,
-            estate.Country,
-            estate.StateProvince,
-            estate.City,
-            estate.Address,
-            estate.ZipCode,
-            estate.LatLng
-        ));
     }
 
     [HttpPut("{id}", Name = "UpdateEstate")]
-    public ActionResult<EstateModel> Put(Guid id, EstateModel model)
+    public IActionResult Put(Guid id, UpdateEstateRequest request)
     {
-        var estate = _dbContext.Estates.Find(id);
-        if (estate == null)
+        try
         {
-            return NotFound();
+            // validate the request model
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var estate = _dbContext.Estates.Find(id);
+            if (estate == null)
+            {
+                return NotFound();
+            }
+
+            estate.Name = request.Name;
+            estate.Country = request.Country;
+            estate.StateProvince = request.StateProvince;
+            estate.City = request.City;
+            estate.Address = request.Address;
+            estate.ZipCode = request.ZipCode;
+            estate.LatLng = request.LatLng;
+
+            try
+            {
+                _dbContext.Estates.Update(estate);
+                _dbContext.SaveChanges();
+            }
+            catch (Exception)
+            {
+                _logger.LogError("Failed to save changes to estate.");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+
+            return Ok(new EstateResponseModel()
+            {
+                Id = estate.Id.ToString(),
+                Name = estate.Name,
+                Country = estate.Country,
+                StateProvince = estate.StateProvince,
+                City = estate.City,
+                Address = estate.Address,
+                ZipCode = estate.ZipCode,
+                LatLng = estate.LatLng,
+                CreatedBy = estate.CreatedBy
+            }
+            );
         }
-
-        estate.Name = model.Name;
-        estate.Country = model.Country;
-        estate.StateProvince = model.StateProvince;
-        estate.City = model.City;
-        estate.Address = model.Address;
-        estate.ZipCode = model.ZipCode;
-        estate.LatLng = model.LatLng;
-
-        _dbContext.SaveChanges();
-
-        return new EstateModel(
-            estate.Id,
-            estate.Name,
-            estate.Country,
-            estate.StateProvince,
-            estate.City,
-            estate.Address,
-            estate.ZipCode,
-            estate.LatLng
-        );
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to update estate.");
+            return StatusCode(StatusCodes.Status500InternalServerError, "Failed to update estate.");
+        }
     }
 
     [HttpDelete("{id}", Name = "DeleteEstate")]
     public IActionResult Delete(Guid id)
     {
-        var estate = _dbContext.Estates.Find(id);
-        if (estate == null)
-        {
-            return NotFound();
-        }
-
         try
         {
+            var estate = _dbContext.Estates.Find(id);
+            if (estate == null)
+            {
+                return NotFound();
+            }
+
+
             _dbContext.Estates.Remove(estate);
             _dbContext.SaveChanges();
+
+
+            return NoContent();
         }
         catch (Exception)
         {
+            _logger.LogError("Failed to delete estate.");
             return StatusCode(StatusCodes.Status500InternalServerError);
         }
-
-        return NoContent();
     }
 }

@@ -3,6 +3,7 @@ namespace EstateManager.Entities
     public class Estate
     {
         public Guid Id { get; set; }
+        public Guid CreatedBy { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Country { get; set; } = string.Empty;
         public string StateProvince { get; set; } = string.Empty;
