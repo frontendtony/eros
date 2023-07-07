@@ -46,10 +46,19 @@ public class EstateBuildingsController : ControllerBase
                 return BadRequest("Invalid estate id");
             }
 
-            var ExixtingEstateBuilding = await Task.Run(() => _dbContext.EstateBuildings.First(B => B.Name == estateBuilding.Name));
-            if (ExixtingEstateBuilding != null)
+            try
             {
-                return StatusCode(StatusCodes.Status409Conflict, $"A building with name '{estateBuilding.Name}' already exists");
+                var ExixtingEstateBuilding = await Task.Run(() => _dbContext.EstateBuildings.Where(B => B.Name == estateBuilding.Name).FirstOrDefault());
+
+                if (ExixtingEstateBuilding != null)
+                {
+                    return StatusCode(StatusCodes.Status409Conflict, $"A building with name '{estateBuilding.Name}' already exists");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error fetching existing estate building");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error verifying existing estate building");
             }
 
             // save the building to the estates_buildings table

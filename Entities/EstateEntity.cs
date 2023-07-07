@@ -11,5 +11,6 @@ namespace EstateManager.Entities
         public string Address { get; set; } = string.Empty;
         public string ZipCode { get; set; } = string.Empty;
         public string? LatLng { get; set; } = string.Empty;
+        public IEnumerable<EstateBuilding> Buildings { get; } = new List<EstateBuilding>();
     }
 }
