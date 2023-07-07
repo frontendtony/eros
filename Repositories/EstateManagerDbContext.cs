@@ -12,5 +12,6 @@ namespace EstateManager.Repositories
         }
 
         public DbSet<Estate> Estates { get; set; } = null!;
+        public DbSet<EstateBuilding> EstateBuildings { get; set; } = null!;
     }
 }
