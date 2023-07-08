@@ -8,4 +8,5 @@ public class UserResponseModel
     public string LastName { get; set; } = string.Empty;
     public string? PhoneNumber { get; set; } = string.Empty;
     public string? Avatar { get; set; } = string.Empty;
+    public string Token { get; set; } = null!;
 }

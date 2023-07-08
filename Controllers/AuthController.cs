@@ -77,6 +77,8 @@ public class AuthController : ControllerBase
                 return BadRequest(result.Errors);
             }
 
+            var Token = _jwtService.CreateToken(NewUser);
+
             var NewUserResponse = new UserResponseModel()
             {
                 Id = UserId,
@@ -84,6 +86,7 @@ public class AuthController : ControllerBase
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Avatar = user.Avatar,
+                Token = Token.Token,
             };
 
             return CreatedAtRoute("Signup", new { id = NewUser.Id }, NewUserResponse);
