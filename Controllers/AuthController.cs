@@ -21,7 +21,7 @@ public class AuthController : ControllerBase
         _jwtService = jwtService;
     }
 
-    [HttpPost("token", Name = "CreateBearerToken")]
+    [HttpPost("Token", Name = "CreateBearerToken")]
     public async Task<ActionResult<TokenResponse>> CreateBearerToken(TokenRequest request)
     {
         if (!ModelState.IsValid || request.Email == null || request.Password == null)
@@ -46,5 +46,52 @@ public class AuthController : ControllerBase
         var token = _jwtService.CreateToken(user);
 
         return Ok(token);
+    }
+
+    [HttpPost("Signup", Name = "Signup")]
+    public async Task<IActionResult> Create(SignupRequestModel user)
+    {
+        try
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var UserId = Guid.NewGuid().ToString();
+
+            var NewUser = new ApplicationUser()
+            {
+                Id = UserId,
+                Email = user.Email,
+                UserName = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Avatar = user.Avatar,
+            };
+
+            var result = await _userManager.CreateAsync(NewUser, user.Password);
+
+            if (!result.Succeeded)
+            {
+                return BadRequest(result.Errors);
+            }
+
+            var NewUserResponse = new UserResponseModel()
+            {
+                Id = UserId,
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Avatar = user.Avatar,
+            };
+
+            return CreatedAtRoute("Signup", new { id = NewUser.Id }, NewUserResponse);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error creating user");
+            return StatusCode(StatusCodes.Status500InternalServerError, "Error creating user account");
+        }
     }
 }
