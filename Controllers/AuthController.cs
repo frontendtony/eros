@@ -22,11 +22,11 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("token", Name = "CreateBearerToken")]
-    public async Task<ActionResult<AuthenticationResponse>> CreateBearerToken(AuthenticationRequest request)
+    public async Task<ActionResult<TokenResponse>> CreateBearerToken(TokenRequest request)
     {
-        if (!ModelState.IsValid)
+        if (!ModelState.IsValid || request.Email == null || request.Password == null)
         {
-            return BadRequest("Bad credentials");
+            return BadRequest("Invalid credentials");
         }
 
         var user = await _userManager.FindByEmailAsync(request.Email);

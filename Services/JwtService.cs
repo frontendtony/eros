@@ -18,7 +18,7 @@ public class JwtService
         _configuration = configuration;
     }
 
-    public AuthenticationResponse CreateToken(ApplicationUser user)
+    public TokenResponse CreateToken(ApplicationUser user)
     {
         var expiration = DateTime.UtcNow.AddMinutes(EXPIRATION_MINUTES);
 
@@ -30,7 +30,7 @@ public class JwtService
 
         var tokenHandler = new JwtSecurityTokenHandler();
 
-        return new AuthenticationResponse
+        return new TokenResponse
         {
             Token = tokenHandler.WriteToken(token),
             Expiration = expiration

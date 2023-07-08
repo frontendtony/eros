@@ -1,7 +1,7 @@
 namespace EstateManager.Models;
 
-public class AuthenticationResponse
+public class TokenResponse
 {
-    public string? Token { get; set; }
+    public string Token { get; set; } = String.Empty;
     public DateTime Expiration { get; set; }
 }
