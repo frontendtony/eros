@@ -26,19 +26,7 @@ public class EstatesController : ControllerBase
     public IActionResult GetEstates()
     {
         var estates = _dbContext.Estates.ToList();
-        return Ok(estates.Select(estate => new EstateResponseModel()
-        {
-            Id = estate.Id,
-            Name = estate.Name,
-            Country = estate.Country,
-            StateProvince = estate.StateProvince,
-            City = estate.City,
-            Address = estate.Address,
-            ZipCode = estate.ZipCode,
-            LatLng = estate.LatLng,
-            CreatedBy = estate.CreatedBy
-        }
-        ));
+        return Ok(estates);
     }
 
     [HttpGet("{id:guid}", Name = "GetEstate")]
@@ -52,19 +40,7 @@ public class EstatesController : ControllerBase
             return NotFound();
         }
 
-        return Ok(new EstateResponseModel()
-        {
-            Id = estate.Id,
-            Name = estate.Name,
-            Country = estate.Country,
-            StateProvince = estate.StateProvince,
-            City = estate.City,
-            Address = estate.Address,
-            ZipCode = estate.ZipCode,
-            LatLng = estate.LatLng,
-            CreatedBy = estate.CreatedBy
-        }
-        );
+        return Ok(estate);
     }
 
     [HttpPost(Name = "CreateEstate")]
@@ -82,28 +58,32 @@ public class EstatesController : ControllerBase
                 return Unauthorized();
             }
 
-            var existingEstate = _dbContext.Estates.Where(e => e.Name == request.Name);
-            if (existingEstate != null)
+            bool existingEstate = _dbContext.Estates.Any(e => e.Name == request.Name);
+            if (existingEstate)
             {
                 return StatusCode(StatusCodes.Status409Conflict, $"Estate with name {request.Name} already exists");
             }
 
-            var estate = new Estate
+            var CurrentTime = DateTime.UtcNow;
+
+            var NewEstate = new Estate
             {
                 Id = Guid.NewGuid(),
                 CreatedBy = Guid.Parse(currentUserId),
                 Name = request.Name,
                 Country = request.Country,
-                StateProvince = request.State,
+                State = request.State,
                 City = request.City,
                 Address = request.Address,
                 ZipCode = request.ZipCode,
-                LatLng = request.LatLng ?? string.Empty
+                LatLng = request.LatLng ?? string.Empty,
+                CreatedAt = CurrentTime,
+                UpdatedAt = CurrentTime,
             };
 
             try
             {
-                _dbContext.Estates.Add(estate);
+                _dbContext.Estates.Add(NewEstate);
                 _dbContext.SaveChanges();
             }
             catch (Exception ex)
@@ -112,19 +92,7 @@ public class EstatesController : ControllerBase
                 return StatusCode(StatusCodes.Status500InternalServerError, "Failed to create estate.");
             }
 
-            return CreatedAtRoute("CreateEstate", new { id = estate.Id }, new EstateResponseModel()
-            {
-                Id = estate.Id,
-                Name = estate.Name,
-                Country = estate.Country,
-                StateProvince = estate.StateProvince,
-                City = estate.City,
-                Address = estate.Address,
-                ZipCode = estate.ZipCode,
-                LatLng = estate.LatLng,
-                CreatedBy = estate.CreatedBy
-            }
-            );
+            return CreatedAtRoute("CreateEstate", new { id = NewEstate.Id }, NewEstate);
         }
         catch (Exception ex)
         {
@@ -155,11 +123,12 @@ public class EstatesController : ControllerBase
 
             estate.Name = request.Name;
             estate.Country = request.Country;
-            estate.StateProvince = request.StateProvince;
+            estate.State = request.State;
             estate.City = request.City;
             estate.Address = request.Address;
             estate.ZipCode = request.ZipCode;
             estate.LatLng = request.LatLng;
+            estate.UpdatedAt = DateTime.UtcNow;
 
             try
             {
@@ -172,19 +141,7 @@ public class EstatesController : ControllerBase
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
 
-            return Ok(new EstateResponseModel()
-            {
-                Id = estate.Id,
-                Name = estate.Name,
-                Country = estate.Country,
-                StateProvince = estate.StateProvince,
-                City = estate.City,
-                Address = estate.Address,
-                ZipCode = estate.ZipCode,
-                LatLng = estate.LatLng,
-                CreatedBy = estate.CreatedBy
-            }
-            );
+            return Ok(estate);
         }
         catch (Exception ex)
         {

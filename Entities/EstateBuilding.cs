@@ -8,15 +8,13 @@ public class EstateBuilding
 {
     [Required]
     public Guid Id { get; set; }
-
     [Required]
     public Guid EstateId { get; set; }
-
     [Required]
     public Guid CreatedBy { get; set; }
-
     [Required]
     public string Name { get; set; } = String.Empty;
-
     public string? Description { get; set; } = String.Empty;
+    public DateTime CreatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
 }

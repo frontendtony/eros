@@ -50,7 +50,9 @@ public class UsersController : ControllerBase
                 FirstName = User.FirstName,
                 LastName = User.LastName,
                 PhoneNumber = User.PhoneNumber,
-                Avatar = User.Avatar
+                Avatar = User.Avatar,
+                CreatedAt = User.CreatedAt,
+                UpdatedAt = User.UpdatedAt,
             });
         }
         catch (Exception ex)

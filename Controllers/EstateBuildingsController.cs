@@ -64,7 +64,8 @@ public class EstateBuildingsController : ControllerBase
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error verifying existing estate building");
             }
 
-            // save the building to the estates_buildings table
+            var CurrentTime = DateTime.UtcNow;
+
             var NewEstateBuilding = new EstateBuilding()
             {
                 Id = Guid.NewGuid(),
@@ -72,6 +73,8 @@ public class EstateBuildingsController : ControllerBase
                 CreatedBy = Guid.Parse(CurrentUserId),
                 Name = estateBuilding.Name,
                 Description = estateBuilding.Description ?? String.Empty,
+                CreatedAt = CurrentTime,
+                UpdatedAt = CurrentTime,
             };
 
             try

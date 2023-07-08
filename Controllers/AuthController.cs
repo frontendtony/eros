@@ -63,6 +63,7 @@ public class AuthController : ControllerBase
             }
 
             var UserId = Guid.NewGuid().ToString();
+            var CurrentTime = DateTime.UtcNow;
 
             var NewUser = new ApplicationUser()
             {
@@ -72,6 +73,7 @@ public class AuthController : ControllerBase
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Avatar = user.Avatar,
+                CreatedAt = CurrentTime,
             };
 
             var result = await _userManager.CreateAsync(NewUser, user.Password);
@@ -91,6 +93,8 @@ public class AuthController : ControllerBase
                 LastName = user.LastName,
                 Avatar = user.Avatar,
                 Token = Token.Token,
+                CreatedAt = NewUser.CreatedAt,
+                UpdatedAt = NewUser.CreatedAt,
             };
 
             return CreatedAtRoute("Signup", new { id = NewUser.Id }, NewUserResponse);
