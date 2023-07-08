@@ -4,7 +4,6 @@ using EstateManager.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
-using Microsoft.EntityFrameworkCore;
 
 namespace EstateManager.Controllers;
 
@@ -203,29 +202,6 @@ public class EstatesController : ControllerBase
         {
             _logger.LogError("Failed to delete estate.");
             return StatusCode(StatusCodes.Status500InternalServerError);
-        }
-    }
-
-    [HttpGet("{id}/buildings", Name = "GetEstateBuildings")]
-    public async Task<IActionResult> GetEstateBuildings(Guid id)
-    {
-        try
-        {
-            var estate = await Task.Run(() => _dbContext.Estates.Include(e => e.Buildings).FirstOrDefault(e => e.Id == id));
-
-            if (estate == null)
-            {
-                return NotFound();
-            }
-            else
-            {
-                return Ok(estate.Buildings);
-            }
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "An error occured when tryint to retrieve estate buildings");
-            return StatusCode(StatusCodes.Status500InternalServerError, "Could not fetch estate buildings");
         }
     }
 }

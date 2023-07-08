@@ -4,12 +4,13 @@ using EstateManager.Models;
 using EstateManager.Repositories;
 using System.Security.Claims;
 using EstateManager.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace EstateManager.Controllers;
 
 [ApiController]
 [Authorize]
-[Route("Estates/{estateId}/Buildings")]
+[Route("Estates/{Id}/Buildings")]
 public class EstateBuildingsController : ControllerBase
 {
     private readonly ILogger<EstateBuildingsController> _logger;
@@ -21,9 +22,8 @@ public class EstateBuildingsController : ControllerBase
         _dbContext = dbContext;
     }
 
-    // create an estate building
     [HttpPost(Name = "CreateEstateBuilding")]
-    public async Task<IActionResult> CreateEstateBuilding(Guid estateId, CreateEstateBuildingModel estateBuilding)
+    public async Task<IActionResult> CreateEstateBuilding(Guid Id, CreateEstateBuildingModel estateBuilding)
     {
         try
         {
@@ -40,7 +40,7 @@ public class EstateBuildingsController : ControllerBase
             }
 
             // retrieve the estate from the database
-            var Estate = await _dbContext.Estates.FindAsync(estateId);
+            var Estate = await _dbContext.Estates.FindAsync(Id);
             if (Estate == null)
             {
                 return BadRequest("Invalid estate id");
@@ -90,6 +90,29 @@ public class EstateBuildingsController : ControllerBase
         {
             _logger.LogError(ex, "Failed to create estate building");
             return StatusCode(StatusCodes.Status500InternalServerError, "Failed to create estate building");
+        }
+    }
+
+    [HttpGet(Name = "GetEstateBuildings")]
+    public async Task<IActionResult> GetEstateBuildings(Guid Id)
+    {
+        try
+        {
+            var estate = await Task.Run(() => _dbContext.Estates.Include(e => e.Buildings).FirstOrDefault(e => e.Id == Id));
+
+            if (estate == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok(estate.Buildings);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occured when tryint to retrieve estate buildings");
+            return StatusCode(StatusCodes.Status500InternalServerError, "Could not fetch estate buildings");
         }
     }
 }
