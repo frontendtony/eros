@@ -8,7 +8,7 @@ using System.Security.Claims;
 namespace EstateManager.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/estates")]
 [Authorize]
 public class EstatesController : ControllerBase
 {
@@ -23,12 +23,12 @@ public class EstatesController : ControllerBase
 
     [HttpGet(Name = "GetEstates")]
     [ProducesResponseType(typeof(List<EstateResponseModel>), StatusCodes.Status200OK)]
-    public IActionResult Get()
+    public IActionResult GetEstates()
     {
         var estates = _dbContext.Estates.ToList();
         return Ok(estates.Select(estate => new EstateResponseModel()
         {
-            Id = estate.Id.ToString(),
+            Id = estate.Id,
             Name = estate.Name,
             Country = estate.Country,
             StateProvince = estate.StateProvince,
@@ -41,8 +41,9 @@ public class EstatesController : ControllerBase
         ));
     }
 
-    [HttpGet("{id}", Name = "GetEstate")]
+    [HttpGet("{id:guid}", Name = "GetEstate")]
     [ProducesResponseType(typeof(EstateResponseModel), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Get(Guid id)
     {
         var estate = await _dbContext.Estates.FindAsync(id);
@@ -53,7 +54,7 @@ public class EstatesController : ControllerBase
 
         return Ok(new EstateResponseModel()
         {
-            Id = estate.Id.ToString(),
+            Id = estate.Id,
             Name = estate.Name,
             Country = estate.Country,
             StateProvince = estate.StateProvince,
@@ -67,7 +68,10 @@ public class EstatesController : ControllerBase
     }
 
     [HttpPost(Name = "CreateEstate")]
-    public IActionResult Post(CreateEstateModel request)
+    [ProducesResponseType(typeof(EstateResponseModel), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    public IActionResult CreateEstate([FromBody] CreateEstateModel request)
     {
         try
         {
@@ -76,6 +80,12 @@ public class EstatesController : ControllerBase
             if (currentUserId == null)
             {
                 return Unauthorized();
+            }
+
+            var existingEstate = _dbContext.Estates.Where(e => e.Name == request.Name);
+            if (existingEstate != null)
+            {
+                return StatusCode(StatusCodes.Status409Conflict, $"Estate with name {request.Name} already exists");
             }
 
             var estate = new Estate
@@ -104,7 +114,7 @@ public class EstatesController : ControllerBase
 
             return CreatedAtRoute("CreateEstate", new { id = estate.Id }, new EstateResponseModel()
             {
-                Id = estate.Id.ToString(),
+                Id = estate.Id,
                 Name = estate.Name,
                 Country = estate.Country,
                 StateProvince = estate.StateProvince,
@@ -124,7 +134,10 @@ public class EstatesController : ControllerBase
     }
 
     [HttpPut("{id}", Name = "UpdateEstate")]
-    public IActionResult Put(Guid id, UpdateEstateRequest request)
+    [ProducesResponseType(typeof(EstateResponseModel), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> UpdateEstate(Guid id, [FromBody] UpdateEstateRequest request)
     {
         try
         {
@@ -134,7 +147,7 @@ public class EstatesController : ControllerBase
                 return BadRequest(ModelState);
             }
 
-            var estate = _dbContext.Estates.Find(id);
+            var estate = await _dbContext.Estates.FindAsync(id);
             if (estate == null)
             {
                 return NotFound();
@@ -161,7 +174,7 @@ public class EstatesController : ControllerBase
 
             return Ok(new EstateResponseModel()
             {
-                Id = estate.Id.ToString(),
+                Id = estate.Id,
                 Name = estate.Name,
                 Country = estate.Country,
                 StateProvince = estate.StateProvince,
@@ -181,7 +194,9 @@ public class EstatesController : ControllerBase
     }
 
     [HttpDelete("{id}", Name = "DeleteEstate")]
-    public IActionResult Delete(Guid id)
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public IActionResult DeleteEstate(Guid id)
     {
         try
         {

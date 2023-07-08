@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace EstateManager.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/auth")]
 public class AuthController : ControllerBase
 {
     private readonly ILogger<AuthController> _logger;
@@ -21,8 +21,10 @@ public class AuthController : ControllerBase
         _jwtService = jwtService;
     }
 
-    [HttpPost("Token", Name = "CreateBearerToken")]
-    public async Task<ActionResult<TokenResponse>> CreateBearerToken(TokenRequest request)
+    [HttpPost("token", Name = "CreateBearerToken")]
+    [ProducesResponseType(typeof(TokenResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> CreateBearerToken([FromBody] TokenRequest request)
     {
         if (!ModelState.IsValid || request.Email == null || request.Password == null)
         {
@@ -48,8 +50,10 @@ public class AuthController : ControllerBase
         return Ok(token);
     }
 
-    [HttpPost("Signup", Name = "Signup")]
-    public async Task<IActionResult> Create(SignupRequestModel user)
+    [HttpPost("signup", Name = "Signup")]
+    [ProducesResponseType(typeof(UserResponseModel), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> Create([FromBody] SignupRequestModel user)
     {
         try
         {

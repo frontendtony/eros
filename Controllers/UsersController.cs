@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace EstateManager.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/users")]
 [Authorize]
 public class UsersController : ControllerBase
 {
@@ -23,8 +23,9 @@ public class UsersController : ControllerBase
         _jwtService = jwtService;
     }
 
-    [HttpGet("{id}", Name = "GetUser")]
+    [HttpGet("{id:guid}", Name = "GetUser")]
     [ProducesResponseType(typeof(UserResponseModel), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Get(string id)
     {
         try

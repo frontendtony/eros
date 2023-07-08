@@ -10,7 +10,7 @@ namespace EstateManager.Controllers;
 
 [ApiController]
 [Authorize]
-[Route("Estates/{Id}/Buildings")]
+[Route("/api/estates/{id:guid}/buildings")]
 public class EstateBuildingsController : ControllerBase
 {
     private readonly ILogger<EstateBuildingsController> _logger;
@@ -23,7 +23,10 @@ public class EstateBuildingsController : ControllerBase
     }
 
     [HttpPost(Name = "CreateEstateBuilding")]
-    public async Task<IActionResult> CreateEstateBuilding(Guid Id, CreateEstateBuildingModel estateBuilding)
+    [ProducesResponseType(typeof(EstateBuildingResponseModel), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> CreateEstateBuilding(Guid id, [FromBody] CreateEstateBuildingModel estateBuilding)
     {
         try
         {
@@ -40,7 +43,7 @@ public class EstateBuildingsController : ControllerBase
             }
 
             // retrieve the estate from the database
-            var Estate = await _dbContext.Estates.FindAsync(Id);
+            var Estate = await _dbContext.Estates.FindAsync(id);
             if (Estate == null)
             {
                 return BadRequest("Invalid estate id");
@@ -94,11 +97,13 @@ public class EstateBuildingsController : ControllerBase
     }
 
     [HttpGet(Name = "GetEstateBuildings")]
-    public async Task<IActionResult> GetEstateBuildings(Guid Id)
+    [ProducesResponseType(typeof(List<EstateBuildingResponseModel>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetEstateBuildings(Guid id)
     {
         try
         {
-            var estate = await Task.Run(() => _dbContext.Estates.Include(e => e.Buildings).FirstOrDefault(e => e.Id == Id));
+            var estate = await Task.Run(() => _dbContext.Estates.Include(e => e.Buildings).FirstOrDefault(e => e.Id == id));
 
             if (estate == null)
             {

@@ -2,7 +2,7 @@ namespace EstateManager.Models;
 
 public class EstateResponseModel
 {
-    public string? Id { get; set; }
+    public Guid Id { get; set; }
     public string Name { get; set; } = string.Empty;
     public string Country { get; set; } = string.Empty;
     public string StateProvince { get; set; } = string.Empty;
