@@ -25,7 +25,7 @@ public class EstateBuildingsController : ControllerBase
     [HttpPost(Name = "CreateEstateBuilding")]
     [ProducesResponseType(typeof(EstateBuildingResponseModel), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> CreateEstateBuilding(Guid id, [FromBody] CreateEstateBuildingModel estateBuilding)
     {
         try
@@ -46,7 +46,7 @@ public class EstateBuildingsController : ControllerBase
             var Estate = await _dbContext.Estates.FindAsync(id);
             if (Estate == null)
             {
-                return BadRequest("Invalid estate id");
+                return NotFound("Estate not found");
             }
 
             try

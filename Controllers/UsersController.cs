@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using EstateManager.Models;
 using EstateManager.Entities;
-using EstateManager.Services;
 using Microsoft.AspNetCore.Authorization;
 
 namespace EstateManager.Controllers;
@@ -14,13 +13,11 @@ public class UsersController : ControllerBase
 {
     private readonly ILogger<UsersController> _logger;
     private readonly UserManager<ApplicationUser> _userManager;
-    private readonly JwtService _jwtService;
 
-    public UsersController(ILogger<UsersController> logger, UserManager<ApplicationUser> userManager, JwtService jwtService)
+    public UsersController(ILogger<UsersController> logger, UserManager<ApplicationUser> userManager)
     {
         _logger = logger;
         _userManager = userManager;
-        _jwtService = jwtService;
     }
 
     [HttpGet("{id:guid}", Name = "GetUser")]
@@ -30,15 +27,8 @@ public class UsersController : ControllerBase
     {
         try
         {
-            // find by id
-            var User = await _userManager.FindByIdAsync(id);
-            if (User == null)
-            {
-                // try finding by email
-                User = await _userManager.FindByEmailAsync(id);
-            }
-
-            if (User == null)
+            var User = await _userManager.FindByIdAsync(id) ?? await _userManager.FindByEmailAsync(id);
+            if (User is null)
             {
                 return NotFound();
             }
