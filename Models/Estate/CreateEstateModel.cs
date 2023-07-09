@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using EstateManager.Constants;
 
 namespace EstateManager.Models
 {
@@ -7,7 +8,7 @@ namespace EstateManager.Models
         [Required]
         public string Name { get; set; } = string.Empty;
         [Required]
-        public string Country { get; set; } = Constants.DefaultCountry;
+        public string Country { get; set; } = GlobalConstants.DefaultCountry;
         [Required]
         public string State { get; set; } = string.Empty;
         [Required]
