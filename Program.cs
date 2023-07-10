@@ -6,6 +6,7 @@ using System.Text;
 using EstateManager.Services;
 using Microsoft.OpenApi.Models;
 using EstateManager.Entities;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -69,6 +70,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("esm.frontendtony.com")) // Replace with your secret key
         };
     });
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminOnly", policy => policy.RequireClaim(ClaimTypes.Role, "True"));
+});
 
 var app = builder.Build();
 
