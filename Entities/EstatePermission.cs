@@ -1,6 +1,6 @@
 namespace EstateManager.Entities;
 
-public class Permission
+public class EstatePermission
 {
     public Guid Id { get; set; }
     public string Name { get; set; } = String.Empty;
