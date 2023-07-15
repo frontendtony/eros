@@ -3,6 +3,7 @@ using System;
 using EstateManager.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EstateManager.Migrations
 {
     [DbContext(typeof(EstateManagerDbContext))]
-    partial class EstateManagerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230711003107_UpdateRoleAndPermissionNavigation2")]
+    partial class UpdateRoleAndPermissionNavigation2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -209,37 +212,37 @@ namespace EstateManager.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("38e64366-c467-4c73-a19c-8766f0040f23"),
+                            Id = new Guid("33281eda-3d5b-4b11-9c8e-3e865693bfec"),
                             Description = "Permission to create an estate",
                             Name = "CreateEstate"
                         },
                         new
                         {
-                            Id = new Guid("402fb180-e064-4ff8-ae36-a84a3f5bedfa"),
+                            Id = new Guid("5cb2022d-15ad-457e-85bd-cd6c1aa7bf6f"),
                             Description = "Permission to update an estate",
                             Name = "UpdateEstate"
                         },
                         new
                         {
-                            Id = new Guid("6649b456-89d7-49b4-bdbe-d77c1111ecbc"),
+                            Id = new Guid("53779268-773e-4649-8fa8-a3545f9116e9"),
                             Description = "Permission to delete an estate",
                             Name = "DeleteEstate"
                         },
                         new
                         {
-                            Id = new Guid("4d457e8c-8634-4d3e-ae90-f4c7a026e1a6"),
+                            Id = new Guid("aee36fd2-93a7-4eab-afa8-6baae529349c"),
                             Description = "Permission to create an estate building",
                             Name = "CreateEstateBuilding"
                         },
                         new
                         {
-                            Id = new Guid("070e110c-bd98-411f-b291-e3f87271451a"),
+                            Id = new Guid("2b328be2-1b62-4fdb-8229-355bb5be69fa"),
                             Description = "Permission to update an estate building",
                             Name = "UpdateEstateBuilding"
                         },
                         new
                         {
-                            Id = new Guid("6f0d50d8-f3e9-408c-be0c-4274cf64086a"),
+                            Id = new Guid("a79d58ee-6d39-459b-9d2a-4dbb7fa87810"),
                             Description = "Permission to delete an estate building",
                             Name = "DeleteEstateBuilding"
                         });
@@ -283,8 +286,6 @@ namespace EstateManager.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("EstatePermissionId");
 
                     b.HasIndex("EstateRoleId");
 
@@ -368,19 +369,11 @@ namespace EstateManager.Migrations
 
             modelBuilder.Entity("EstateManager.Entities.EstateRolePermission", b =>
                 {
-                    b.HasOne("EstateManager.Entities.EstatePermission", "EstatePermission")
-                        .WithMany()
-                        .HasForeignKey("EstatePermissionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("EstateManager.Entities.EstateRole", null)
                         .WithMany("Permissions")
                         .HasForeignKey("EstateRoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("EstatePermission");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>

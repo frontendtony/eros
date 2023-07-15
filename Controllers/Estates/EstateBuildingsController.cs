@@ -51,9 +51,9 @@ public class EstateBuildingsController : ControllerBase
 
             try
             {
-                var ExixtingEstateBuilding = await Task.Run(() => _dbContext.EstateBuildings.Where(B => B.Name == estateBuilding.Name).FirstOrDefault());
+                var AlreadyExists = await Task.Run(() => _dbContext.EstateBuildings.Any(B => B.Name == estateBuilding.Name));
 
-                if (ExixtingEstateBuilding != null)
+                if (AlreadyExists)
                 {
                     return StatusCode(StatusCodes.Status409Conflict, $"A building with name '{estateBuilding.Name}' already exists");
                 }

@@ -3,6 +3,7 @@ using System;
 using EstateManager.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EstateManager.Migrations
 {
     [DbContext(typeof(EstateManagerDbContext))]
-    partial class EstateManagerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230710233226_EnableRoleAndPermissionNavigation")]
+    partial class EnableRoleAndPermissionNavigation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -209,37 +212,37 @@ namespace EstateManager.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("38e64366-c467-4c73-a19c-8766f0040f23"),
+                            Id = new Guid("5aefed4f-f17f-47b4-89fc-d62275aab1e7"),
                             Description = "Permission to create an estate",
                             Name = "CreateEstate"
                         },
                         new
                         {
-                            Id = new Guid("402fb180-e064-4ff8-ae36-a84a3f5bedfa"),
+                            Id = new Guid("5e9dfe37-8b83-4d14-9087-65c4d02aeed3"),
                             Description = "Permission to update an estate",
                             Name = "UpdateEstate"
                         },
                         new
                         {
-                            Id = new Guid("6649b456-89d7-49b4-bdbe-d77c1111ecbc"),
+                            Id = new Guid("5c089e93-b47f-4554-b87d-c99a18f52ab1"),
                             Description = "Permission to delete an estate",
                             Name = "DeleteEstate"
                         },
                         new
                         {
-                            Id = new Guid("4d457e8c-8634-4d3e-ae90-f4c7a026e1a6"),
+                            Id = new Guid("f434477d-e806-465b-8f6e-db578e9fa827"),
                             Description = "Permission to create an estate building",
                             Name = "CreateEstateBuilding"
                         },
                         new
                         {
-                            Id = new Guid("070e110c-bd98-411f-b291-e3f87271451a"),
+                            Id = new Guid("c773fd51-5d5c-4783-a845-b3dd265f25f7"),
                             Description = "Permission to update an estate building",
                             Name = "UpdateEstateBuilding"
                         },
                         new
                         {
-                            Id = new Guid("6f0d50d8-f3e9-408c-be0c-4274cf64086a"),
+                            Id = new Guid("df0a5e8e-6a0f-4575-894f-678640f9b394"),
                             Description = "Permission to delete an estate building",
                             Name = "DeleteEstateBuilding"
                         });
@@ -251,9 +254,6 @@ namespace EstateManager.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text");
@@ -261,9 +261,6 @@ namespace EstateManager.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
@@ -276,11 +273,17 @@ namespace EstateManager.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<Guid>("EstatePermissionId")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("EstateRoleId")
                         .HasColumnType("uuid");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
@@ -369,18 +372,20 @@ namespace EstateManager.Migrations
             modelBuilder.Entity("EstateManager.Entities.EstateRolePermission", b =>
                 {
                     b.HasOne("EstateManager.Entities.EstatePermission", "EstatePermission")
-                        .WithMany()
+                        .WithMany("Roles")
                         .HasForeignKey("EstatePermissionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EstateManager.Entities.EstateRole", null)
+                    b.HasOne("EstateManager.Entities.EstateRole", "EstateRole")
                         .WithMany("Permissions")
                         .HasForeignKey("EstateRoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("EstatePermission");
+
+                    b.Navigation("EstateRole");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -413,6 +418,11 @@ namespace EstateManager.Migrations
             modelBuilder.Entity("EstateManager.Entities.Estate", b =>
                 {
                     b.Navigation("Buildings");
+                });
+
+            modelBuilder.Entity("EstateManager.Entities.EstatePermission", b =>
+                {
+                    b.Navigation("Roles");
                 });
 
             modelBuilder.Entity("EstateManager.Entities.EstateRole", b =>
