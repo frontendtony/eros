@@ -21,15 +21,6 @@ namespace EstateManager.Repositories
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
-            modelBuilder.Entity<EstatePermission>().HasData(
-                new EstatePermission { Id = Guid.NewGuid(), Name = PermissionConstants.CreateEstate, Description = "Permission to create an estate" },
-                new EstatePermission { Id = Guid.NewGuid(), Name = PermissionConstants.UpdateEstate, Description = "Permission to update an estate" },
-                new EstatePermission { Id = Guid.NewGuid(), Name = PermissionConstants.DeleteEstate, Description = "Permission to delete an estate" },
-                new EstatePermission { Id = Guid.NewGuid(), Name = PermissionConstants.CreateEstateBuilding, Description = "Permission to create an estate building" },
-                new EstatePermission { Id = Guid.NewGuid(), Name = PermissionConstants.UpdateEstateBuilding, Description = "Permission to update an estate building" },
-                new EstatePermission { Id = Guid.NewGuid(), Name = PermissionConstants.DeleteEstateBuilding, Description = "Permission to delete an estate building" }
-            );
         }
     }
 }
