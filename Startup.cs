@@ -1,9 +1,8 @@
-using EstateManager.Repositories;
 using Microsoft.EntityFrameworkCore;
 using EstateManager.Services;
 using EstateManager.Interfaces;
 using Application.Extensions;
-using FluentValidation.AspNetCore;
+using EstateManager.DbContexts;
 
 public class Startup
 {

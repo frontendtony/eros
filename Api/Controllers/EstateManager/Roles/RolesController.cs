@@ -4,6 +4,7 @@ using EstateManager.Models;
 using EstateManager.Entities;
 using EstateManager.Repositories;
 using Api.ResponseModels;
+using EstateManager.DbContexts;
 
 namespace EstateManager.Controllers;
 

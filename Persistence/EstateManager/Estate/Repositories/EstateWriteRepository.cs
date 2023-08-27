@@ -1,10 +1,12 @@
+using EstateManager.DbContexts;
 using EstateManager.Entities;
 using EstateManager.Interfaces;
-using EstateManager.Repositories;
+
+namespace EstateManager.Repositories;
 
 public class EstateWriteRepository : IEstateWriteRepository
 {
-    private EstateManagerDbContext _dbContext;
+    private readonly EstateManagerDbContext _dbContext;
 
     public EstateWriteRepository(EstateManagerDbContext dbContext)
     {

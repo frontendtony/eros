@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using EstateManager.Validators;
+using EstateManager.DbContexts;
 
 public static class ServiceExtensions
 {
