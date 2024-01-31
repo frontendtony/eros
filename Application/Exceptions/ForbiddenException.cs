@@ -1,5 +1,7 @@
 using System.Globalization;
 
+namespace Eros.Application.Exceptions;
+
 public class ForbiddenException : Exception
 {
     public ForbiddenException(string message) : base(message)

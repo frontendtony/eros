@@ -3,6 +3,7 @@ using EstateManager.Services;
 using EstateManager.Interfaces;
 using Application.Extensions;
 using EstateManager.DbContexts;
+using Eros.Persistence.Repositories;
 
 public class Startup
 {
@@ -22,6 +23,7 @@ public class Startup
         services.AddAuthorizationService();
         services.AddValidations();
 
+        services.AddPersistenceServices(Configuration);
         services.AddDbContext<EstateManagerDbContext>(options => options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
         services.AddTransient<ITokenService, TokenService>();

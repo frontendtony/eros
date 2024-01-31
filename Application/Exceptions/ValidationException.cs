@@ -1,4 +1,4 @@
-namespace Application.Exceptions;
+namespace Eros.Application.Exceptions;
 
 public class CustomValidationException : Exception
 {

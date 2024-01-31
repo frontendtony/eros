@@ -1,6 +1,6 @@
 using System.Globalization;
 
-namespace Application.Exceptions;
+namespace Eros.Application.Exceptions;
 
 public class DatabaseException : Exception
 {
