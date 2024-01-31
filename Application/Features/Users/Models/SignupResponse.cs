@@ -1,4 +1,4 @@
-namespace Application.Features.Users.Models;
+namespace Eros.Application.Features.Users.Models;
 
 public class SignupCommandResponse
 {

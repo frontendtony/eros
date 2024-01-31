@@ -2,7 +2,7 @@ using Eros.Application.Services;
 using Eros.Domain.Aggregates.Users;
 using Eros.Application.Features.Users.Commands;
 using FluentValidation;
-using Application.Features.Users.Models;
+using Eros.Application.Features.Users.Models;
 using Eros.Application.Exceptions;
 
 namespace Eros.Application.Features.Users.CommandHandlers;

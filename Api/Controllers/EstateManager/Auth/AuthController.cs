@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-using EstateManager.Commands;
 using Api.ResponseModels;
-using EstateManager.Handlers.CommandHandlers;
+using Eros.Application.Features.Users.CommandHandlers;
+using Eros.Application.Features.Users.Commands;
 
-namespace EstateManager.Controllers;
+namespace Eros.Api.Controllers;
 
 [ApiController]
 [Route("api/auth")]
@@ -26,7 +26,15 @@ public class AuthController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateBearerToken([FromBody] LoginCommand request)
     {
-        return Ok(await _loginCommandHandler.Handle(request));
+        var loginCommandResponse = await _loginCommandHandler.Handle(request);
+
+        return Ok(
+            new SingleResponseModel<string>()
+            {
+                Data = loginCommandResponse.Token,
+                Message = "Token created successfully"
+            }
+        );
     }
 
     [HttpPost("signup", Name = "Signup")]
@@ -34,6 +42,14 @@ public class AuthController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Signup([FromBody] SignupCommand request)
     {
-        return Ok(await _signupCommandHandler.Handle(request));
+        var signupCommandResponse = await _signupCommandHandler.Handle(request);
+
+        return Ok(
+            new SingleResponseModel<Application.Features.Users.Models.SignupCommandResponse>()
+            {
+                Data = signupCommandResponse,
+                Message = "User created successfully"
+            }
+        );
     }
 }

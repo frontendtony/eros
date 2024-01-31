@@ -1,10 +1,11 @@
-using Api.ResponseModels;
-using Eros.Application.Exceptions;
-using EstateManager.Commands;
-using EstateManager.Interfaces;
 using FluentValidation;
+using Eros.Application.Features.Users.Commands;
+using Eros.Application.Exceptions;
+using Eros.Domain.Aggregates.Users;
+using Eros.Application.Services;
+using Application.Features.Users.Models;
 
-namespace EstateManager.Handlers.CommandHandlers;
+namespace Eros.Application.Features.Users.CommandHandlers;
 
 public class LoginCommandHandler
 {
@@ -23,7 +24,7 @@ public class LoginCommandHandler
         _validator = validator;
     }
 
-    public async Task<SingleResponseModel<string>> Handle(LoginCommand request)
+    public async Task<LoginResponse> Handle(LoginCommand request)
     {
         var validationResult = await _validator.ValidateAsync(request);
 
@@ -36,7 +37,7 @@ public class LoginCommandHandler
             .ToList());
         }
 
-        var user = await _userReadRepository.GetUserByEmailAsync(request.Email);
+        var user = await _userReadRepository.GetByEmailAsync(request.Email);
 
         if (user is null)
         {
@@ -58,10 +59,6 @@ public class LoginCommandHandler
 
         var token = _tokenService.GenerateToken(user);
 
-        return new SingleResponseModel<string>
-        {
-            Data = token,
-            StatusCode = StatusCodes.Status200OK
-        };
+        return new LoginResponse(token);
     }
 }

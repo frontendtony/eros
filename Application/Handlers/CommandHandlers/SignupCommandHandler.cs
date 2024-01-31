@@ -1,7 +1,8 @@
-using Api.ResponseModels;
-using Application.Exceptions;
-using EstateManager.Commands;
-using EstateManager.Interfaces;
+using Eros.Application.Features.Users.Models;
+using Eros.Application.Exceptions;
+using Eros.Application.Features.Users.Commands;
+using Eros.Application.Services;
+using Eros.Domain.Aggregates.Users;
 using FluentValidation;
 
 namespace EstateManager.Handlers.CommandHandlers;
@@ -26,7 +27,7 @@ public class SignupCommandHandler
         _validator = validator;
     }
 
-    public async Task<SingleResponseModel<SignupResponseModel>> Handle(SignupCommand request)
+    public async Task<SignupCommandResponse> Handle(SignupCommand request)
     {
         var validationResult = await _validator.ValidateAsync(request);
 
@@ -39,21 +40,24 @@ public class SignupCommandHandler
             .ToList());
         }
 
-        var user = await _userReadRepository.GetUserByEmailAsync(request.Email);
+        var existingUser = await _userReadRepository.GetByEmailAsync(request.Email);
 
-        if (user is not null)
+        if (existingUser is not null)
         {
             throw new ConflictException($"A user address already exists with this email address: {request.Email}");
         }
 
-        var newUser = await _userWriteRepository.CreateUserAsync(request) ?? throw new BadRequestException("Error creating user");
+        var user = User.Create(request.FirstName, request.LastName, request.Email, request.Avatar);
+
+        var newUser = await _userWriteRepository.AddAsync(user, request.Password) ?? throw new BadRequestException("Error creating user");
         var token = _tokenService.GenerateToken(newUser);
 
-        return new SingleResponseModel<SignupResponseModel>
-        {
-            Data = new SignupResponseModel(newUser, token),
-            StatusCode = StatusCodes.Status201Created,
-            Message = "User created successfully"
-        };
+        return new SignupCommandResponse(
+            token,
+            newUser.Email,
+            newUser.FirstName,
+            newUser.LastName,
+            newUser.Avatar
+        );
     }
 }
