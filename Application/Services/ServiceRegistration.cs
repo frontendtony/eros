@@ -1,6 +1,5 @@
 using System.Text;
 using EstateManager.Constants;
-using EstateManager.Entities;
 using EstateManager.Interfaces;
 using EstateManager.Handlers.CommandHandlers;
 using EstateManager.Handlers.QueryHandlers;
@@ -12,6 +11,12 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using EstateManager.Validators;
 using EstateManager.DbContexts;
+using Eros.Application.Features.Users.Commands;
+using Eros.Persistence.Data.Users.Repositories;
+using Eros.Application.Features.Users.Validators;
+using Eros.Domain.Aggregates.Users;
+using Eros.Application.Features.Users.CommandHandlers;
+using Eros.Application.Features.Users.QueryHandlers;
 
 public static class ServiceExtensions
 {
@@ -19,8 +24,8 @@ public static class ServiceExtensions
     {
         services.AddTransient<IEstateReadRepository, EstateReadRepository>();
         services.AddTransient<IEstateWriteRepository, EstateWriteRepository>();
-        services.AddTransient<IUserWriteRepository, UserWriteRepository>();
-        services.AddTransient<IUserReadRepository, UserReadRepository>();
+        services.AddTransient<Eros.Domain.Aggregates.Users.IUserWriteRepository, UserWriteRepository>();
+        services.AddTransient<Eros.Domain.Aggregates.Users.IUserReadRepository, UserReadRepository>();
 
         return services;
     }
@@ -91,7 +96,7 @@ public static class ServiceExtensions
 
     public static IServiceCollection AddIdentityService(this IServiceCollection services)
     {
-        services
+        _ = services
             .AddIdentityCore<User>(options =>
             {
                 options.SignIn.RequireConfirmedAccount = false;

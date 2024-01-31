@@ -1,9 +1,10 @@
 using Microsoft.EntityFrameworkCore;
-using EstateManager.Services;
-using EstateManager.Interfaces;
 using Application.Extensions;
 using EstateManager.DbContexts;
 using Eros.Persistence.Repositories;
+using Eros.Application.Services;
+
+namespace Eros.Api;
 
 public class Startup
 {

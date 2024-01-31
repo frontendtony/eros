@@ -1,7 +1,7 @@
-using EstateManager.Commands;
+using Eros.Application.Features.Users.Commands;
 using FluentValidation;
 
-namespace EstateManager.Validators;
+namespace Eros.Application.Features.Users.Validators;
 
 public class LoginCommandValidator : AbstractValidator<LoginCommand>
 {

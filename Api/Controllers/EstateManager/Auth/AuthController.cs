@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Api.ResponseModels;
 using Eros.Application.Features.Users.CommandHandlers;
 using Eros.Application.Features.Users.Commands;
+using Eros.Application.Features.Users.Models;
 
 namespace Eros.Api.Controllers;
 
@@ -38,14 +39,14 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("signup", Name = "Signup")]
-    [ProducesResponseType(typeof(UserResponseModel), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(SignupCommandResponse), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Signup([FromBody] SignupCommand request)
     {
         var signupCommandResponse = await _signupCommandHandler.Handle(request);
 
         return Ok(
-            new SingleResponseModel<Application.Features.Users.Models.SignupCommandResponse>()
+            new SingleResponseModel<SignupCommandResponse>()
             {
                 Data = signupCommandResponse,
                 Message = "User created successfully"

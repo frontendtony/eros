@@ -20,7 +20,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet("{id:guid}", Name = "GetUser")]
-    [ProducesResponseType(typeof(UserResponseModel), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(GetUserResponseModel), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<SingleResponseModel<GetUserResponseModel>>> GetUser(Guid id)
     {
