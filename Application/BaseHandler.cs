@@ -5,11 +5,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Eros.Handlers;
 
-public class BaseHandler : ControllerBase
+public class EstateManagerBaseHandler : ControllerBase
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public BaseHandler(IHttpContextAccessor httpContextAccessor)
+    public EstateManagerBaseHandler(IHttpContextAccessor httpContextAccessor)
     {
         _httpContextAccessor = httpContextAccessor;
     }

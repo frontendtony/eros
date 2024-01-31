@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Api.ResponseModels;
-using EstateManager.Handlers.QueryHandlers;
+using Eros.Application.Features.Users.QueryHandlers;
+using Eros.Application.Features.Users.Queries;
+using Eros.Application.Features.Users.Models;
 
 namespace EstateManager.Controllers;
 
@@ -20,8 +22,15 @@ public class UsersController : ControllerBase
     [HttpGet("{id:guid}", Name = "GetUser")]
     [ProducesResponseType(typeof(UserResponseModel), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<SingleResponseModel<UserResponseModel>>> GetUser(Guid id)
+    public async Task<ActionResult<SingleResponseModel<GetUserResponseModel>>> GetUser(Guid id)
     {
-        return Ok(await _getUserQueryHandler.Handle(id));
+        var user = await _getUserQueryHandler.Handle(new GetUserQuery(id));
+
+        return Ok(
+            new SingleResponseModel<GetUserResponseModel>()
+            {
+                Data = user
+            }
+        );
     }
 }
