@@ -4,6 +4,7 @@ using Api.ResponseModels;
 using EstateManager.Commands;
 using EstateManager.Handlers.QueryHandlers;
 using EstateManager.Handlers.CommandHandlers;
+using Eros.Api.Models;
 
 namespace EstateManager.Controllers;
 

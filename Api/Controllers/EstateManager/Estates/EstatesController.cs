@@ -1,30 +1,35 @@
-using EstateManager.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using Api.ResponseModels;
 using EstateManager.Commands;
 using EstateManager.Handlers.QueryHandlers;
 using EstateManager.Handlers.CommandHandlers;
+using MediatR;
+using Eros.Application.Features.Estates.Queries;
+using Eros.Api.Models;
+using Eros.Application.Features.Estates.Models;
 
-namespace EstateManager.Controllers;
+namespace Eros.Controllers;
 
 [ApiController]
 [Route("api/estates")]
 [Authorize]
 public class EstatesController : ControllerBase
 {
+    private readonly IMediator _mediator;
     private readonly GetEstateQueryHandler _getEstateQueryHandler;
     private readonly CreateEstateCommandHandler _createEstateCommandHandler;
     private readonly UpdateEstateCommandHandler _updateEstateCommandHandler;
     private readonly DeleteEstateCommandHandler _deleteEstateCommandHandler;
 
     public EstatesController(
+        IMediator mediator,
         GetEstateQueryHandler estateQueryHandler,
         CreateEstateCommandHandler createEstateCommandHandler,
         UpdateEstateCommandHandler updateEstateCommandHandler,
         DeleteEstateCommandHandler deleteEstateCommandHandler
     )
     {
+        _mediator = mediator;
         _getEstateQueryHandler = estateQueryHandler;
         _createEstateCommandHandler = createEstateCommandHandler;
         _updateEstateCommandHandler = updateEstateCommandHandler;
@@ -36,7 +41,14 @@ public class EstatesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<SingleResponseModel<EstateResponseModel>>> GetEstate(Guid id)
     {
-        return Ok(await _getEstateQueryHandler.GetEstate(id));
+        var response = await _mediator.Send(new GetEstateByIdQuery(id));
+
+        return Ok(
+            new SingleResponseModel<EstateResponseModel>()
+            {
+                Data = response
+            }
+        );
     }
 
     [HttpPost(Name = "CreateEstate")]

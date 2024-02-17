@@ -1,3 +1,5 @@
+namespace Eros;
+
 public class Program
 {
     public static Task Main(string[] args) => CreateHostBuilder(args).Build().RunAsync();

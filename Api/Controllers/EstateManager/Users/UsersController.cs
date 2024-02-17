@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using Api.ResponseModels;
 using Eros.Application.Features.Users.QueryHandlers;
 using Eros.Application.Features.Users.Queries;
 using Eros.Application.Features.Users.Models;
+using Eros.Api.Models;
 
 namespace EstateManager.Controllers;
 

@@ -4,7 +4,7 @@ using EstateManager.DbContexts;
 using Eros.Persistence.Repositories;
 using Eros.Application.Services;
 
-namespace Eros.Api;
+namespace Eros;
 
 public class Startup
 {
@@ -32,6 +32,8 @@ public class Startup
 
         services.AddEstateManagerRepositories();
         services.AddEstateManagerHandlers();
+
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Startup>());
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

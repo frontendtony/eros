@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using EstateManager.Models;
 using EstateManager.Entities;
-using EstateManager.Repositories;
 using Api.ResponseModels;
 using EstateManager.DbContexts;
 
