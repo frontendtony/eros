@@ -1,12 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using EstateManager.Commands;
 using EstateManager.Handlers.QueryHandlers;
 using EstateManager.Handlers.CommandHandlers;
 using MediatR;
 using Eros.Application.Features.Estates.Queries;
 using Eros.Api.Models;
 using Eros.Application.Features.Estates.Models;
+using Eros.Application.Features.Estates.Commands;
+using Eros.Domain.Aggregates.Estates;
 
 namespace Eros.Controllers;
 
@@ -57,17 +58,30 @@ public class EstatesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult<SingleResponseModel<EstateResponseModel>>> CreateEstate([FromBody] CreateEstateCommand command)
     {
-        var estate = await _createEstateCommandHandler.CreateEstate(command);
-        return Created($"/api/estates/{estate.Data?.Id}", estate);
+        var estate = await _mediator.Send(command);
+
+        return Ok(
+            new SingleResponseModel<EstateResponseModel>()
+            {
+                Data = estate
+            }
+        );
     }
 
     [HttpPut("{id}", Name = "UpdateEstate")]
     [ProducesResponseType(typeof(EstateResponseModel), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<SingleResponseModel<EstateResponseModel>>> UpdateEstate(Guid id, [FromBody] UpdateEstateCommand command)
+    public async Task<ActionResult<SingleResponseModel<EstateResponseModel>>> UpdateEstate(Guid id, [FromBody] Estate estate)
     {
-        return Ok(await _updateEstateCommandHandler.UpdateEstate(command, id));
+        var response = await _mediator.Send(new UpdateEstateCommand(id, estate.Name, estate.Address, estate.LatLng));
+
+        return Ok(
+            new SingleResponseModel<EstateResponseModel>()
+            {
+                Data = response
+            }
+        );
     }
 
     [HttpDelete("{id}", Name = "DeleteEstate")]
@@ -75,6 +89,8 @@ public class EstatesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<SingleResponseModel<EstateResponseModel>>> DeleteEstate(Guid id)
     {
-        return Ok(await _deleteEstateCommandHandler.DeleteEstate(id));
+        await _mediator.Send(new DeleteEstateCommand(id));
+
+        return NoContent();
     }
 }

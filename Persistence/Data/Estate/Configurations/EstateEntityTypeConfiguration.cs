@@ -17,6 +17,9 @@ public class EstateEntityTypeConfiguration : IEntityTypeConfiguration<Estate>
             .IsRequired()
             .HasMaxLength(100);
 
+        builder.HasIndex(x => x.Name)
+            .IsUnique();
+
         builder.Property(x => x.CreatedAt)
             .IsRequired();
 

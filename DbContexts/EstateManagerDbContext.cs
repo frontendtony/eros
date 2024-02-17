@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-
 using Microsoft.EntityFrameworkCore;
 using EstateManager.Entities;
+using Eros.Domain.Aggregates.Users;
 
 namespace EstateManager.DbContexts;
 

@@ -1,5 +1,4 @@
 using Eros.Domain.Aggregates.Estates;
-using Eros.Domain.Aggregates.Roles;
 using Microsoft.EntityFrameworkCore;
 
 namespace Eros.Persistence.Data.Estates.Repositories;
@@ -13,17 +12,23 @@ public class EstateReadRepository : IEstateReadRepository
         _dbContext = dbContext;
     }
 
-    public async Task<Estate?> GetByIdAsync(Guid id)
+    public async Task<Estate?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         return await _dbContext.Estates
-            .FirstOrDefaultAsync(e => e.Id == id);
+            .FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
     }
 
-    public async Task<IEnumerable<Estate>> GetAllAsync()
+    public async Task<Estate?> GetByNameAsync(string name, CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.Estates
+            .FirstOrDefaultAsync(e => e.Name == name, cancellationToken);
+    }
+
+    public async Task<IEnumerable<Estate>> GetAllAsync(CancellationToken cancellationToken = default)
     {
         return await _dbContext.Estates
             .AsNoTracking()
             .Include(e => e.Roles)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
     }
 }
