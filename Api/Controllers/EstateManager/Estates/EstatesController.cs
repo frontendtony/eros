@@ -1,7 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using EstateManager.Handlers.QueryHandlers;
-using EstateManager.Handlers.CommandHandlers;
 using MediatR;
 using Eros.Application.Features.Estates.Queries;
 using Eros.Api.Models;
@@ -17,24 +15,12 @@ namespace Eros.Controllers;
 public class EstatesController : ControllerBase
 {
     private readonly IMediator _mediator;
-    private readonly GetEstateQueryHandler _getEstateQueryHandler;
-    private readonly CreateEstateCommandHandler _createEstateCommandHandler;
-    private readonly UpdateEstateCommandHandler _updateEstateCommandHandler;
-    private readonly DeleteEstateCommandHandler _deleteEstateCommandHandler;
 
     public EstatesController(
-        IMediator mediator,
-        GetEstateQueryHandler estateQueryHandler,
-        CreateEstateCommandHandler createEstateCommandHandler,
-        UpdateEstateCommandHandler updateEstateCommandHandler,
-        DeleteEstateCommandHandler deleteEstateCommandHandler
+        IMediator mediator
     )
     {
         _mediator = mediator;
-        _getEstateQueryHandler = estateQueryHandler;
-        _createEstateCommandHandler = createEstateCommandHandler;
-        _updateEstateCommandHandler = updateEstateCommandHandler;
-        _deleteEstateCommandHandler = deleteEstateCommandHandler;
     }
 
     [HttpGet("{id:guid}", Name = "GetEstate")]
