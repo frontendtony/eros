@@ -6,7 +6,7 @@ namespace Eros.Application.Features.Estates.Commands;
 public record CreateEstateCommand(
     string Name,
     string Address,
-    string LatLng
+    string? LatLng
 ) : IRequest<EstateResponseModel>
 {
 }
