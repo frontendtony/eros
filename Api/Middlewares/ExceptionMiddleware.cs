@@ -1,8 +1,8 @@
 using System.Net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using Application.Exceptions;
-using Api.ResponseModels;
+using Eros.Api.Models;
+using Eros.Application.Exceptions;
 
 namespace Api.Middlewares;
 
@@ -30,7 +30,6 @@ public class ExceptionMiddleware
             var responseModel = new SingleResponseModel<string>
             {
                 Message = error?.Message ?? string.Empty,
-                Messages = new List<string> { error?.Message ?? string.Empty },
                 Data = null
             };
 
@@ -66,13 +65,11 @@ public class ExceptionMiddleware
                 case CustomValidationException validationException:
                     response.StatusCode = (int)HttpStatusCode.BadRequest;
                     responseModel.StatusCode = (int)HttpStatusCode.BadRequest;
-                    responseModel.Messages = validationException.Errors.Select(x => x.ErrorMessage).ToList();
                     break;
 
                 default:
                     response.StatusCode = (int)HttpStatusCode.InternalServerError;
                     responseModel.StatusCode = (int)HttpStatusCode.InternalServerError;
-                    responseModel.Messages = new List<string> { "server error" };
                     break;
             }
 

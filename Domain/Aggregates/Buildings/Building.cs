@@ -7,11 +7,23 @@ public class Building
 {
     public required Guid Id { get; set; }
     public required string Name { get; set; }
-    public string? Description { get; private set; }
+    public required string Address { get; set; }
+    public string? Description { get; set; }
     public required Guid EstateId { get; set; }
     public Estate? Estate { get; private set; }
     public required Guid BuildingTypeId { get; set; }
     public BuildingType? BuildingType { get; private set; }
     public ICollection<Apartment>? Apartments { get; set; }
     public DateTime CreatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
+
+    public void Update(string name, string description, string address, Guid buildingTypeId)
+    {
+        Name = name ?? Name;
+        Description = description ?? Description;
+        Address = address ?? Address;
+        BuildingTypeId = Guid.TryParse(buildingTypeId.ToString(), out var id) ? id : BuildingTypeId;
+
+        UpdatedAt = DateTime.UtcNow;
+    }
 }

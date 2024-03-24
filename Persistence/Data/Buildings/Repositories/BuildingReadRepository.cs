@@ -19,10 +19,17 @@ public class BuildingReadRepository : IBuildingReadRepository
             .FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
     }
 
+    public async Task<Building?> GetByNameAsync(string name, CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.Buildings
+            .FirstOrDefaultAsync(e => e.Name.ToLower() == name.ToLower(), cancellationToken);
+    }
+
     public async Task<IEnumerable<Building>> GetByEstateIdAsync(Guid estateId, CancellationToken cancellationToken = default)
     {
         return await _dbContext.Buildings
             .Where(b => b.EstateId == estateId)
+            .Include(b => b.BuildingType)
             .ToListAsync(cancellationToken);
     }
 

@@ -17,6 +17,13 @@ public class BuildingEntityTypeConfiguration : IEntityTypeConfiguration<Building
             .IsRequired()
             .HasMaxLength(100);
 
+        builder.Property(x => x.Address)
+            .IsRequired()
+            .HasMaxLength(100);
+
+        builder.Property(x => x.Description)
+            .HasMaxLength(255);
+
         builder.Property(x => x.EstateId)
             .IsRequired();
 

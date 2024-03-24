@@ -1,13 +1,12 @@
 namespace Eros.Contracts.Buildings;
 
 public record BuildingResponse(
-    string Id,
+    Guid Id,
     string Name,
     string Description,
     string Address,
-    string BuildingTypeId,
-    string EstateId,
-    string CreatedBy,
-    string CreatedAt,
-    string UpdatedAt
+    string BuildingType,
+    Guid EstateId,
+    DateTime CreatedAt,
+    DateTime UpdatedAt
 );

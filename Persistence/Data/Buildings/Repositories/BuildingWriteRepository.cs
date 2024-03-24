@@ -17,6 +17,12 @@ public class BuildingWriteRepository : IBuildingWriteRepository
         await _context.SaveChangesAsync(cancellationToken);
     }
 
+    public async Task UpdateAsync(Building building, CancellationToken cancellationToken)
+    {
+        _context.Buildings.Update(building);
+        await _context.SaveChangesAsync(cancellationToken);
+    }
+
     public async Task DeleteAsync(Building building, CancellationToken cancellationToken)
     {
         _context.Buildings.Remove(building);

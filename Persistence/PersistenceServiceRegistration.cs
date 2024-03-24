@@ -1,5 +1,14 @@
+using Eros.Domain.Aggregates.Apartments;
+using Eros.Domain.Aggregates.Buildings;
+using Eros.Domain.Aggregates.Estates;
+using Eros.Domain.Aggregates.Estates.Repositories;
+using Eros.Domain.Aggregates.Roles;
 using Eros.Domain.Aggregates.Users;
 using Eros.Persistence.Data;
+using Eros.Persistence.Data.Apartments.Repositories;
+using Eros.Persistence.Data.Buildings.Repositories;
+using Eros.Persistence.Data.Estates.Repositories;
+using Eros.Persistence.Data.Roles.Repositories;
 using Eros.Persistence.Data.Users.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,6 +28,15 @@ public static class PersistenceServiceRegistration
 
         services.AddScoped<IUserReadRepository, UserReadRepository>();
         services.AddScoped<IUserWriteRepository, UserWriteRepository>();
+        services.AddScoped<IRoleReadRepository, RoleReadRepository>();
+        services.AddScoped<IEstateReadRepository, EstateReadRepository>();
+        services.AddScoped<IEstateWriteRepository, EstateWriteRepository>();
+        services.AddScoped<IBuildingReadRepository, BuildingReadRepository>();
+        services.AddScoped<IBuildingWriteRepository, BuildingWriteRepository>();
+        services.AddScoped<IBuildingTypeReadRepository, BuildingTypeReadRepository>();
+        services.AddScoped<IBuildingTypeWriteRepository, BuildingTypeWriteRepository>();
+        services.AddScoped<IApartmentReadRepository, ApartmentReadRepository>();
+        services.AddScoped<IApartmentWriteRepository, ApartmentWriteRepository>();
 
         return services;
     }
