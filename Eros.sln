@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.002.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eros.Api", "Eros.Api\Eros.Api.csproj", "{8D25E406-ADB1-412C-9296-AC6C726048DA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eros.Application", "Eros.Application\Eros.Application.csproj", "{921DE7C6-E8D9-4401-83A2-B4DEE0932F2D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eros.Persistence", "Eros.Persistence\Eros.Persistence.csproj", "{D38C522F-1F6B-4467-9A56-AA084AC93A4D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eros.Domain", "Eros.Domain\Eros.Domain.csproj", "{7B9ADF40-98CD-4B4B-A8B3-DE81787503AA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eros.Auth", "Eros.Auth\Eros.Auth.csproj", "{6484060B-BA03-4DB6-B08C-F7741C3ACC40}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8D25E406-ADB1-412C-9296-AC6C726048DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D25E406-ADB1-412C-9296-AC6C726048DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D25E406-ADB1-412C-9296-AC6C726048DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D25E406-ADB1-412C-9296-AC6C726048DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{921DE7C6-E8D9-4401-83A2-B4DEE0932F2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{921DE7C6-E8D9-4401-83A2-B4DEE0932F2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{921DE7C6-E8D9-4401-83A2-B4DEE0932F2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{921DE7C6-E8D9-4401-83A2-B4DEE0932F2D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D38C522F-1F6B-4467-9A56-AA084AC93A4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D38C522F-1F6B-4467-9A56-AA084AC93A4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D38C522F-1F6B-4467-9A56-AA084AC93A4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D38C522F-1F6B-4467-9A56-AA084AC93A4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B9ADF40-98CD-4B4B-A8B3-DE81787503AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B9ADF40-98CD-4B4B-A8B3-DE81787503AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B9ADF40-98CD-4B4B-A8B3-DE81787503AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B9ADF40-98CD-4B4B-A8B3-DE81787503AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6484060B-BA03-4DB6-B08C-F7741C3ACC40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6484060B-BA03-4DB6-B08C-F7741C3ACC40}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6484060B-BA03-4DB6-B08C-F7741C3ACC40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6484060B-BA03-4DB6-B08C-F7741C3ACC40}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {782F6148-EE5D-481E-BB85-0A8A1AA7AFDB}
+	EndGlobalSection
+EndGlobal
