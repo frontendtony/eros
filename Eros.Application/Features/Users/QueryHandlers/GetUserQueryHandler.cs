@@ -9,13 +9,23 @@ namespace Eros.Application.Features.Users.QueryHandlers;
 public class GetUserQueryHandler(IUserReadRepository userReadRepository, IHttpContextAccessor httpContextAccessor)
     : ErosBaseHandler(httpContextAccessor)
 {
-    public async Task<GetUserResponseModel> Handle(GetUserQuery query)
+    public async Task<GetUserQueryResponse> Handle(GetUserQuery query)
     {
         if (IsSelf(query.UserId) || IsAdmin())
         {
             var user = await userReadRepository.GetByIdAsync(query.UserId.ToString()) ?? throw new NotFoundException("User not found");
 
-            return new GetUserResponseModel(user);
+            return new GetUserQueryResponse
+            {
+                Id = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                Avatar = user.Avatar,
+                CreatedAt = user.CreatedAt,
+                UpdatedAt = user.UpdatedAt
+            };
         }
         else
         {

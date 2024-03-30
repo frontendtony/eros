@@ -1,4 +1,6 @@
+using Eros.Api.Middlewares;
 using Eros.Application;
+using Eros.Application.Features.Users.CommandHandlers;
 using Eros.Auth;
 using Eros.Persistence;
 using Microsoft.OpenApi.Models;
@@ -37,9 +39,10 @@ builder.Services.AddControllers();
 builder.Services.AddPersistenceServices(configuration);
 builder.Services.RegisterAuthServices(configuration);
 builder.Services.AddMediatR(cfg => {
-    cfg.RegisterServicesFromAssembly(typeof(Program).Assembly);
+    cfg.RegisterServicesFromAssembly(typeof(SignupCommandHandler).Assembly);
 });
 builder.Services.AddValidators();
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
@@ -55,4 +58,7 @@ else
     app.UseHttpsRedirection();
 }
 
+app.UseRouting();
+app.MapControllers();
+app.UseMiddleware<ExceptionMiddleware>();
 app.Run();

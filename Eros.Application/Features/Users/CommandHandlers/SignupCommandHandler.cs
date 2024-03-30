@@ -4,6 +4,7 @@ using FluentValidation;
 using Eros.Application.Features.Users.Models;
 using Eros.Application.Exceptions;
 using Eros.Auth.Services;
+using MediatR;
 
 namespace Eros.Application.Features.Users.CommandHandlers;
 
@@ -11,11 +12,11 @@ public class SignupCommandHandler(
     JwtService jwtService,
     IUserWriteRepository userWriteRepository,
     IUserReadRepository userReadRepository,
-    IValidator<SignupCommand> validator)
+    IValidator<SignupCommand> validator) : IRequestHandler<SignupCommand, SignupCommandResponse>
 {
-    public async Task<SignupCommandResponse> Handle(SignupCommand command)
+    public async Task<SignupCommandResponse> Handle(SignupCommand command, CancellationToken cancellationToken)
     {
-        var validationResult = await validator.ValidateAsync(command);
+        var validationResult = await validator.ValidateAsync(command, cancellationToken);
 
         if (!validationResult.IsValid)
         {
@@ -33,9 +34,15 @@ public class SignupCommandHandler(
             throw new ConflictException($"A user address already exists with this email address: {command.Email}");
         }
 
-        var user = User.Create(command.FirstName, command.LastName, command.Email, command.Avatar);
+        var user = User.Create(command.Email, command.FirstName, command.LastName, command.Avatar);
 
-        var newUser = await userWriteRepository.AddAsync(user, command.Password) ?? throw new BadRequestException("Error creating user");
+        var newUser = await userWriteRepository.AddAsync(user, command.Password, cancellationToken);
+        
+        if (newUser is null)
+        {
+            throw new BadRequestException("User could not be created");
+        }
+        
         var jwt = jwtService.CreateToken(newUser);
 
         return new SignupCommandResponse(

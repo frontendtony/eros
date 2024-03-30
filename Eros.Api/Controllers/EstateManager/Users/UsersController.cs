@@ -1,33 +1,27 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
-using Eros.Application.Features.Users.QueryHandlers;
-using Eros.Application.Features.Users.Queries;
-using Eros.Application.Features.Users.Models;
 using Eros.Api.Models;
+using Eros.Application.Features.Users.Models;
+using Eros.Application.Features.Users.Queries;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
-namespace EstateManager.Controllers;
+namespace Eros.Api.Controllers.EstateManager.Users;
 
 [ApiController]
 [Route("api/users")]
 [Authorize]
-public class UsersController : ControllerBase
+public class UsersController(ISender mediator) : ControllerBase
 {
-    private readonly GetUserQueryHandler _getUserQueryHandler;
-
-    public UsersController(GetUserQueryHandler getUserQueryHandler)
-    {
-        _getUserQueryHandler = getUserQueryHandler;
-    }
-
     [HttpGet("{id:guid}", Name = "GetUser")]
-    [ProducesResponseType(typeof(GetUserResponseModel), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(UserResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<SingleResponseModel<GetUserResponseModel>>> GetUser(Guid id)
+    public async Task<ActionResult<SingleResponseModel<UserResponse>>> GetUser(Guid id)
     {
-        var user = await _getUserQueryHandler.Handle(new GetUserQuery(id));
+        var query = new GetUserQuery(id);
+        var user = await mediator.Send(query);
 
         return Ok(
-            new SingleResponseModel<GetUserResponseModel>()
+            new SingleResponseModel<UserResponse>()
             {
                 Data = user
             }

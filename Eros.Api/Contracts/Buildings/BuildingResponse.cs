@@ -8,5 +8,5 @@ public record BuildingResponse(
     string BuildingType,
     Guid EstateId,
     DateTime CreatedAt,
-    DateTime UpdatedAt
+    DateTime? UpdatedAt
 );

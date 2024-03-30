@@ -3,24 +3,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Eros.Persistence.Data.Apartments.Repositories;
 
-public class ApartmentReadRepository : IApartmentReadRepository
+public class ApartmentReadRepository(ErosDbContext dbContext) : IApartmentReadRepository
 {
-    private readonly ErosDbContext _dbContext;
-
-    public ApartmentReadRepository(ErosDbContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
-
     public async Task<Apartment?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await _dbContext.Apartments
+        return await dbContext.Apartments
             .FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
     }
 
     public async Task<IEnumerable<Apartment>> GetByBuildingIdAsync(Guid buildingId, CancellationToken cancellationToken = default)
     {
-        return await _dbContext.Apartments
+        return await dbContext.Apartments
             .Where(a => a.BuildingId == buildingId)
             .ToListAsync(cancellationToken);
     }

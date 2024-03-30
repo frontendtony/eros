@@ -3,24 +3,12 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Eros.Persistence.Data.Users.Repositories;
 
-public class UserWriteRepository : IUserWriteRepository
+public class UserWriteRepository(UserManager<User> userManager) : IUserWriteRepository
 {
-    private readonly UserManager<User> _userManager;
-
-    public UserWriteRepository(UserManager<User> userManager)
+    public async Task<User?> AddAsync(User user, string password, CancellationToken cancellationToken = default)
     {
-        _userManager = userManager;
-    }
+        var identityResult = await userManager.CreateAsync(user, password);
 
-    public async Task<User?> AddAsync(User user, string password)
-    {
-        var identityResult = await _userManager.CreateAsync(user, password);
-
-        if (!identityResult.Succeeded)
-        {
-            return null;
-        }
-
-        return user;
+        return !identityResult.Succeeded ? null : user;
     }
 }

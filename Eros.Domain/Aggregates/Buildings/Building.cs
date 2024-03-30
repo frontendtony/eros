@@ -15,7 +15,7 @@ public class Building
     public BuildingType? BuildingType { get; private set; }
     public ICollection<Apartment>? Apartments { get; set; }
     public DateTime CreatedAt { get; set; }
-    public DateTime UpdatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
 
     public void Update(string name, string description, string address, Guid buildingTypeId)
     {

@@ -33,8 +33,12 @@ public class JwtService(IConfiguration configuration)
         };
     }
 
-    private JwtSecurityToken CreateJwtToken(IEnumerable<Claim> claims, SigningCredentials credentials, DateTime expiration) =>
-        new JwtSecurityToken(
+    private JwtSecurityToken CreateJwtToken(
+        IEnumerable<Claim> claims,
+        SigningCredentials credentials,
+        DateTime expiration
+    ) =>
+        new(
             configuration["Jwt:Issuer"],
             configuration["Jwt:Audience"],
             claims,

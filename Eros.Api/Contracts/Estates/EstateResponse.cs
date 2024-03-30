@@ -7,5 +7,5 @@ public record EstateResponse(
     string? LatLng,
     Guid CreatedBy,
     DateTime CreatedAt,
-    DateTime UpdatedAt
+    DateTime? UpdatedAt
 );

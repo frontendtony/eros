@@ -1,4 +1,4 @@
-namespace Eros.Api.Contracts.Users;
+namespace Eros.Application.Features.Users.Models;
 
 public record UserResponse(
     string Id,

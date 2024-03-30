@@ -2,7 +2,7 @@ using Eros.Domain.Aggregates.Estates;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Eros.Persistence.Data.Estates;
+namespace Eros.Persistence.Data.Estates.Configurations;
 
 public class EstateRoleEntityTypeConfiguration : IEntityTypeConfiguration<EstateRole>
 {

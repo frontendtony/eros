@@ -18,6 +18,8 @@ public class Estate
         LatLng = latlng;
         CreatedAt = DateTime.UtcNow;
     }
+    
+    public Estate() {}
 
     public Guid Id { get; set; }
     public string Name { get; set; }
@@ -26,6 +28,6 @@ public class Estate
     public string? LatLng { get; set; }
     public IEnumerable<Role> Roles { get; set; } = new List<Role>();
     public DateTime CreatedAt { get; init; }
-    public DateTime UpdatedAt { get; set; }
-    public DateTime DeletedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
+    public DateTime? DeletedAt { get; set; }
 }

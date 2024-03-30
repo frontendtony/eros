@@ -3,7 +3,7 @@ using Eros.Domain.Aggregates.Roles;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Eros.Persistence.Data.Roles;
+namespace Eros.Persistence.Data.Roles.Configurations;
 
 public class RoleEntityTypeConfiguration : IEntityTypeConfiguration<Role>
 {

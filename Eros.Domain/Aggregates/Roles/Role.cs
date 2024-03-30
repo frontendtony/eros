@@ -30,5 +30,5 @@ public class Role
     public IEnumerable<Estate> Estates { get; set; } = new List<Estate>();
     public bool IsShared { get; set; }
     public DateTime CreatedAt { get; init; }
-    public DateTime UpdatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
 }

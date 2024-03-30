@@ -2,11 +2,11 @@ using Eros.Domain.Aggregates.Estates;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Eros.Persistence.Data.Estates;
+namespace Eros.Persistence.Data.Estates.Configurations;
 
-public class EstateEntityTypeConfiguration : IEntityTypeConfiguration<Estate>
+public class EstateEntityTypeConfiguration : IEntityTypeConfiguration<Domain.Aggregates.Estates.Estate>
 {
-    public void Configure(EntityTypeBuilder<Estate> builder)
+    public void Configure(EntityTypeBuilder<Domain.Aggregates.Estates.Estate> builder)
     {
         builder.ToTable("Estates");
 
@@ -19,6 +19,14 @@ public class EstateEntityTypeConfiguration : IEntityTypeConfiguration<Estate>
 
         builder.HasIndex(x => x.Name)
             .IsUnique();
+        
+        builder.Property(x => x.Address)
+            .IsRequired()
+            .HasMaxLength(100);
+        
+        builder.Property(x => x.LatLng)
+            .IsRequired(false)
+            .HasMaxLength(100);
 
         builder.Property(x => x.CreatedAt)
             .IsRequired();

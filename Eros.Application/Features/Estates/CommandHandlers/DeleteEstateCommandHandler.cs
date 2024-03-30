@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Http;
 namespace Eros.Application.Features.Estates.CommandHandlers;
 
 public class DeleteEstateCommandHandler(
-    HttpContextAccessor httpContextAccessor,
+    IHttpContextAccessor httpContextAccessor,
     IEstateReadRepository estateReadRepository,
     IEstateWriteRepository estateWriteRepository)
     : ErosBaseHandler(httpContextAccessor), IRequestHandler<DeleteEstateCommand>

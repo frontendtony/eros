@@ -10,5 +10,5 @@ public record EstateBuildingResponseModel(
     Guid EstateId,
     string BuildingType,
     DateTime CreatedAt,
-    DateTime UpdatedAt
+    DateTime? UpdatedAt
 );
