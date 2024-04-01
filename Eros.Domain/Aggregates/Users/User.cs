@@ -4,13 +4,12 @@ namespace Eros.Domain.Aggregates.Users;
 
 public class User : IdentityUser
 {
-    private User(string email, string firstName, string lastName, string? avatar, bool isAdmin = false)
+    private User(string email, string firstName, string lastName, bool isAdmin = false)
     {
         Email = email;
         UserName = email;
         FirstName = firstName;
         LastName = lastName;
-        Avatar = avatar;
         IsAdmin = isAdmin;
         CreatedAt = DateTime.UtcNow;
         UpdatedAt = DateTime.UtcNow;
@@ -25,13 +24,13 @@ public class User : IdentityUser
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
 
-    public static User Create(string email, string firstName, string lastName, string? avatar)
+    public static User Create(string email, string firstName, string lastName)
     {
-        return new User(email, firstName, lastName, avatar);
+        return new User(email, firstName, lastName);
     }
 
     public static User CreateAdmin(string email, string firstName, string lastName, string? avatar)
     {
-        return new User(email, firstName, lastName, avatar, true);
+        return new User(email, firstName, lastName, true);
     }
 }

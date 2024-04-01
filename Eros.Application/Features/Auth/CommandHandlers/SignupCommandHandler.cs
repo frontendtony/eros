@@ -1,20 +1,22 @@
+using Eros.Api.Dto.Auth;
 using Eros.Domain.Aggregates.Users;
-using Eros.Application.Features.Users.Commands;
+using Eros.Application.Features.Auth.Commands;
 using FluentValidation;
-using Eros.Application.Features.Users.Models;
 using Eros.Application.Exceptions;
+using Eros.Application.Features.Users.Models;
 using Eros.Auth.Services;
+using Mapster;
 using MediatR;
 
-namespace Eros.Application.Features.Users.CommandHandlers;
+namespace Eros.Application.Features.Auth.CommandHandlers;
 
 public class SignupCommandHandler(
     JwtService jwtService,
     IUserWriteRepository userWriteRepository,
     IUserReadRepository userReadRepository,
-    IValidator<SignupCommand> validator) : IRequestHandler<SignupCommand, SignupCommandResponse>
+    IValidator<SignupCommand> validator) : IRequestHandler<SignupCommand, SignupCommandDto>
 {
-    public async Task<SignupCommandResponse> Handle(SignupCommand command, CancellationToken cancellationToken)
+    public async Task<SignupCommandDto> Handle(SignupCommand command, CancellationToken cancellationToken)
     {
         var validationResult = await validator.ValidateAsync(command, cancellationToken);
 
@@ -34,7 +36,7 @@ public class SignupCommandHandler(
             throw new ConflictException($"A user address already exists with this email address: {command.Email}");
         }
 
-        var user = User.Create(command.Email, command.FirstName, command.LastName, command.Avatar);
+        var user = User.Create(command.Email, command.FirstName, command.LastName);
 
         var newUser = await userWriteRepository.AddAsync(user, command.Password, cancellationToken);
         
@@ -44,13 +46,10 @@ public class SignupCommandHandler(
         }
         
         var jwt = jwtService.CreateToken(newUser);
-
-        return new SignupCommandResponse(
-            jwt.Token,
-            newUser.Email,
-            newUser.FirstName,
-            newUser.LastName,
-            newUser.Avatar
-        );
+        
+        var response = newUser.Adapt<SignupCommandDto>();
+        response.Token = jwt.Token;
+        
+        return response;
     }
 }

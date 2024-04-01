@@ -1,7 +1,10 @@
 using Eros.Api.Contracts.Users;
+using Eros.Api.Dto.Auth;
 using Eros.Api.Models;
+using Eros.Application.Features.Auth.Commands;
 using Eros.Application.Features.Users.Commands;
 using Eros.Application.Features.Users.Models;
+using Mapster;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -33,22 +36,16 @@ public class AuthController(ISender mediator) : ControllerBase
     }
 
     [HttpPost("signup", Name = "Signup")]
-    [ProducesResponseType(typeof(SignupCommandResponse), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof( SignupCommandDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Signup([FromBody] SignupRequest request)
+    public async Task<IActionResult> Signup([FromBody] SignupDto dto)
     {
-        var signupCommand = new SignupCommand(
-            request.Email,
-            request.Password,
-            request.FirstName,
-            request.LastName,
-            request.Avatar
-        );
+        var signupCommand = dto.Adapt<SignupCommand>();
         
         var signupCommandResponse = await mediator.Send(signupCommand);
 
         return Ok(
-            new SingleResponseModel<SignupCommandResponse>()
+            new SingleResponseModel< SignupCommandDto>()
             {
                 Data = signupCommandResponse,
                 Message = "User created successfully"

@@ -1,6 +1,6 @@
 using Eros.Api.Middlewares;
 using Eros.Application;
-using Eros.Application.Features.Users.CommandHandlers;
+using Eros.Application.Features.Auth.CommandHandlers;
 using Eros.Auth;
 using Eros.Persistence;
 using Microsoft.OpenApi.Models;

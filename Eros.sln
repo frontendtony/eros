@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eros.Domain", "Eros.Domain\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eros.Auth", "Eros.Auth\Eros.Auth.csproj", "{6484060B-BA03-4DB6-B08C-F7741C3ACC40}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eros.Api.Dto", "Eros.Api.Dto\Eros.Api.Dto.csproj", "{F9230745-209C-4D29-BE1B-13A1A4EF3599}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eros.Common", "Eros.Common\Eros.Common.csproj", "{3B2700CF-F7EA-4849-9CB6-D9C764681241}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +43,14 @@ Global
 		{6484060B-BA03-4DB6-B08C-F7741C3ACC40}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6484060B-BA03-4DB6-B08C-F7741C3ACC40}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6484060B-BA03-4DB6-B08C-F7741C3ACC40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9230745-209C-4D29-BE1B-13A1A4EF3599}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9230745-209C-4D29-BE1B-13A1A4EF3599}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9230745-209C-4D29-BE1B-13A1A4EF3599}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9230745-209C-4D29-BE1B-13A1A4EF3599}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B2700CF-F7EA-4849-9CB6-D9C764681241}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B2700CF-F7EA-4849-9CB6-D9C764681241}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B2700CF-F7EA-4849-9CB6-D9C764681241}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B2700CF-F7EA-4849-9CB6-D9C764681241}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

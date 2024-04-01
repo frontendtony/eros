@@ -22,7 +22,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Eros.Api.Dto\Eros.Api.Dto.csproj" />
     <ProjectReference Include="..\Eros.Auth\Eros.Auth.csproj" />
+    <ProjectReference Include="..\Eros.Common\Eros.Common.csproj" />
     <ProjectReference Include="..\Eros.Persistence\Eros.Persistence.csproj" />
     <ProjectReference Include="..\Eros.Domain\Eros.Domain.csproj" />
     <ProjectReference Include="..\Eros.Application\Eros.Application.csproj" />

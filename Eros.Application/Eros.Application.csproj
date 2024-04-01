@@ -8,12 +8,14 @@
 
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="11.5.1" />
+    <PackageReference Include="Mapster" Version="7.4.1-pre01" />
     <PackageReference Include="MediatR" Version="12.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Eros.Api.Dto\Eros.Api.Dto.csproj" />
     <ProjectReference Include="..\Eros.Auth\Eros.Auth.csproj" />
     <ProjectReference Include="..\Eros.Domain\Eros.Domain.csproj" />
   </ItemGroup>
