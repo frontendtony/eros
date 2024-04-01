@@ -1,4 +1,4 @@
-using Eros.Api.Middlewares;
+using Eros.Api.Extensions;
 using Eros.Application;
 using Eros.Application.Features.Auth.CommandHandlers;
 using Eros.Auth;
@@ -60,5 +60,5 @@ else
 
 app.UseRouting();
 app.MapControllers();
-app.UseMiddleware<ExceptionMiddleware>();
+app.ConfigureExceptionHandlers();
 app.Run();
