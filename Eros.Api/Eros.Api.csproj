@@ -30,4 +30,8 @@
     <ProjectReference Include="..\Eros.Application\Eros.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Contracts\Users\" />
+  </ItemGroup>
+
 </Project>

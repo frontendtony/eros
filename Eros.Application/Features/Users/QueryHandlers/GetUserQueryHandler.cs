@@ -20,7 +20,7 @@ public class GetUserQueryHandler(IUserReadRepository userReadRepository, IHttpCo
                 Id = user.Id,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
-                Email = user.Email,
+                Email = user.Email!,
                 PhoneNumber = user.PhoneNumber,
                 Avatar = user.Avatar,
                 CreatedAt = user.CreatedAt,

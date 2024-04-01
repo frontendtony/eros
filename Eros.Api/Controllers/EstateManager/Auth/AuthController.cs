@@ -1,8 +1,6 @@
-using Eros.Api.Contracts.Users;
 using Eros.Api.Dto.Auth;
 using Eros.Api.Models;
 using Eros.Application.Features.Auth.Commands;
-using Eros.Application.Features.Users.Commands;
 using Eros.Application.Features.Users.Models;
 using Mapster;
 using MediatR;
@@ -17,19 +15,15 @@ public class AuthController(ISender mediator) : ControllerBase
     [HttpPost("token", Name = "CreateBearerToken")]
     [ProducesResponseType(typeof(SingleResponseModel<string>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> CreateBearerToken([FromBody] LoginRequest request)
+    public async Task<IActionResult> CreateBearerToken([FromBody] LoginDto dto)
     {
-        var loginCommand = new LoginCommand()
-        {
-            Email = request.Email,
-            Password = request.Password
-        };
+        var loginCommand = dto.Adapt<LoginCommand>();
         var loginCommandResponse = await mediator.Send(loginCommand);
 
         return Ok(
-            new SingleResponseModel<string>()
+            new SingleResponseModel<LoginCommandDto>()
             {
-                Data = loginCommandResponse.Token,
+                Data = loginCommandResponse,
                 Message = "Token created successfully"
             }
         );
@@ -45,7 +39,7 @@ public class AuthController(ISender mediator) : ControllerBase
         var signupCommandResponse = await mediator.Send(signupCommand);
 
         return Ok(
-            new SingleResponseModel< SignupCommandDto>()
+            new SingleResponseModel<SignupCommandDto>()
             {
                 Data = signupCommandResponse,
                 Message = "User created successfully"

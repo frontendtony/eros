@@ -20,4 +20,10 @@
     <ProjectReference Include="..\Eros.Domain\Eros.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\Users\CommandHandlers\" />
+    <Folder Include="Features\Users\Commands\" />
+    <Folder Include="Features\Users\Validators\" />
+  </ItemGroup>
+
 </Project>

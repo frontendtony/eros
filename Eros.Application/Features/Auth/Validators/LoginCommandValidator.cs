@@ -1,7 +1,7 @@
-using Eros.Application.Features.Users.Commands;
+using Eros.Application.Features.Auth.Commands;
 using FluentValidation;
 
-namespace Eros.Application.Features.Users.Validators;
+namespace Eros.Application.Features.Auth.Validators;
 
 public class LoginCommandValidator : AbstractValidator<LoginCommand>
 {

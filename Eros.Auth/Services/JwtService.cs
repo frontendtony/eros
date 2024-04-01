@@ -53,7 +53,7 @@ public class JwtService(IConfiguration configuration)
                 new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString(CultureInfo.InvariantCulture)),
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
                 new Claim(ClaimTypes.Name, user.FirstName + " " + user.LastName),
-                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.Email, user.Email!),
                 new Claim(ClaimTypes.Role, user.IsAdmin ? "True" : "False")
         };
 

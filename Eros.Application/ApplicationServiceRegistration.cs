@@ -2,8 +2,6 @@ using Eros.Application.Features.Auth.Commands;
 using Eros.Application.Features.Auth.Validators;
 using Eros.Application.Features.Estates.Commands;
 using Eros.Application.Features.Estates.Validators;
-using Eros.Application.Features.Users.Commands;
-using Eros.Application.Features.Users.Validators;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 

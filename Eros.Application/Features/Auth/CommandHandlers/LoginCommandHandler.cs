@@ -1,19 +1,19 @@
-using FluentValidation;
-using Eros.Application.Features.Users.Commands;
+using Eros.Api.Dto.Auth;
 using Eros.Application.Exceptions;
-using Eros.Domain.Aggregates.Users;
-using Application.Features.Users.Models;
+using Eros.Application.Features.Auth.Commands;
 using Eros.Auth.Services;
+using Eros.Domain.Aggregates.Users;
+using FluentValidation;
 using MediatR;
 
-namespace Eros.Application.Features.Users.CommandHandlers;
+namespace Eros.Application.Features.Auth.CommandHandlers;
 
 public class LoginCommandHandler(
     JwtService jwtService,
     IUserReadRepository userReadRepository,
-    IValidator<LoginCommand> validator) : IRequestHandler<LoginCommand, LoginResponse>
+    IValidator<LoginCommand> validator) : IRequestHandler<LoginCommand, LoginCommandDto>
 {
-    public async Task<LoginResponse> Handle(LoginCommand request, CancellationToken cancellationToken)
+    public async Task<LoginCommandDto> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
         var validationResult = await validator.ValidateAsync(request, cancellationToken);
 
@@ -48,6 +48,6 @@ public class LoginCommandHandler(
 
         var jwt = jwtService.CreateToken(user);
 
-        return new LoginResponse(jwt.Token);
+        return new LoginCommandDto(jwt.Token);
     }
 }
