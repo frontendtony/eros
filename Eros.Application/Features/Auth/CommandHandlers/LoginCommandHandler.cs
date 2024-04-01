@@ -10,29 +10,12 @@ namespace Eros.Application.Features.Auth.CommandHandlers;
 
 public class LoginCommandHandler(
     JwtService jwtService,
-    IUserReadRepository userReadRepository,
-    IValidator<LoginCommand> validator) : IRequestHandler<LoginCommand, LoginCommandDto>
+    IUserReadRepository userReadRepository) : IRequestHandler<LoginCommand, LoginCommandDto>
 {
     public async Task<LoginCommandDto> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
-        var validationResult = await validator.ValidateAsync(request, cancellationToken);
-
-        if (!validationResult.IsValid)
-        {
-            throw new CustomValidationException(validationResult.Errors.Select(x => new ValidationFailure()
-            {
-                ErrorMessage = x.ErrorMessage
-            })
-            .ToList());
-        }
-
-        var user = await userReadRepository.GetByEmailAsync(request.Email);
-
-        if (user is null)
-        {
-            throw new BadRequestException("Incorrect email address");
-        }
-
+        var user = await userReadRepository.GetByEmailAsync(request.Email)
+            ?? throw new BadRequestException("Incorrect email address");
 
         if (user.IsAdmin)
         {

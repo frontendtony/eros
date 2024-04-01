@@ -18,44 +18,29 @@ public class ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddlewa
         {
             var response = context.Response;
             response.ContentType = "application/json";
-            var responseModel = new SingleResponseModel<string>
+            
+            var responseModel = new ErrorResponseModel()
             {
-                Message = error?.Message ?? string.Empty,
-                Data = null
+                Message = error?.Message ?? string.Empty
             };
+            
+            if (error is CustomValidationException validationException)
+            {
+                responseModel.ValidationErrors = validationException.Errors;
+            }
 
             logger.LogError(error, error?.Message);
 
-            switch (error)
+            response.StatusCode = error switch
             {
-                case NotFoundException:
-                    response.StatusCode = (int)HttpStatusCode.NotFound;
-                    break;
-
-                case BadRequestException:
-                    response.StatusCode = (int)HttpStatusCode.BadRequest;
-                    break;
-
-                case UnauthorizedException:
-                    response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                    break;
-
-                case ForbiddenException:
-                    response.StatusCode = (int)HttpStatusCode.Forbidden;
-                    break;
-
-                case ConflictException:
-                    response.StatusCode = (int)HttpStatusCode.Conflict;
-                    break;
-
-                case CustomValidationException validationException:
-                    response.StatusCode = (int)HttpStatusCode.BadRequest;
-                    break;
-
-                default:
-                    response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                    break;
-            }
+                NotFoundException => (int)HttpStatusCode.NotFound,
+                BadRequestException => (int)HttpStatusCode.BadRequest,
+                UnauthorizedException => (int)HttpStatusCode.Unauthorized,
+                ForbiddenException => (int)HttpStatusCode.Forbidden,
+                ConflictException => (int)HttpStatusCode.Conflict,
+                CustomValidationException => (int)HttpStatusCode.BadRequest,
+                _ => (int)HttpStatusCode.InternalServerError
+            };
 
             var result = JsonConvert.SerializeObject(responseModel, new JsonSerializerSettings
             {

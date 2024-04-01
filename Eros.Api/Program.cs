@@ -38,11 +38,12 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddControllers();
 builder.Services.AddPersistenceServices(configuration);
 builder.Services.RegisterAuthServices(configuration);
-builder.Services.AddMediatR(cfg => {
+builder.Services.AddMediatR(cfg =>
+{
     cfg.RegisterServicesFromAssembly(typeof(SignupCommandHandler).Assembly);
 });
-builder.Services.AddValidators();
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddApplicationServices();
 
 var app = builder.Build();
 
