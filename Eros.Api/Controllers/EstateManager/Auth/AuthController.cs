@@ -14,7 +14,7 @@ public class AuthController(ISender mediator) : ControllerBase
     [HttpPost("token", Name = "CreateBearerToken")]
     [ProducesResponseType(typeof(SingleResponseModel<string>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> CreateBearerToken([FromBody] LoginDto dto)
+    public async Task<IActionResult> CreateBearerToken(LoginDto dto)
     {
         var loginCommand = dto.Adapt<LoginCommand>();
         var loginCommandResponse = await mediator.Send(loginCommand);

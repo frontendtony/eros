@@ -35,7 +35,10 @@ builder.Services.AddSwaggerGen(options =>
         });
     }
 );
-builder.Services.AddControllers();
+builder.Services.AddControllers(opt => 
+    // disable automatic model state validation
+    opt.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true
+);
 builder.Services.AddPersistenceServices(configuration);
 builder.Services.RegisterAuthServices(configuration);
 builder.Services.AddMediatR(cfg =>
