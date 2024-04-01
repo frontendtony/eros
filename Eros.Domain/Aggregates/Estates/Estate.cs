@@ -22,8 +22,8 @@ public class Estate
     public Estate() {}
 
     public Guid Id { get; set; }
-    public string Name { get; set; }
-    public string Address { get; set; }
+    public string Name { get; set; } = null!;
+    public string Address { get; set; } = null!;
     public Guid CreatedBy { get; init; }
     public string? LatLng { get; set; }
     public IEnumerable<Role> Roles { get; set; } = new List<Role>();
