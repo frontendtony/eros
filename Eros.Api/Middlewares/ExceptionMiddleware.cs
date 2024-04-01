@@ -26,7 +26,7 @@ public class ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddlewa
             
             if (error is CustomValidationException validationException)
             {
-                responseModel.ValidationErrors = validationException.Errors;
+                responseModel.ValidationErrors = validationException.Errors.Select(e => new ValidationErrorModel(e.PropertyName, e.ErrorMessage));
             }
 
             logger.LogError(error, error?.Message);
