@@ -1,6 +1,5 @@
 using Eros.Api.Extensions;
 using Eros.Application;
-using Eros.Application.Features.Auth.CommandHandlers;
 using Eros.Auth;
 using Eros.Persistence;
 using Microsoft.OpenApi.Models;
@@ -41,10 +40,6 @@ builder.Services.AddControllers(opt =>
 );
 builder.Services.AddPersistenceServices(configuration);
 builder.Services.RegisterAuthServices(configuration);
-builder.Services.AddMediatR(cfg =>
-{
-    cfg.RegisterServicesFromAssembly(typeof(SignupCommandHandler).Assembly);
-});
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddApplicationServices();
 

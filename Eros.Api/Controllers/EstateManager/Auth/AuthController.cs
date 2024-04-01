@@ -22,7 +22,7 @@ public class AuthController(ISender mediator) : ControllerBase
         return Ok(
             new SingleResponseModel<LoginCommandDto>()
             {
-                Data = loginCommandResponse,
+                Data = loginCommandResponse.Value,
                 Message = "Token created successfully"
             }
         );
@@ -40,7 +40,7 @@ public class AuthController(ISender mediator) : ControllerBase
         return Ok(
             new SingleResponseModel<SignupCommandDto>()
             {
-                Data = signupCommandResponse,
+                Data = signupCommandResponse.Value,
                 Message = "User created successfully"
             }
         );

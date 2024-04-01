@@ -1,10 +1,10 @@
 using Eros.Api.Dto.Auth;
 using MediatR;
+using ErrorOr;
 
 namespace Eros.Application.Features.Auth.Commands;
 
-public class LoginCommand : IRequest<LoginCommandDto>
-{
-    public required string Email { get; init; }
-    public required string Password { get; init; }
-}
+public sealed record LoginCommand(
+    string Email,
+    string Password
+) : IRequest<ErrorOr<LoginCommandDto>>;

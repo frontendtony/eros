@@ -1,5 +1,5 @@
 using Eros.Api.Dto.Auth;
-using Eros.Application.Features.Users.Models;
+using ErrorOr;
 using MediatR;
 
 namespace Eros.Application.Features.Auth.Commands;
@@ -9,4 +9,4 @@ public sealed record SignupCommand(
     string Password,
     string FirstName,
     string LastName
-) : IRequest<SignupCommandDto>;
+) : IRequest<ErrorOr<SignupCommandDto>>;
