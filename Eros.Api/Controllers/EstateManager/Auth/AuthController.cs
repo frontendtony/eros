@@ -1,5 +1,6 @@
 using Eros.Api.Dto.Auth;
 using Eros.Api.Models;
+using Eros.Application.Exceptions;
 using Eros.Application.Features.Auth.Commands;
 using Mapster;
 using MediatR;
@@ -11,27 +12,33 @@ namespace Eros.Api.Controllers.EstateManager.Auth;
 [Route("api/auth")]
 public class AuthController(ISender mediator) : ControllerBase
 {
-    [HttpPost("token", Name = "CreateBearerToken")]
+    [HttpPost("login")]
     [ProducesResponseType(typeof(SingleResponseModel<string>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> CreateBearerToken(LoginDto dto)
+    public async Task<IActionResult> Login(LoginDto dto)
     {
         var loginCommand = dto.Adapt<LoginCommand>();
         var loginCommandResponse = await mediator.Send(loginCommand);
 
+        var loginCommandDto = loginCommandResponse.Value;
+        if (loginCommandDto.User.IsAdmin)
+        {
+            throw new ForbiddenException("User is an admin");
+        }
+        
         return Ok(
             new SingleResponseModel<LoginCommandDto>()
             {
-                Data = loginCommandResponse.Value,
+                Data = loginCommandDto,
                 Message = "Token created successfully"
             }
         );
     }
 
-    [HttpPost("signup", Name = "Signup")]
+    [HttpPost("register")]
     [ProducesResponseType(typeof(SignupCommandDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Signup([FromBody] SignupDto dto)
+    public async Task<IActionResult> Register(SignupDto dto)
     {
         var signupCommand = dto.Adapt<SignupCommand>();
 

@@ -27,7 +27,7 @@ public class AdminAuthController(ISender mediator) : ControllerBase
         return Ok(
             new SingleResponseModel<LoginCommandDto>()
             {
-                Data = loginCommandResponse.Value,
+                Data = loginCommandDto,
                 Message = "Token created successfully"
             }
         );
