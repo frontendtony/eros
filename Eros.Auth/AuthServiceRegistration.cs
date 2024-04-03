@@ -28,7 +28,7 @@ public static class AuthServiceRegistration
                 options.Password.RequireLowercase = false;
             })
             .AddEntityFrameworkStores<ErosDbContext>();
-        
+
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {

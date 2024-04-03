@@ -7,6 +7,11 @@ using Microsoft.OpenApi.Models;
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 
+builder.Services.AddControllers(opt => 
+    // disable automatic model state validation
+    opt.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true
+);
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
     {
@@ -34,14 +39,11 @@ builder.Services.AddSwaggerGen(options =>
         });
     }
 );
-builder.Services.AddControllers(opt => 
-    // disable automatic model state validation
-    opt.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true
-);
+
 builder.Services.AddPersistenceServices(configuration);
-builder.Services.RegisterAuthServices(configuration);
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddApplicationServices();
+builder.Services.RegisterAuthServices(configuration);
 
 var app = builder.Build();
 
@@ -57,7 +59,11 @@ else
     app.UseHttpsRedirection();
 }
 
-app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.MapControllers();
+
 app.ConfigureExceptionHandlers();
+
 app.Run();

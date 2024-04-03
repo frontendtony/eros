@@ -11,7 +11,7 @@ namespace Eros.Auth.Services;
 
 public class JwtService(IConfiguration configuration)
 {
-    private const int ExpirationMinutes = 60 * 60 * 24 * 7; // 7 days
+    private const int ExpirationMinutes = 60 * 24 * 7; // 7 days
 
     public JwtToken CreateToken(User user)
     {
@@ -57,11 +57,12 @@ public class JwtService(IConfiguration configuration)
                 new Claim(ClaimTypes.Role, user.IsAdmin ? "True" : "False")
         };
 
-    private SigningCredentials CreateSigningCredentials() =>
-        new SigningCredentials(
-            new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(configuration["Jwt:Key"] ?? string.Empty)
-            ),
-            SecurityAlgorithms.HmacSha256
-        );
+    private SigningCredentials CreateSigningCredentials()
+    {
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:SecretKey"]));
+
+        var signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+        
+        return signingCredentials;
+    }
 }
