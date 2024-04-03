@@ -4,6 +4,7 @@ using Eros.Application.Features.Auth.Commands;
 using Eros.Auth.Services;
 using Eros.Domain.Aggregates.Users;
 using ErrorOr;
+using Mapster;
 using MediatR;
 
 namespace Eros.Application.Features.Auth.CommandHandlers;
@@ -17,11 +18,6 @@ public class LoginCommandHandler(
         var user = await userReadRepository.GetByEmailAsync(request.Email)
             ?? throw new BadRequestException("Incorrect email address");
 
-        if (user.IsAdmin)
-        {
-            throw new ForbiddenException("User is an admin");
-        }
-
         var isPasswordValid = await userReadRepository.CheckPassword(user, request.Password);
 
         if (!isPasswordValid)
@@ -31,6 +27,8 @@ public class LoginCommandHandler(
 
         var jwt = jwtService.CreateToken(user);
 
-        return new LoginCommandDto(jwt.Token);
+        var userDto = user.Adapt<UserDto>();
+
+        return new LoginCommandDto(jwt.Token, jwt.ExpiresAt, userDto);
     }
 }
