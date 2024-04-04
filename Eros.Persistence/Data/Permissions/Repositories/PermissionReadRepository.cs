@@ -1,7 +1,7 @@
 using Eros.Domain.Aggregates.Roles;
 using Microsoft.EntityFrameworkCore;
 
-namespace Eros.Persistence.Data.Roles.Repositories;
+namespace Eros.Persistence.Data.Permissions.Repositories;
 
 public class PermissionReadRepository(ErosDbContext dbContext) : IPermissionReadRepository
 {

@@ -1,10 +1,7 @@
 namespace Eros.Domain.Aggregates.Roles;
 
-public class Permission(string name, string description)
+public class Permission(Guid id, string name)
 {
-    public Guid Id { get; init; } = Guid.NewGuid();
-    public required string Name { get; init; } = name;
-    public required string Description { get; init; } = description;
-    public DateTime CreatedAt { get; init; } = DateTime.UtcNow;
-    public DateTime? UpdatedAt { get; set; }
+    public Guid Id { get; init; } = id;
+    public string Name { get; init; } = name;
 }

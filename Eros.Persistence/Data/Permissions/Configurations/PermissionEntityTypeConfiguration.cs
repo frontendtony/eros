@@ -19,18 +19,8 @@ public class PermissionEntityTypeConfiguration : IEntityTypeConfiguration<Permis
             .HasColumnName("Name")
             .IsRequired()
             .HasMaxLength(50);
-
-        builder.Property(x => x.Description)
-            .HasColumnName("Description")
-            .IsRequired()
-            .HasMaxLength(100);
-
-        builder.Property(x => x.CreatedAt)
-            .HasColumnName("CreatedAt")
-            .IsRequired();
-
-        builder.Property(x => x.UpdatedAt)
-            .HasColumnName("UpdatedAt")
-            .IsRequired(false);
+        
+        builder.HasIndex(x => x.Name)
+            .IsUnique();
     }
 }
