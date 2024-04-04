@@ -39,6 +39,6 @@ public class ApiControllerBase : ControllerBase
             throw new InvalidDataException("HttpContext is null.");
         }
         
-        return HttpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Role) == "True";
+        return HttpContextAccessor.HttpContext.User.FindFirstValue("IsAdmin") == "True";
     }
 }
