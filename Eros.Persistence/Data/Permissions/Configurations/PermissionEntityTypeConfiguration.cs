@@ -19,6 +19,10 @@ public class PermissionEntityTypeConfiguration : IEntityTypeConfiguration<Permis
             .HasColumnName("Name")
             .IsRequired()
             .HasMaxLength(50);
+
+        builder.HasMany(x => x.Roles)
+            .WithMany(x => x.Permissions)
+            .UsingEntity<RolePermission>();
         
         builder.HasIndex(x => x.Name)
             .IsUnique();

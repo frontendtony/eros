@@ -37,17 +37,8 @@ public class RoleEntityTypeConfiguration : IEntityTypeConfiguration<Role>
             .IsRequired();
 
         builder.HasMany(x => x.Permissions)
-            .WithMany()
-            .UsingEntity<Dictionary<string, object>>(
-                "RolePermission",
-                x => x.HasOne<Permission>().WithMany().HasForeignKey("PermissionId"),
-                x => x.HasOne<Role>().WithMany().HasForeignKey("RoleId"),
-                x =>
-                {
-                    x.HasKey("RoleId", "PermissionId");
-                    x.ToTable("RolePermissions", "roles");
-                }
-            );
+            .WithMany(x => x.Roles)
+            .UsingEntity<RolePermission>();
 
         builder.HasMany(x => x.Estates)
             .WithMany()
