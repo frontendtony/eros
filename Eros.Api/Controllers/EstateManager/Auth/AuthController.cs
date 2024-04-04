@@ -3,14 +3,12 @@ using Eros.Api.Models;
 using Eros.Application.Exceptions;
 using Eros.Application.Features.Auth.Commands;
 using Mapster;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Eros.Api.Controllers.EstateManager.Auth;
 
-[ApiController]
 [Route("api/auth")]
-public class AuthController(ISender mediator) : ControllerBase
+public class AuthController : ApiControllerBase
 {
     [HttpPost("login")]
     [ProducesResponseType(typeof(SingleResponseModel<string>), StatusCodes.Status200OK)]
@@ -18,7 +16,7 @@ public class AuthController(ISender mediator) : ControllerBase
     public async Task<IActionResult> Login(LoginDto dto)
     {
         var loginCommand = dto.Adapt<LoginCommand>();
-        var loginCommandResponse = await mediator.Send(loginCommand);
+        var loginCommandResponse = await Mediator.Send(loginCommand);
 
         var loginCommandDto = loginCommandResponse.Value;
         if (loginCommandDto.User.IsAdmin)
@@ -42,7 +40,7 @@ public class AuthController(ISender mediator) : ControllerBase
     {
         var signupCommand = dto.Adapt<SignupCommand>();
 
-        var signupCommandResponse = await mediator.Send(signupCommand);
+        var signupCommandResponse = await Mediator.Send(signupCommand);
 
         return Ok(
             new SingleResponseModel<SignupCommandDto>()

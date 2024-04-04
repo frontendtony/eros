@@ -3,20 +3,18 @@ using Eros.Api.Models;
 using Eros.Application.Exceptions;
 using Eros.Application.Features.Auth.Commands;
 using Mapster;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Eros.Api.Controllers.Admin.Auth;
 
-[ApiController]
 [Route("api/admin/auth")]
-public class AdminAuthController(ISender mediator) : ControllerBase
+public class AdminAuthController : ApiControllerBase
 {
     [HttpPost("login")]
     public async Task<IActionResult> Login(LoginDto dto)
     {
         var loginCommand = dto.Adapt<LoginCommand>();
-        var loginCommandResponse = await mediator.Send(loginCommand);
+        var loginCommandResponse = await Mediator.Send(loginCommand);
         
         var loginCommandDto = loginCommandResponse.Value;
         if (!loginCommandDto.User.IsAdmin)
