@@ -18,10 +18,12 @@ public class RoleEntityTypeConfiguration : IEntityTypeConfiguration<Role>
 
         builder.Property(x => x.Name)
             .HasColumnName("Name")
+            .HasMaxLength(50)
             .IsRequired();
 
         builder.Property(x => x.Description)
             .HasColumnName("Description")
+            .HasMaxLength(255)
             .IsRequired();
 
         builder.Property(x => x.CreatedAt)
