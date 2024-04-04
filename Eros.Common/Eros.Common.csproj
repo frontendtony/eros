@@ -5,14 +5,4 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
-
-    <ItemGroup>
-      <PackageReference Include="Mapster" Version="7.4.1-pre01" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\Eros.Api.Dto\Eros.Api.Dto.csproj" />
-      <ProjectReference Include="..\Eros.Application\Eros.Application.csproj" />
-    </ItemGroup>
-
 </Project>

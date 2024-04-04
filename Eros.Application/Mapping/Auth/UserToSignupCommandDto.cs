@@ -2,7 +2,7 @@ using Eros.Api.Dto.Auth;
 using Eros.Domain.Aggregates.Users;
 using Mapster;
 
-namespace Eros.Common.Mapping.Auth;
+namespace Eros.Application.Mapping.Auth;
 
 public class UserToSignupCommandDto : IRegister
 {

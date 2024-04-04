@@ -2,7 +2,7 @@ using Eros.Api.Dto.Auth;
 using Eros.Application.Features.Auth.Commands;
 using Mapster;
 
-namespace Eros.Common.Mapping.Auth;
+namespace Eros.Application.Mapping.Auth;
 
 public class LoginDtoToLoginCommand : IRegister
 {
