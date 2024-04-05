@@ -9,6 +9,7 @@ public class RoleToCreateSharedRoleCommandDto : IRegister
     public void Register(TypeAdapterConfig config)
     {
         config.NewConfig<Role, CreateSharedRoleCommandDto>()
+            .Map(dest => dest.Id, src => src.Id.ToString())
             .Map(dest => dest.Name, src => src.Name)
             .Map(dest => dest.Description, src => src.Description);
     }
