@@ -31,8 +31,7 @@ public class RoleEntityTypeConfiguration : IEntityTypeConfiguration<Role>
             .IsRequired();
 
         builder.Property(x => x.UpdatedAt)
-            .HasColumnName("UpdatedAt")
-            .IsRequired();
+            .HasColumnName("UpdatedAt");
 
         builder.Property(x => x.IsShared)
             .HasColumnName("IsShared")
