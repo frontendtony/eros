@@ -13,7 +13,7 @@ public class ForbidAdminFilter(IHttpContextAccessor httpContextAccessor) : IAuth
             throw new InvalidDataException("HttpContext is null.");
         }
 
-        if (httpContextAccessor.HttpContext.User.FindFirstValue("IsAdmin").Equals("False")) return;
+        if (httpContextAccessor.HttpContext.User.FindFirstValue("IsAdmin") == "False") return;
 
         throw new UnauthorizedException("An admin is not allowed to perform this action.");
     }

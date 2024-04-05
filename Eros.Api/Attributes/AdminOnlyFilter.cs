@@ -13,7 +13,7 @@ public class AdminOnlyFilter(IHttpContextAccessor httpContextAccessor) : IAuthor
             throw new InvalidDataException("HttpContext is null.");
         }
 
-        if (httpContextAccessor.HttpContext.User.FindFirstValue("IsAdmin").Equals("True")) return;
+        if (httpContextAccessor.HttpContext.User.FindFirstValue("IsAdmin") == "True") return;
 
         throw new UnauthorizedException("Unauthorized.");
     }
