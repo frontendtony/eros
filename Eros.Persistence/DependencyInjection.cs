@@ -7,6 +7,7 @@ using Eros.Domain.Aggregates.Users;
 using Eros.Persistence.Data.Apartments.Repositories;
 using Eros.Persistence.Data.Buildings.Repositories;
 using Eros.Persistence.Data.Estates.Repositories;
+using Eros.Persistence.Data.Permissions.Repositories;
 using Eros.Persistence.Data.Roles.Repositories;
 using Eros.Persistence.Data.Users.Repositories;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,7 +16,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Eros.Persistence;
 
-public static class PersistenceServiceRegistration
+public static class DependencyInjection
 {
     public static IServiceCollection AddPersistenceServices(this IServiceCollection services, IConfiguration configuration)
     {
@@ -30,6 +31,8 @@ public static class PersistenceServiceRegistration
         services.AddScoped<IUserReadRepository, UserReadRepository>();
         services.AddScoped<IUserWriteRepository, UserWriteRepository>();
         services.AddScoped<IRoleReadRepository, RoleReadRepository>();
+        services.AddScoped<IRoleWriteRepository, RoleWriteRepository>();
+        services.AddScoped<IPermissionReadRepository, PermissionReadRepository>();
         services.AddScoped<IEstateReadRepository, EstateReadRepository>();
         services.AddScoped<IEstateWriteRepository, EstateWriteRepository>();
         services.AddScoped<IBuildingReadRepository, BuildingReadRepository>();

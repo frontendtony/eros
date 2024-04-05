@@ -17,4 +17,10 @@ public class RoleReadRepository(ErosDbContext dbContext) : IRoleReadRepository
             .AsNoTracking()
             .ToListAsync();
     }
+    
+    public async Task<Role?> GetByNameAsync(string name, CancellationToken cancellationToken)
+    {
+        return await dbContext.Roles
+            .FirstOrDefaultAsync(r => r.Name == name, cancellationToken);
+    }
 }

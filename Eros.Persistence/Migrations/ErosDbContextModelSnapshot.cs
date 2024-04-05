@@ -341,7 +341,6 @@ namespace Eros.Persistence.Migrations
                         .HasColumnName("Name");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .IsRequired()
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("UpdatedAt");
 
