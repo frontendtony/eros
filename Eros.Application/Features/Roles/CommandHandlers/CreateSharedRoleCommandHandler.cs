@@ -53,6 +53,6 @@ public class CreateSharedRoleCommandHandler(
         await roleWriteRepository.AddAsync(newRole, cancellationToken);
         logger.LogInformation("Role saved to database. Name: {Name}", request.Name);
 
-        return role.Adapt<CreateSharedRoleCommandDto>();
+        return newRole.Adapt<CreateSharedRoleCommandDto>();
     }
 }
