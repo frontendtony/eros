@@ -10,8 +10,6 @@ public class RoleToCreateSharedRoleCommandDto : IRegister
     {
         config.NewConfig<Role, CreateSharedRoleCommandDto>()
             .Map(dest => dest.Name, src => src.Name)
-            .Map(dest => dest.Description, src => src.Description)
-            .Map(dest => dest.PermissionIds, src =>
-                src.Permissions.Select(p => p.Id).ToList());
+            .Map(dest => dest.Description, src => src.Description);
     }
 }
