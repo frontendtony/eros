@@ -17,6 +17,7 @@ public class Estate
         Name = name;
         Address = address;
         CreatedBy = createdBy;
+        OwnerId = createdBy;
         LatLng = latlng;
         CreatedAt = DateTime.UtcNow;
     }
