@@ -25,6 +25,11 @@ class UserEntityTypeConfiguration : IEntityTypeConfiguration<User>
             .Property(x => x.LastName)
             .IsRequired()
             .HasMaxLength(50);
+        
+        builder
+            .Property(x => x.Avatar)
+            .IsRequired()
+            .HasMaxLength(255);
 
         builder
             .Property(x => x.Email)
@@ -36,7 +41,6 @@ class UserEntityTypeConfiguration : IEntityTypeConfiguration<User>
             .IsRequired();
 
         builder
-            .Property(x => x.UpdatedAt)
-            .IsRequired();
+            .Property(x => x.UpdatedAt);
     }
 }

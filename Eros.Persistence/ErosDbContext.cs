@@ -9,12 +9,13 @@ using Eros.Persistence.Data.Buildings.Configurations;
 using Eros.Persistence.Data.Estates.Configurations;
 using Eros.Persistence.Data.Permissions.Configurations;
 using Eros.Persistence.Data.Roles.Configurations;
+using Eros.Persistence.Data.Users.Configurations;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Eros.Persistence;
 
-public class ErosDbContext(DbContextOptions<ErosDbContext> options) : IdentityUserContext<User>(options)
+public class ErosDbContext(DbContextOptions<ErosDbContext> options) : IdentityUserContext<User, Guid>(options)
 {
     public DbSet<Role> Roles { get; init; } = null!;
     public DbSet<Permission> Permissions { get; init; } = null!;
@@ -29,6 +30,7 @@ public class ErosDbContext(DbContextOptions<ErosDbContext> options) : IdentityUs
     {
         base.OnModelCreating(modelBuilder);
         
+        modelBuilder.ApplyConfiguration(new UserEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new PermissionEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new RoleEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new EstateEntityTypeConfiguration());

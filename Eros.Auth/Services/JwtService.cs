@@ -48,10 +48,10 @@ public class JwtService(IConfiguration configuration)
 
     private static Claim[] CreateClaims(User user) =>
         new[] {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Id),
+                new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString(CultureInfo.InvariantCulture)),
-                new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.FirstName + " " + user.LastName),
                 new Claim(ClaimTypes.Email, user.Email!),
                 new Claim("IsAdmin", user.IsAdmin ? "True" : "False")
@@ -59,7 +59,10 @@ public class JwtService(IConfiguration configuration)
 
     private SigningCredentials CreateSigningCredentials()
     {
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:SecretKey"]));
+        var secretKey = configuration["Jwt:SecretKey"] ??
+                        throw new Exception("Secret key is missing in configuration.");
+        
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
 
         var signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
         

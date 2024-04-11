@@ -17,7 +17,7 @@ public class GetUserQueryHandler(IUserReadRepository userReadRepository, IHttpCo
 
             return new GetUserQueryResponse
             {
-                Id = user.Id,
+                Id = user.Id.ToString(),
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Email = user.Email!,

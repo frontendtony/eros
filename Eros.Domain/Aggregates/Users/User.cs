@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Eros.Domain.Aggregates.Users;
 
-public class User : IdentityUser
+public class User : IdentityUser<Guid>
 {
     private User(string email, string firstName, string lastName, bool isAdmin = false)
     {
@@ -14,9 +14,8 @@ public class User : IdentityUser
         CreatedAt = DateTime.UtcNow;
         UpdatedAt = DateTime.UtcNow;
     }
-
-    public override string? Email { get; set; }
-    public override string? UserName { get; set; }
+    public sealed override string? Email { get; set; }
+    public sealed override string? UserName { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string? Avatar { get; set; }
