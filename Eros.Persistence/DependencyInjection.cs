@@ -1,7 +1,6 @@
 using Eros.Domain.Aggregates.Apartments;
 using Eros.Domain.Aggregates.Buildings;
 using Eros.Domain.Aggregates.Estates;
-using Eros.Domain.Aggregates.Estates.Repositories;
 using Eros.Domain.Aggregates.Roles;
 using Eros.Domain.Aggregates.Users;
 using Eros.Persistence.Data.Apartments.Repositories;
@@ -35,6 +34,7 @@ public static class DependencyInjection
         services.AddScoped<IPermissionReadRepository, PermissionReadRepository>();
         services.AddScoped<IEstateReadRepository, EstateReadRepository>();
         services.AddScoped<IEstateWriteRepository, EstateWriteRepository>();
+        services.AddScoped<IEstateRoleWriteRepository, EstateRoleWriteRepository>();
         services.AddScoped<IBuildingReadRepository, BuildingReadRepository>();
         services.AddScoped<IBuildingWriteRepository, BuildingWriteRepository>();
         services.AddScoped<IBuildingTypeReadRepository, BuildingTypeReadRepository>();

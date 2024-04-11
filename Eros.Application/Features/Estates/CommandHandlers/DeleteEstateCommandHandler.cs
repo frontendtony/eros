@@ -1,7 +1,6 @@
 using Eros.Application.Exceptions;
 using Eros.Application.Features.Estates.Commands;
 using Eros.Domain.Aggregates.Estates;
-using Eros.Domain.Aggregates.Estates.Repositories;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 

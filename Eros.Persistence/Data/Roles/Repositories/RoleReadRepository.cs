@@ -18,6 +18,13 @@ public class RoleReadRepository(ErosDbContext dbContext) : IRoleReadRepository
             .ToListAsync();
     }
     
+    public async Task<IEnumerable<Role>> GetSharedRolesAsync(CancellationToken cancellationToken)
+    {
+        return await dbContext.Roles
+            .AsNoTracking()
+            .Where(r => r.IsShared).ToListAsync(cancellationToken);
+    }
+    
     public async Task<Role?> GetByNameAsync(string name, CancellationToken cancellationToken)
     {
         return await dbContext.Roles

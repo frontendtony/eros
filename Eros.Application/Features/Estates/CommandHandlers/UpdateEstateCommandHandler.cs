@@ -2,12 +2,13 @@ using Eros.Application.Exceptions;
 using Eros.Application.Features.Estates.Commands;
 using Eros.Application.Features.Estates.Models;
 using Eros.Domain.Aggregates.Estates;
-using Eros.Domain.Aggregates.Estates.Repositories;
+using Eros.Persistence;
 using MediatR;
 
 namespace Eros.Application.Features.Estates.CommandHandlers;
 
 public class UpdateEstateCommandHandler(
+    ErosDbContext dbContext,
     IEstateWriteRepository estateWriteRepository,
     IEstateReadRepository estateReadRepository)
     : IRequestHandler<UpdateEstateCommand, EstateResponseModel>
@@ -21,15 +22,17 @@ public class UpdateEstateCommandHandler(
         estate.LatLng = request.LatLng ?? estate.LatLng;
         estate.UpdatedAt = DateTime.UtcNow;
 
-        return await estateWriteRepository.UpdateAsync(estate, cancellationToken)
-            .ContinueWith(t => new EstateResponseModel(
-                t.Result.Id,
-                t.Result.Name,
-                t.Result.Address,
-                t.Result.LatLng,
-                t.Result.CreatedBy,
-                t.Result.CreatedAt,
-                t.Result.UpdatedAt
-            ), cancellationToken);
+        estateWriteRepository.UpdateAsync(estate, cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
+
+        return new EstateResponseModel(
+            estate.Id,
+            estate.Name,
+            estate.Address,
+            estate.LatLng,
+            estate.CreatedBy,
+            estate.CreatedAt,
+            estate.UpdatedAt
+        );
     }
 }
