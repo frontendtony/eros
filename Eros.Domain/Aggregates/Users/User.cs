@@ -1,3 +1,4 @@
+using Eros.Domain.Aggregates.Estates;
 using Microsoft.AspNetCore.Identity;
 
 namespace Eros.Domain.Aggregates.Users;
@@ -20,6 +21,8 @@ public class User : IdentityUser<Guid>
     public string LastName { get; set; }
     public string? Avatar { get; set; }
     public bool IsAdmin { get; set; }
+    public List<Estate> Estates { get; } = [];
+    public List<EstateUser> EstateUsers { get; } = [];
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
 

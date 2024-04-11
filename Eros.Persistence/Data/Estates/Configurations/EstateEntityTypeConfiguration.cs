@@ -38,9 +38,16 @@ public class EstateEntityTypeConfiguration : IEntityTypeConfiguration<Estate>
 
         builder.Property(x => x.CreatedBy)
             .IsRequired();
+        
+        builder.Property(x => x.OwnerId)
+            .IsRequired();
 
         builder.HasMany(x => x.Roles)
             .WithMany(r => r.Estates)
             .UsingEntity<EstateRole>();
+
+        builder.HasMany(x => x.Users)
+            .WithMany(u => u.Estates)
+            .UsingEntity<EstateUser>();
     }
 }
