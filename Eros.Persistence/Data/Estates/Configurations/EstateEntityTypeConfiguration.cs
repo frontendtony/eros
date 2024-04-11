@@ -4,14 +4,13 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Eros.Persistence.Data.Estates.Configurations;
 
-public class EstateEntityTypeConfiguration : IEntityTypeConfiguration<Domain.Aggregates.Estates.Estate>
+public class EstateEntityTypeConfiguration : IEntityTypeConfiguration<Estate>
 {
-    public void Configure(EntityTypeBuilder<Domain.Aggregates.Estates.Estate> builder)
+    public void Configure(EntityTypeBuilder<Estate> builder)
     {
         builder.ToTable("Estates");
 
         builder.HasKey(x => x.Id);
-        builder.Property(x => x.Id).ValueGeneratedNever();
 
         builder.Property(x => x.Name)
             .IsRequired()
@@ -41,7 +40,7 @@ public class EstateEntityTypeConfiguration : IEntityTypeConfiguration<Domain.Agg
             .IsRequired();
 
         builder.HasMany(x => x.Roles)
-            .WithMany()
+            .WithMany(r => r.Estates)
             .UsingEntity<EstateRole>();
     }
 }

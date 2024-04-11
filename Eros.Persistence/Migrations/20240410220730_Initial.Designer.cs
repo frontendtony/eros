@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Eros.Persistence.Migrations
 {
     [DbContext(typeof(ErosDbContext))]
-    [Migration("20240330190650_Initial")]
+    [Migration("20240410220730_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace Eros.Persistence.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.3")
+                .HasAnnotation("ProductVersion", "7.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -28,6 +28,7 @@ namespace Eros.Persistence.Migrations
             modelBuilder.Entity("Eros.Domain.Aggregates.Apartments.Apartment", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("ApartmentTypeId")
@@ -37,12 +38,13 @@ namespace Eros.Persistence.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("Description")
-                        .HasColumnType("text");
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<int>("NumberOfRooms")
                         .HasColumnType("integer");
@@ -62,15 +64,17 @@ namespace Eros.Persistence.Migrations
             modelBuilder.Entity("Eros.Domain.Aggregates.Apartments.ApartmentType", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("Description")
-                        .HasColumnType("text");
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.HasKey("Id");
 
@@ -83,6 +87,7 @@ namespace Eros.Persistence.Migrations
             modelBuilder.Entity("Eros.Domain.Aggregates.Buildings.Building", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("Address")
@@ -117,9 +122,6 @@ namespace Eros.Persistence.Migrations
 
                     b.HasIndex("EstateId");
 
-                    b.HasIndex("Name", "EstateId")
-                        .IsUnique();
-
                     b.ToTable("Buildings", (string)null);
                 });
 
@@ -147,6 +149,7 @@ namespace Eros.Persistence.Migrations
             modelBuilder.Entity("Eros.Domain.Aggregates.Estates.Estate", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("Address")
@@ -195,7 +198,7 @@ namespace Eros.Persistence.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("EstateRoles", (string)null);
+                    b.ToTable("EstateRole");
                 });
 
             modelBuilder.Entity("Eros.Domain.Aggregates.Roles.Permission", b =>
@@ -205,29 +208,115 @@ namespace Eros.Persistence.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("Id");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("CreatedAt");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("Description");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
                         .HasColumnName("Name");
 
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("UpdatedAt");
-
                     b.HasKey("Id");
 
+                    b.HasIndex("Name")
+                        .IsUnique();
+
                     b.ToTable("Permissions", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("8cfdbbb4-cb87-4d78-9806-c20a63b87530"),
+                            Name = "Estate.Create"
+                        },
+                        new
+                        {
+                            Id = new Guid("d542cd68-6d1a-4588-92c1-b35f550a2a1b"),
+                            Name = "Estate.Update"
+                        },
+                        new
+                        {
+                            Id = new Guid("32e40dda-f579-4fd8-aeee-d157cedeb062"),
+                            Name = "Estate.Delete"
+                        },
+                        new
+                        {
+                            Id = new Guid("e45f233e-6dbd-4228-8b18-a23a66c1b18b"),
+                            Name = "Estate.View"
+                        },
+                        new
+                        {
+                            Id = new Guid("b80d1e12-44bb-4457-a1ce-e6fbbbd74cec"),
+                            Name = "Building.Create"
+                        },
+                        new
+                        {
+                            Id = new Guid("2a84ccda-2adf-4215-8e2e-5bbd72d5216c"),
+                            Name = "Building.Update"
+                        },
+                        new
+                        {
+                            Id = new Guid("bd848626-40c8-499a-b9f8-2886cf57d8c6"),
+                            Name = "Building.Delete"
+                        },
+                        new
+                        {
+                            Id = new Guid("af23db24-f6c0-4448-9f43-67288c4f5328"),
+                            Name = "Building.View"
+                        },
+                        new
+                        {
+                            Id = new Guid("e300d634-8686-40b2-b396-6e0ac5cb0d09"),
+                            Name = "Building.List"
+                        },
+                        new
+                        {
+                            Id = new Guid("9765a47d-7e67-4d24-aa86-af372748ec7a"),
+                            Name = "Apartment.Create"
+                        },
+                        new
+                        {
+                            Id = new Guid("61e201f7-7859-40b9-bbe8-715f29204291"),
+                            Name = "Apartment.Update"
+                        },
+                        new
+                        {
+                            Id = new Guid("1c8a89a0-b6fe-4efc-b0e3-12db170433fe"),
+                            Name = "Apartment.Delete"
+                        },
+                        new
+                        {
+                            Id = new Guid("8b7a4964-46b3-4a03-a19e-86c35cb5b3cd"),
+                            Name = "Apartment.View"
+                        },
+                        new
+                        {
+                            Id = new Guid("2c67bdb4-7d9e-419a-816d-be29da2e837a"),
+                            Name = "Apartment.List"
+                        },
+                        new
+                        {
+                            Id = new Guid("98d6ab3d-8a40-44bc-85d6-96c739813f9d"),
+                            Name = "Role.Create"
+                        },
+                        new
+                        {
+                            Id = new Guid("1a4b7beb-488b-4666-86d4-991895e0872b"),
+                            Name = "Role.Update"
+                        },
+                        new
+                        {
+                            Id = new Guid("4c6e1ac5-b00e-41f5-89fa-c801578a9818"),
+                            Name = "Role.Delete"
+                        },
+                        new
+                        {
+                            Id = new Guid("ed64a073-1821-407c-add6-2e88f5d045e1"),
+                            Name = "Role.View"
+                        },
+                        new
+                        {
+                            Id = new Guid("e0a2cb5c-28e2-4ee7-8fb9-a00a3e761e5e"),
+                            Name = "Role.List"
+                        });
                 });
 
             modelBuilder.Entity("Eros.Domain.Aggregates.Roles.Role", b =>
@@ -243,7 +332,8 @@ namespace Eros.Persistence.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
                         .HasColumnName("Description");
 
                     b.Property<bool>("IsShared")
@@ -252,17 +342,32 @@ namespace Eros.Persistence.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
                         .HasColumnName("Name");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .IsRequired()
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("UpdatedAt");
 
                     b.HasKey("Id");
 
                     b.ToTable("Roles", (string)null);
+                });
+
+            modelBuilder.Entity("Eros.Domain.Aggregates.Roles.RolePermission", b =>
+                {
+                    b.Property<Guid>("PermissionId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("PermissionId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("RolePermission");
                 });
 
             modelBuilder.Entity("Eros.Domain.Aggregates.Users.User", b =>
@@ -284,7 +389,6 @@ namespace Eros.Persistence.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
 
@@ -335,7 +439,6 @@ namespace Eros.Persistence.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("UserName")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
 
@@ -417,21 +520,6 @@ namespace Eros.Persistence.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("RolePermission", b =>
-                {
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("PermissionId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("RoleId", "PermissionId");
-
-                    b.HasIndex("PermissionId");
-
-                    b.ToTable("RolePermissions", "roles");
-                });
-
             modelBuilder.Entity("Eros.Domain.Aggregates.Apartments.Apartment", b =>
                 {
                     b.HasOne("Eros.Domain.Aggregates.Apartments.ApartmentType", "ApartmentType")
@@ -460,7 +548,7 @@ namespace Eros.Persistence.Migrations
                         .IsRequired();
 
                     b.HasOne("Eros.Domain.Aggregates.Estates.Estate", "Estate")
-                        .WithMany()
+                        .WithMany("Buildings")
                         .HasForeignKey("EstateId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -472,21 +560,32 @@ namespace Eros.Persistence.Migrations
 
             modelBuilder.Entity("Eros.Domain.Aggregates.Estates.EstateRole", b =>
                 {
-                    b.HasOne("Eros.Domain.Aggregates.Estates.Estate", "Estate")
+                    b.HasOne("Eros.Domain.Aggregates.Estates.Estate", null)
                         .WithMany()
                         .HasForeignKey("EstateId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Eros.Domain.Aggregates.Roles.Role", "Role")
+                    b.HasOne("Eros.Domain.Aggregates.Roles.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
 
-                    b.Navigation("Estate");
+            modelBuilder.Entity("Eros.Domain.Aggregates.Roles.RolePermission", b =>
+                {
+                    b.HasOne("Eros.Domain.Aggregates.Roles.Permission", null)
+                        .WithMany()
+                        .HasForeignKey("PermissionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("Role");
+                    b.HasOne("Eros.Domain.Aggregates.Roles.Role", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -516,24 +615,14 @@ namespace Eros.Persistence.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("RolePermission", b =>
-                {
-                    b.HasOne("Eros.Domain.Aggregates.Roles.Permission", null)
-                        .WithMany()
-                        .HasForeignKey("PermissionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Eros.Domain.Aggregates.Roles.Role", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Eros.Domain.Aggregates.Buildings.Building", b =>
                 {
                     b.Navigation("Apartments");
+                });
+
+            modelBuilder.Entity("Eros.Domain.Aggregates.Estates.Estate", b =>
+                {
+                    b.Navigation("Buildings");
                 });
 #pragma warning restore 612, 618
         }

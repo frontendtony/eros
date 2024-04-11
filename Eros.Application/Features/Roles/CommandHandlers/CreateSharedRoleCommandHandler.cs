@@ -31,7 +31,6 @@ public class CreateSharedRoleCommandHandler(
         var newRole = Role.CreateSharedRole(request.Name, request.Description);
         
         logger.LogInformation("Role created. Name: {Name}", request.Name);
-        var permissions = new List<Permission>();
         
         logger.LogInformation("Adding permissions to role");
         foreach (var id in request.PermissionIds)
@@ -44,10 +43,8 @@ public class CreateSharedRoleCommandHandler(
                 throw new NotFoundException($"Permission not found. Id: {id}");
             }
             
-            permissions.Add(permission);
+            newRole.Permissions.Add(permission);
         }
-        
-        newRole.Permissions = permissions;
         
         logger.LogInformation("Saving role to database");
         await roleWriteRepository.AddAsync(newRole, cancellationToken);

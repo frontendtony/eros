@@ -10,10 +10,10 @@ public class Building
     public required string Address { get; set; }
     public string? Description { get; set; }
     public required Guid EstateId { get; set; }
-    public Estate? Estate { get; private set; }
+    public Estate Estate { get; private set; } = null!;
     public required Guid BuildingTypeId { get; set; }
     public BuildingType? BuildingType { get; private set; }
-    public ICollection<Apartment>? Apartments { get; set; }
+    public List<Apartment> Apartments { get; } = [];
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
 

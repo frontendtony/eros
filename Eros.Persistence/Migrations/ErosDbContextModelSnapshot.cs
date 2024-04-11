@@ -25,6 +25,7 @@ namespace Eros.Persistence.Migrations
             modelBuilder.Entity("Eros.Domain.Aggregates.Apartments.Apartment", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("ApartmentTypeId")
@@ -34,12 +35,13 @@ namespace Eros.Persistence.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("Description")
-                        .HasColumnType("text");
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<int>("NumberOfRooms")
                         .HasColumnType("integer");
@@ -59,15 +61,17 @@ namespace Eros.Persistence.Migrations
             modelBuilder.Entity("Eros.Domain.Aggregates.Apartments.ApartmentType", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("Description")
-                        .HasColumnType("text");
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.HasKey("Id");
 
@@ -80,6 +84,7 @@ namespace Eros.Persistence.Migrations
             modelBuilder.Entity("Eros.Domain.Aggregates.Buildings.Building", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("Address")
@@ -114,9 +119,6 @@ namespace Eros.Persistence.Migrations
 
                     b.HasIndex("EstateId");
 
-                    b.HasIndex("Name", "EstateId")
-                        .IsUnique();
-
                     b.ToTable("Buildings", (string)null);
                 });
 
@@ -144,6 +146,7 @@ namespace Eros.Persistence.Migrations
             modelBuilder.Entity("Eros.Domain.Aggregates.Estates.Estate", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("Address")
@@ -192,7 +195,7 @@ namespace Eros.Persistence.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("EstateRoles", (string)null);
+                    b.ToTable("EstateRole");
                 });
 
             modelBuilder.Entity("Eros.Domain.Aggregates.Roles.Permission", b =>
@@ -542,7 +545,7 @@ namespace Eros.Persistence.Migrations
                         .IsRequired();
 
                     b.HasOne("Eros.Domain.Aggregates.Estates.Estate", "Estate")
-                        .WithMany()
+                        .WithMany("Buildings")
                         .HasForeignKey("EstateId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -554,21 +557,17 @@ namespace Eros.Persistence.Migrations
 
             modelBuilder.Entity("Eros.Domain.Aggregates.Estates.EstateRole", b =>
                 {
-                    b.HasOne("Eros.Domain.Aggregates.Estates.Estate", "Estate")
+                    b.HasOne("Eros.Domain.Aggregates.Estates.Estate", null)
                         .WithMany()
                         .HasForeignKey("EstateId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Eros.Domain.Aggregates.Roles.Role", "Role")
+                    b.HasOne("Eros.Domain.Aggregates.Roles.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Estate");
-
-                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("Eros.Domain.Aggregates.Roles.RolePermission", b =>
@@ -616,6 +615,11 @@ namespace Eros.Persistence.Migrations
             modelBuilder.Entity("Eros.Domain.Aggregates.Buildings.Building", b =>
                 {
                     b.Navigation("Apartments");
+                });
+
+            modelBuilder.Entity("Eros.Domain.Aggregates.Estates.Estate", b =>
+                {
+                    b.Navigation("Buildings");
                 });
 #pragma warning restore 612, 618
         }

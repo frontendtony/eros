@@ -11,16 +11,15 @@ public class ApartmentTypeEntityTypeConfiguration : IEntityTypeConfiguration<Apa
         builder.ToTable("ApartmentTypes");
 
         builder.HasKey(x => x.Id);
-        builder.Property(x => x.Id).ValueGeneratedNever();
 
         builder.Property(x => x.Name)
             .IsRequired()
-            .HasMaxLength(100);
+            .HasMaxLength(50);
 
         builder.HasIndex(x => x.Name)
             .IsUnique();
 
         builder.Property(x => x.Description)
-            .IsRequired(false);
+            .HasMaxLength(255);
     }
 }

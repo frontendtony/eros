@@ -9,7 +9,7 @@ public class Apartment
     public string? Description { get; private set; }
     public int NumberOfRooms { get; set; }
     public required Guid ApartmentTypeId { get; set; }
-    public ApartmentType? ApartmentType { get; private set; }
+    public ApartmentType? ApartmentType { get; init; }
     public required Guid BuildingId { get; set; }
-    public Building? Building { get; private set; }
+    public Building Building { get; private set; } = null!;
 }

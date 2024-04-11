@@ -1,3 +1,4 @@
+using System.Collections;
 using Eros.Domain.Aggregates.Estates;
 
 namespace Eros.Domain.Aggregates.Roles;
@@ -23,12 +24,12 @@ public class Role
         return new Role(name, description, true);
     }
 
-    public Guid Id { get; set; }
-    public string Name { get; set; }
-    public string Description { get; set; }
-    public IEnumerable<Permission> Permissions { get; set; } = new List<Permission>();
-    public IEnumerable<Estate> Estates { get; set; } = new List<Estate>();
-    public bool IsShared { get; set; }
+    public Guid Id { get; init; }
+    public string Name { get; private set; }
+    public string Description { get; private set; }
+    public List<Permission> Permissions { get; set; } = [];
+    public List<Estate> Estates { get; } = [];
+    public bool IsShared { get; init; }
     public DateTime CreatedAt { get; init; }
-    public DateTime? UpdatedAt { get; set; }
+    public DateTime? UpdatedAt { get; private set; }
 }

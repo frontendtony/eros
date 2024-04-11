@@ -11,7 +11,6 @@ public class BuildingEntityTypeConfiguration : IEntityTypeConfiguration<Building
         builder.ToTable("Buildings");
 
         builder.HasKey(x => x.Id);
-        builder.Property(x => x.Id).ValueGeneratedNever();
 
         builder.Property(x => x.Name)
             .IsRequired()
@@ -28,8 +27,9 @@ public class BuildingEntityTypeConfiguration : IEntityTypeConfiguration<Building
             .IsRequired();
 
         builder.HasOne(x => x.Estate)
-            .WithMany()
-            .HasForeignKey(x => x.EstateId);
+            .WithMany(e => e.Buildings)
+            .HasForeignKey(x => x.EstateId)
+            .IsRequired();
 
         builder.Property(x => x.BuildingTypeId)
             .IsRequired();
@@ -44,8 +44,5 @@ public class BuildingEntityTypeConfiguration : IEntityTypeConfiguration<Building
 
         builder.Property(x => x.CreatedAt)
             .IsRequired();
-
-        builder.HasIndex(x => new { x.Name, x.EstateId })
-            .IsUnique();
     }
 }

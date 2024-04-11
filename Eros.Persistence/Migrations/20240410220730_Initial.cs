@@ -4,6 +4,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace Eros.Persistence.Migrations
 {
     /// <inheritdoc />
@@ -12,16 +14,13 @@ namespace Eros.Persistence.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.EnsureSchema(
-                name: "roles");
-
             migrationBuilder.CreateTable(
                 name: "ApartmentTypes",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: true)
+                    Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    Description = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -33,8 +32,8 @@ namespace Eros.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "text", nullable: false),
-                    Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
-                    UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     FirstName = table.Column<string>(type: "text", nullable: false),
                     LastName = table.Column<string>(type: "text", nullable: false),
                     Avatar = table.Column<string>(type: "text", nullable: true),
@@ -95,10 +94,7 @@ namespace Eros.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    Description = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -110,11 +106,11 @@ namespace Eros.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: false),
+                    Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    Description = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
                     IsShared = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -213,7 +209,7 @@ namespace Eros.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "EstateRoles",
+                name: "EstateRole",
                 columns: table => new
                 {
                     EstateId = table.Column<Guid>(type: "uuid", nullable: false),
@@ -221,15 +217,15 @@ namespace Eros.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EstateRoles", x => new { x.EstateId, x.RoleId });
+                    table.PrimaryKey("PK_EstateRole", x => new { x.EstateId, x.RoleId });
                     table.ForeignKey(
-                        name: "FK_EstateRoles_Estates_EstateId",
+                        name: "FK_EstateRole_Estates_EstateId",
                         column: x => x.EstateId,
                         principalTable: "Estates",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_EstateRoles_Roles_RoleId",
+                        name: "FK_EstateRole_Roles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "Roles",
                         principalColumn: "Id",
@@ -237,8 +233,7 @@ namespace Eros.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RolePermissions",
-                schema: "roles",
+                name: "RolePermission",
                 columns: table => new
                 {
                     RoleId = table.Column<Guid>(type: "uuid", nullable: false),
@@ -246,15 +241,15 @@ namespace Eros.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RolePermissions", x => new { x.RoleId, x.PermissionId });
+                    table.PrimaryKey("PK_RolePermission", x => new { x.PermissionId, x.RoleId });
                     table.ForeignKey(
-                        name: "FK_RolePermissions_Permissions_PermissionId",
+                        name: "FK_RolePermission_Permissions_PermissionId",
                         column: x => x.PermissionId,
                         principalTable: "Permissions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_RolePermissions_Roles_RoleId",
+                        name: "FK_RolePermission_Roles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "Roles",
                         principalColumn: "Id",
@@ -266,8 +261,8 @@ namespace Eros.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: true),
+                    Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    Description = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true),
                     NumberOfRooms = table.Column<int>(type: "integer", nullable: false),
                     ApartmentTypeId = table.Column<Guid>(type: "uuid", nullable: false),
                     BuildingId = table.Column<Guid>(type: "uuid", nullable: false)
@@ -287,6 +282,32 @@ namespace Eros.Persistence.Migrations
                         principalTable: "Buildings",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Permissions",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { new Guid("1a4b7beb-488b-4666-86d4-991895e0872b"), "Role.Update" },
+                    { new Guid("1c8a89a0-b6fe-4efc-b0e3-12db170433fe"), "Apartment.Delete" },
+                    { new Guid("2a84ccda-2adf-4215-8e2e-5bbd72d5216c"), "Building.Update" },
+                    { new Guid("2c67bdb4-7d9e-419a-816d-be29da2e837a"), "Apartment.List" },
+                    { new Guid("32e40dda-f579-4fd8-aeee-d157cedeb062"), "Estate.Delete" },
+                    { new Guid("4c6e1ac5-b00e-41f5-89fa-c801578a9818"), "Role.Delete" },
+                    { new Guid("61e201f7-7859-40b9-bbe8-715f29204291"), "Apartment.Update" },
+                    { new Guid("8b7a4964-46b3-4a03-a19e-86c35cb5b3cd"), "Apartment.View" },
+                    { new Guid("8cfdbbb4-cb87-4d78-9806-c20a63b87530"), "Estate.Create" },
+                    { new Guid("9765a47d-7e67-4d24-aa86-af372748ec7a"), "Apartment.Create" },
+                    { new Guid("98d6ab3d-8a40-44bc-85d6-96c739813f9d"), "Role.Create" },
+                    { new Guid("af23db24-f6c0-4448-9f43-67288c4f5328"), "Building.View" },
+                    { new Guid("b80d1e12-44bb-4457-a1ce-e6fbbbd74cec"), "Building.Create" },
+                    { new Guid("bd848626-40c8-499a-b9f8-2886cf57d8c6"), "Building.Delete" },
+                    { new Guid("d542cd68-6d1a-4588-92c1-b35f550a2a1b"), "Estate.Update" },
+                    { new Guid("e0a2cb5c-28e2-4ee7-8fb9-a00a3e761e5e"), "Role.List" },
+                    { new Guid("e300d634-8686-40b2-b396-6e0ac5cb0d09"), "Building.List" },
+                    { new Guid("e45f233e-6dbd-4228-8b18-a23a66c1b18b"), "Estate.View" },
+                    { new Guid("ed64a073-1821-407c-add6-2e88f5d045e1"), "Role.View" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -349,14 +370,8 @@ namespace Eros.Persistence.Migrations
                 column: "EstateId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Buildings_Name_EstateId",
-                table: "Buildings",
-                columns: new[] { "Name", "EstateId" },
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_EstateRoles_RoleId",
-                table: "EstateRoles",
+                name: "IX_EstateRole_RoleId",
+                table: "EstateRole",
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
@@ -366,10 +381,15 @@ namespace Eros.Persistence.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_RolePermissions_PermissionId",
-                schema: "roles",
-                table: "RolePermissions",
-                column: "PermissionId");
+                name: "IX_Permissions_Name",
+                table: "Permissions",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RolePermission_RoleId",
+                table: "RolePermission",
+                column: "RoleId");
         }
 
         /// <inheritdoc />
@@ -388,11 +408,10 @@ namespace Eros.Persistence.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "EstateRoles");
+                name: "EstateRole");
 
             migrationBuilder.DropTable(
-                name: "RolePermissions",
-                schema: "roles");
+                name: "RolePermission");
 
             migrationBuilder.DropTable(
                 name: "ApartmentTypes");
