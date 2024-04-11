@@ -1,5 +1,5 @@
+using Eros.Application.Abstractions;
 using Eros.Application.Exceptions;
-using ErrorOr;
 using FluentValidation;
 using MediatR;
 
@@ -7,8 +7,7 @@ namespace Eros.Application.Behaviours;
 
 public class ValidationBehavior<TRequest, TResponse>(IValidator<TRequest>? validator = null)
     : IPipelineBehavior<TRequest, TResponse>
-        where TRequest : IRequest<TResponse>
-        where TResponse : IErrorOr
+        where TRequest : ICommandBase
 {
     public async Task<TResponse> Handle(
         TRequest request,

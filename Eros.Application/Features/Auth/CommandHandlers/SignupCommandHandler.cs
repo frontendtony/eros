@@ -3,7 +3,6 @@ using Eros.Domain.Aggregates.Users;
 using Eros.Application.Features.Auth.Commands;
 using Eros.Application.Exceptions;
 using Eros.Auth.Services;
-using ErrorOr;
 using Mapster;
 using MediatR;
 
@@ -12,9 +11,9 @@ namespace Eros.Application.Features.Auth.CommandHandlers;
 public class SignupCommandHandler(
     JwtService jwtService,
     IUserWriteRepository userWriteRepository,
-    IUserReadRepository userReadRepository) : IRequestHandler<SignupCommand, ErrorOr<SignupCommandDto>>
+    IUserReadRepository userReadRepository) : IRequestHandler<SignupCommand, SignupCommandDto>
 {
-    public async Task<ErrorOr<SignupCommandDto>> Handle(SignupCommand command, CancellationToken cancellationToken)
+    public async Task<SignupCommandDto> Handle(SignupCommand command, CancellationToken cancellationToken)
     {
         var existingUser = await userReadRepository.GetByEmailAsync(command.Email);
 

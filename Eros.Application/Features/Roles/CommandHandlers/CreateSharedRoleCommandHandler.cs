@@ -2,7 +2,6 @@ using Eros.Api.Dto.Roles;
 using Eros.Application.Exceptions;
 using Eros.Application.Features.Roles.Commands;
 using Eros.Domain.Aggregates.Roles;
-using ErrorOr;
 using Mapster;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -14,9 +13,9 @@ public class CreateSharedRoleCommandHandler(
         IRoleWriteRepository roleWriteRepository,
         IPermissionReadRepository permissionReadRepository,
         ILogger<CreateSharedRoleCommandHandler> logger
-) : IRequestHandler<CreateSharedRoleCommand, ErrorOr<CreateSharedRoleCommandDto>>
+) : IRequestHandler<CreateSharedRoleCommand, CreateSharedRoleCommandDto>
 {
-    public async Task<ErrorOr<CreateSharedRoleCommandDto>> Handle(CreateSharedRoleCommand request, CancellationToken cancellationToken)
+    public async Task<CreateSharedRoleCommandDto> Handle(CreateSharedRoleCommand request, CancellationToken cancellationToken)
     {
         logger.LogInformation("Creating shared role. Name: {Name}", request.Name);
         

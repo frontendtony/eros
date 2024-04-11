@@ -17,9 +17,8 @@ public class AuthController : ApiControllerBase
     {
         var loginCommand = dto.Adapt<LoginCommand>();
         var loginCommandResponse = await Mediator.Send(loginCommand);
-
-        var loginCommandDto = loginCommandResponse.Value;
-        if (loginCommandDto.User.IsAdmin)
+        
+        if (loginCommandResponse.User.IsAdmin)
         {
             throw new ForbiddenException("User is an admin");
         }
@@ -27,7 +26,7 @@ public class AuthController : ApiControllerBase
         return Ok(
             new SingleResponseModel<LoginCommandDto>()
             {
-                Data = loginCommandDto,
+                Data = loginCommandResponse,
                 Message = "Token created successfully"
             }
         );
@@ -45,7 +44,7 @@ public class AuthController : ApiControllerBase
         return Ok(
             new SingleResponseModel<SignupCommandDto>()
             {
-                Data = signupCommandResponse.Value,
+                Data = signupCommandResponse,
                 Message = "User created successfully"
             }
         );

@@ -4,7 +4,6 @@ using Eros.Application.Features.Estates.Commands;
 using Eros.Domain.Aggregates.Estates;
 using Eros.Domain.Aggregates.Roles;
 using Eros.Persistence;
-using ErrorOr;
 using Mapster;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -18,9 +17,9 @@ public class CreateEstateCommandHandler(
     IEstateRoleWriteRepository estateRoleWriteRepository,
     IRoleReadRepository roleReadRepository,
     ILogger<CreateEstateCommandHandler> logger
-) : IRequestHandler<CreateEstateCommand, ErrorOr<CreateEstateCommandDto>>
+) : IRequestHandler<CreateEstateCommand, CreateEstateCommandDto>
 {
-    public async Task<ErrorOr<CreateEstateCommandDto>> Handle(CreateEstateCommand command, CancellationToken cancellationToken)
+    public async Task<CreateEstateCommandDto> Handle(CreateEstateCommand command, CancellationToken cancellationToken)
     {
         logger.LogInformation("Creating estate with name {Name}", command.Name);
         

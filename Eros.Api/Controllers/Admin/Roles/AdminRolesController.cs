@@ -20,7 +20,7 @@ public class AdminRolesController : ApiControllerBase
         return Ok(
             new SingleResponseModel<CreateSharedRoleCommandDto>()
             {
-                Data = createRoleCommandResponse.Value,
+                Data = createRoleCommandResponse,
                 Message = "Role created successfully"
             }
         );

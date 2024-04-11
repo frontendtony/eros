@@ -51,9 +51,7 @@ public class EstatesController : ApiControllerBase
             UserId
         );
         
-        var estateCommandResponse = await Mediator.Send(command);
-        
-        var estate = estateCommandResponse.Value;
+        var estate = await Mediator.Send(command);
 
         return Created(
             Url.Link("GetEstate", new { id = estate.Id }),
