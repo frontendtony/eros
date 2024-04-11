@@ -28,7 +28,6 @@ class UserEntityTypeConfiguration : IEntityTypeConfiguration<User>
         
         builder
             .Property(x => x.Avatar)
-            .IsRequired()
             .HasMaxLength(255);
 
         builder
