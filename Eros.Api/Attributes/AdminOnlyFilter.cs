@@ -15,6 +15,6 @@ public class AdminOnlyFilter(IHttpContextAccessor httpContextAccessor) : IAuthor
 
         if (httpContextAccessor.HttpContext.User.FindFirstValue("IsAdmin") == "True") return;
 
-        throw new UnauthorizedException("Unauthorized.");
+        throw new ForbiddenException("Unauthorized.");
     }
 }

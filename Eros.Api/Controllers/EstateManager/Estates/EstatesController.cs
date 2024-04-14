@@ -14,7 +14,7 @@ namespace Eros.Api.Controllers.EstateManager.Estates;
 [Route("api/estates")]
 [Authorize]
 [ForbidAdmin]
-public class EstatesController : ApiControllerBase
+public class EstatesController : EstateManagerControllerBase
 {
     [HttpGet("{id:guid}", Name = "GetEstate")]
     [ProducesResponseType(typeof(EstateResponse), StatusCodes.Status200OK)]

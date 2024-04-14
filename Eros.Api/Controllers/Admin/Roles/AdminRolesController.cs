@@ -8,8 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Eros.Api.Controllers.Admin.Roles;
 
 [Route("/api/admin/roles")]
-[AdminOnly]
-public class AdminRolesController : ApiControllerBase
+public class AdminRolesController : AdminControllerBase
 {
     [HttpPost]
     public async Task<IActionResult> CreateRole(CreateSharedRoleDto dto)
