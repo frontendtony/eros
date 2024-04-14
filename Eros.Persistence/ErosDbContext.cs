@@ -21,6 +21,7 @@ public class ErosDbContext(DbContextOptions<ErosDbContext> options) : IdentityUs
     public DbSet<Permission> Permissions { get; init; } = null!;
     public DbSet<Estate> Estates { get; init; } = null!;
     public DbSet<EstateRole> EstateRole { get; init; } = null!;
+    public DbSet<EstateUser> EstateUser { get; init; } = null!;
     public DbSet<Building> Buildings { get; init; } = null!;
     public DbSet<BuildingType> BuildingTypes { get; init; } = null!;
     public DbSet<Apartment> Apartments { get; init; } = null!;
@@ -29,7 +30,7 @@ public class ErosDbContext(DbContextOptions<ErosDbContext> options) : IdentityUs
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        
+
         modelBuilder.ApplyConfiguration(new UserEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new PermissionEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new RoleEntityTypeConfiguration());

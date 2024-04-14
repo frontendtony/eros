@@ -21,8 +21,8 @@ public class Estate
         LatLng = latlng;
         CreatedAt = DateTime.UtcNow;
     }
-    
-    public Estate() {}
+
+    public Estate() { }
 
     public Guid Id { get; init; }
     public string Name { get; set; } = null!;
@@ -32,6 +32,7 @@ public class Estate
     public string? LatLng { get; set; }
     public List<Building> Buildings { get; } = [];
     public List<Role> Roles { get; } = [];
+    public List<EstateRole> EstateRoles { get; } = [];
     public List<User> Users { get; } = [];
     public DateTime CreatedAt { get; init; }
     public DateTime? UpdatedAt { get; set; }

@@ -34,7 +34,7 @@ public static class DependencyInjection
         services.AddScoped<IPermissionReadRepository, PermissionReadRepository>();
         services.AddScoped<IEstateReadRepository, EstateReadRepository>();
         services.AddScoped<IEstateWriteRepository, EstateWriteRepository>();
-        services.AddScoped<IEstateRoleWriteRepository, EstateRoleWriteRepository>();
+        services.AddScoped<IEstateUserWriteRepository, EstateUserWriteRepository>();
         services.AddScoped<IBuildingReadRepository, BuildingReadRepository>();
         services.AddScoped<IBuildingWriteRepository, BuildingWriteRepository>();
         services.AddScoped<IBuildingTypeReadRepository, BuildingTypeReadRepository>();

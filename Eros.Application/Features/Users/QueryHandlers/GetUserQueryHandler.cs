@@ -13,7 +13,7 @@ public class GetUserQueryHandler(IUserReadRepository userReadRepository, IHttpCo
     {
         if (IsSelf(query.UserId) || IsAdmin())
         {
-            var user = await userReadRepository.GetByIdAsync(query.UserId.ToString()) ?? throw new NotFoundException("User not found");
+            var user = await userReadRepository.GetByIdAsync(query.UserId) ?? throw new NotFoundException("User not found");
 
             return new GetUserQueryResponse
             {

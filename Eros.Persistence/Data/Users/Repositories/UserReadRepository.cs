@@ -3,17 +3,13 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Eros.Persistence.Data.Users.Repositories;
 
-public class UserReadRepository : IUserReadRepository
+public class UserReadRepository(UserManager<User> userManager) : IUserReadRepository
 {
-    private readonly UserManager<User> _userManager;
-    public UserReadRepository(UserManager<User> userManager)
-    {
-        _userManager = userManager;
-    }
+    private readonly UserManager<User> _userManager = userManager;
 
-    public async Task<User?> GetByIdAsync(string id)
+    public async Task<User?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await _userManager.FindByIdAsync(id);
+        return await _userManager.FindByIdAsync(id.ToString());
     }
 
     public async Task<User?> GetByEmailAsync(string email)

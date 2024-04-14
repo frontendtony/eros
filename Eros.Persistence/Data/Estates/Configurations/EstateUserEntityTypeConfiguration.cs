@@ -8,21 +8,21 @@ public class EstateUserEntityTypeConfiguration : IEntityTypeConfiguration<Estate
 {
     public void Configure(EntityTypeBuilder<EstateUser> builder)
     {
-        builder.ToTable("EstateUsers");
+        builder.ToTable("EstateUser");
 
         builder.HasKey(x => new { x.EstateId, x.UserId, x.RoleId });
-        
+
         builder.Property(x => x.EstateId)
             .IsRequired();
-        
+
         builder.Property(x => x.UserId)
             .IsRequired();
-        
+
         builder.Property(x => x.RoleId)
             .IsRequired();
-        
+
         builder.Property(x => x.ApartmentId);
-        
+
         builder.Property(x => x.EstateUserType)
             .IsRequired();
 
@@ -35,11 +35,11 @@ public class EstateUserEntityTypeConfiguration : IEntityTypeConfiguration<Estate
 
         builder.Property(x => x.CreatedBy)
             .IsRequired();
-        
+
         builder.HasOne(x => x.Role)
             .WithMany()
             .HasForeignKey(x => x.RoleId);
-        
+
         builder.HasOne(x => x.Estate)
             .WithMany()
             .HasForeignKey(x => x.EstateId);
