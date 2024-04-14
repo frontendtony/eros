@@ -18,11 +18,11 @@ public class EstateEntityTypeConfiguration : IEntityTypeConfiguration<Estate>
 
         builder.HasIndex(x => x.Name)
             .IsUnique();
-        
+
         builder.Property(x => x.Address)
             .IsRequired()
             .HasMaxLength(100);
-        
+
         builder.Property(x => x.LatLng)
             .IsRequired(false)
             .HasMaxLength(100);
@@ -38,7 +38,7 @@ public class EstateEntityTypeConfiguration : IEntityTypeConfiguration<Estate>
 
         builder.Property(x => x.CreatedBy)
             .IsRequired();
-        
+
         builder.Property(x => x.OwnerId)
             .IsRequired();
 

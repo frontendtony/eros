@@ -15,12 +15,12 @@ public class AdminAuthController : ApiControllerBase
     {
         var loginCommand = dto.Adapt<LoginCommand>();
         var loginCommandResponse = await Mediator.Send(loginCommand);
-        
+
         if (!loginCommandResponse.User.IsAdmin)
         {
             throw new UnauthorizedException("User is not an admin");
         }
-        
+
         return Ok(
             new SingleResponseModel<LoginCommandDto>()
             {

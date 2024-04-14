@@ -7,7 +7,7 @@ using Microsoft.OpenApi.Models;
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 
-builder.Services.AddControllers(opt => 
+builder.Services.AddControllers(opt =>
     // disable automatic model state validation
     opt.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true
 );

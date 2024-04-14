@@ -61,11 +61,11 @@ public class JwtService(IConfiguration configuration)
     {
         var secretKey = configuration["Jwt:SecretKey"] ??
                         throw new Exception("Secret key is missing in configuration.");
-        
+
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
 
         var signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-        
+
         return signingCredentials;
     }
 }

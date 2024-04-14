@@ -50,7 +50,7 @@ public class EstatesController : ApiControllerBase
             dto.Address,
             UserId
         );
-        
+
         var estate = await Mediator.Send(command);
 
         return Created(

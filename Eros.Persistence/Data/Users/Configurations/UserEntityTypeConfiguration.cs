@@ -25,7 +25,7 @@ class UserEntityTypeConfiguration : IEntityTypeConfiguration<User>
             .Property(x => x.LastName)
             .IsRequired()
             .HasMaxLength(50);
-        
+
         builder
             .Property(x => x.Avatar)
             .HasMaxLength(255);

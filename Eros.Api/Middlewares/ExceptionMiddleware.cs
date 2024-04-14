@@ -18,12 +18,12 @@ public class ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddlewa
         {
             var response = context.Response;
             response.ContentType = "application/json";
-            
+
             var responseModel = new ErrorResponseModel()
             {
                 Message = error?.Message ?? string.Empty
             };
-            
+
             if (error is CustomValidationException validationException)
             {
                 responseModel.Message = validationException.Errors.First().ErrorMessage;

@@ -25,7 +25,7 @@ public class ValidationBehavior<TRequest, TResponse>(IValidator<TRequest>? valid
         {
             return await next();
         }
-        
+
         throw new CustomValidationException(validationResult.Errors);
     }
 }

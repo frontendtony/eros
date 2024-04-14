@@ -19,7 +19,7 @@ public class PermissionEntityTypeConfiguration : IEntityTypeConfiguration<Permis
             .HasColumnName("Name")
             .IsRequired()
             .HasMaxLength(50);
-        
+
         builder.HasIndex(x => x.Name)
             .IsUnique();
     }

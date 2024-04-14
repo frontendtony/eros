@@ -48,7 +48,7 @@ public static class AuthServiceRegistration
 
         services.AddAuthorizationBuilder()
             .AddPolicy("AdminOnly", policy => policy.RequireClaim(ClaimTypes.Role, "True", "False"));
-        
+
         return services;
     }
 }

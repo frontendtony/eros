@@ -13,7 +13,7 @@ public class PermissionReadRepository(ErosDbContext dbContext) : IPermissionRead
             .AsNoTracking()
             .ToListAsync();
     }
-    
+
     public async Task<Permission?> GetByIdAsync(Guid id)
     {
         return await _dbContext.Permissions
