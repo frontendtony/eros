@@ -26,6 +26,9 @@ public class InvitationEntityTypeConfiguration : IEntityTypeConfiguration<Invita
         
         builder.Property(x => x.EstateId)
             .IsRequired();
+        
+        builder.Property(x => x.RoleId)
+            .IsRequired();
 
         builder.Property(x => x.CreatedAt)
             .IsRequired();

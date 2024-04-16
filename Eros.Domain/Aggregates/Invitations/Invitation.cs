@@ -6,6 +6,7 @@ public class Invitation
     public required string Email { get; init; }
     public required string Code { get; init; }
     public required Guid EstateId { get; init; }
+    public required Guid RoleId { get; init; }
     public required Guid CreatedBy { get; init; }
     public DateTime Expiration { get; init; } = DateTime.UtcNow.AddDays(7);
     public InvitationStatus Status { get; private set; } = InvitationStatus.Pending;
