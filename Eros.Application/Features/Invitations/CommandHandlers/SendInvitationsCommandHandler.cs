@@ -5,6 +5,7 @@ using Eros.Application.Features.Invitations.Commands;
 using Eros.Domain.Aggregates.Estates;
 using Eros.Domain.Aggregates.Invitations;
 using Eros.Domain.Aggregates.Roles;
+using Eros.Domain.Aggregates.Users;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -13,6 +14,7 @@ namespace Eros.Application.Features.Invitations.CommandHandlers;
 public class SendInvitationsCommandHandler(
     IRoleReadRepository _roleReadRepository,
     IEstateUserReadRepository _estateUserReadRepository,
+    IUserReadRepository _userReadRepository,
     ILogger<SendInvitationsCommandHandler> _logger
 ) : IRequestHandler<SendInvitationsCommand, bool>
 {
@@ -47,14 +49,28 @@ public class SendInvitationsCommandHandler(
 
         // Use the same expiration date for all invitations
         var expirationDate = DateTime.UtcNow.AddDays(7);
-        var invitations = request.Emails.Select(email => new Invitation
+        Invitation[] invitations = [];
+
+        foreach (var email in request.Emails)
         {
-            Email = email,
-            RoleId = request.RoleId,
-            EstateId = request.EstateId,
-            CreatedBy = request.SenderId,
-            Expiration = expirationDate,
-        }).ToArray();
+            // check if the user already exists
+            var user = await _userReadRepository.GetByEmailAsync(email);
+
+            // add a new invitation and set the user id if the user already exists
+            var invitation = new Invitation
+            {
+                Email = email,
+                RoleId = request.RoleId,
+                EstateId = request.EstateId,
+                CreatedBy = request.SenderId,
+                Expiration = expirationDate
+            };
+
+            if (user != null)
+            {
+                invitation.UserId = user.Id;
+            }
+        }
 
         // Send invitation emails
         await SendInvitationEmails(invitations);

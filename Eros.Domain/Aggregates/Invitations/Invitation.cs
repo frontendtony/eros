@@ -7,7 +7,7 @@ public class Invitation
     public required Guid EstateId { get; init; }
     public required Guid RoleId { get; init; }
     public required Guid CreatedBy { get; init; }
-    public Guid? UserId { get; init; }
+    public Guid? UserId { get; set; }
     public DateTime Expiration { get; init; } = DateTime.UtcNow.AddDays(7);
     public InvitationStatus Status { get; private set; } = InvitationStatus.Pending;
 
