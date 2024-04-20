@@ -1,6 +1,8 @@
+using Eros.Application.Abstractions;
+
 namespace Eros.Application.Features.Invitations.Commands;
 
-public sealed record SendInvitationsCommand
+public sealed record SendInvitationsCommand : ICommand<bool>
 {
     public required string[] Emails { get; init; }
     public required Guid RoleId { get; init; }

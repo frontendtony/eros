@@ -30,4 +30,16 @@ public class RoleReadRepository(ErosDbContext dbContext) : IRoleReadRepository
         return await dbContext.Roles
             .FirstOrDefaultAsync(r => r.Name == name, cancellationToken);
     }
+
+    public async Task<bool> HasPermissionsAsync(Guid roleId, IEnumerable<Guid> permissions, CancellationToken cancellationToken)
+    {
+        var includedPermissionsCount = await dbContext.Roles
+            .Where(r => r.Id == roleId)
+            .SelectMany(r => r.Permissions)
+            .Select(p => p.Id)
+            .Intersect(permissions)
+            .CountAsync(cancellationToken);
+
+        return includedPermissionsCount == permissions.Count();
+    }
 }
