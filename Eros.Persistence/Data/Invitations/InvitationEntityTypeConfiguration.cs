@@ -19,14 +19,14 @@ public class InvitationEntityTypeConfiguration : IEntityTypeConfiguration<Invita
 
         builder.Property(x => x.Code)
             .IsRequired()
-            .HasMaxLength(128);
+            .HasMaxLength(1024);
 
         builder.Property(x => x.CreatedBy)
             .IsRequired();
-        
+
         builder.Property(x => x.EstateId)
             .IsRequired();
-        
+
         builder.Property(x => x.RoleId)
             .IsRequired();
 
