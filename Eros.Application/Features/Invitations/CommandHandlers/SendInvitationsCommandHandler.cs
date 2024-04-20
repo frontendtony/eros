@@ -1,5 +1,6 @@
 using System.Text;
 using System.Text.Json;
+using Eros.Application.Exceptions;
 using Eros.Application.Features.Invitations.Commands;
 using Eros.Domain.Aggregates.Estates;
 using Eros.Domain.Aggregates.Invitations;
@@ -22,7 +23,7 @@ public class SendInvitationsCommandHandler(
         if (estateUser == null)
         {
             _logger.LogError("User is not a member of the estate. {EstateId} {SenderId}", request.EstateId, request.SenderId);
-            throw new Exception("User is not a member of the estate.");
+            throw new BadRequestException("You cannot send invitations to an estate you are not a member of.");
         }
 
         var role = await _roleReadRepository.GetByIdAsync(request.RoleId);
@@ -30,7 +31,7 @@ public class SendInvitationsCommandHandler(
         if (role == null)
         {
             _logger.LogError("The role does not exist. {RoleId}", request.RoleId);
-            throw new Exception("The role does not exist.");
+            throw new BadRequestException("The role does not exist.");
         }
 
         var rolePermisionIds = role.Permissions.Select(p => p.Id);
@@ -41,30 +42,23 @@ public class SendInvitationsCommandHandler(
         {
             // User can only assign roles with permissions that he has
             _logger.LogError("User does not have the required permissions to assign the role. {EstateId} {SenderId} {RoleId}", request.EstateId, request.SenderId, request.RoleId);
-            throw new Exception("User does not have the required permissions to assign the role.");
+            throw new BadRequestException("You can only assign roles with permissions that you have.");
         }
 
-        // Create invitations
+        // Use the same expiration date for all invitations
+        var expirationDate = DateTime.UtcNow.AddDays(7);
         var invitations = request.Emails.Select(email => new Invitation
         {
-            Id = Guid.NewGuid(),
             Email = email,
             RoleId = request.RoleId,
             EstateId = request.EstateId,
             CreatedBy = request.SenderId,
-            // Generate a base64 hash that includes the estate name, estate id, inviter name, role name, and expiration date as json
-            Code = Convert.ToBase64String(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(new
-            {
-                request.EstateId,
-                EstateName = estateUser.Estate.Name,
-                InviterName = estateUser.User.FirstName,
-                RoleName = role.Name,
-                ExpirationDate = DateTime.UtcNow.AddDays(7)
-            })))
+            Expiration = expirationDate,
         }).ToArray();
 
         // Send invitation emails
         await SendInvitationEmails(invitations);
+
         return true;
     }
 
@@ -74,7 +68,7 @@ public class SendInvitationsCommandHandler(
 
         foreach (var invitation in invitations)
         {
-            _logger.LogInformation("Invitation: {Email} {Code}", invitation.Email, invitation.Code);
+            _logger.LogInformation("Invitation: {Email} {Id}", invitation.Email, invitation.Id);
         }
         return Task.CompletedTask;
     }

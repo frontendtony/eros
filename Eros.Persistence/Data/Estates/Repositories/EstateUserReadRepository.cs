@@ -10,6 +10,9 @@ public class EstateUserReadRepository(
     public async Task<EstateUser?> GetByEstateIdAndUserIdAsync(Guid estateId, Guid userId, CancellationToken cancellationToken)
     {
         return await _dbContext.EstateUser
+            .Include(eu => eu.Estate)
+            .Include(eu => eu.User)
+            .Include(eu => eu.Role)
             .FirstOrDefaultAsync(eu => eu.EstateId == estateId && eu.UserId == userId, cancellationToken);
     }
 }
