@@ -17,10 +17,6 @@ public class InvitationEntityTypeConfiguration : IEntityTypeConfiguration<Invita
             .IsRequired()
             .HasMaxLength(128);
 
-        builder.Property(x => x.Code)
-            .IsRequired()
-            .HasMaxLength(1024);
-
         builder.Property(x => x.CreatedBy)
             .IsRequired();
 
