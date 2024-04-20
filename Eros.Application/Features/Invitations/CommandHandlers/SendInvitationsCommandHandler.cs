@@ -55,6 +55,23 @@ public class SendInvitationsCommandHandler(
         {
             // check if the user already exists
             var user = await _userReadRepository.GetByEmailAsync(email);
+            if (user != null)
+            {
+                // check if the user is an eros admin
+                if (user.IsAdmin)
+                {
+                    _logger.LogWarning("User is an Eros admin. {UserId}", user.Id);
+                    continue;
+                }
+
+                // check if the user is already a member of the estate
+                var existingEstateUser = await _estateUserReadRepository.GetByEstateIdAndUserIdAsync(request.EstateId, user.Id, cancellationToken);
+                if (existingEstateUser != null)
+                {
+                    _logger.LogWarning("User is already a member of the estate. {EstateId} {UserId}", request.EstateId, user.Id);
+                    continue;
+                }
+            }
 
             // add a new invitation and set the user id if the user already exists
             var invitation = new Invitation
