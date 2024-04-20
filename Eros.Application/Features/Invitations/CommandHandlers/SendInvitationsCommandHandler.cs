@@ -1,5 +1,3 @@
-using System.Text;
-using System.Text.Json;
 using Eros.Application.Exceptions;
 using Eros.Application.Features.Invitations.Commands;
 using Eros.Domain.Aggregates.Estates;
@@ -15,6 +13,7 @@ public class SendInvitationsCommandHandler(
     IRoleReadRepository _roleReadRepository,
     IEstateUserReadRepository _estateUserReadRepository,
     IUserReadRepository _userReadRepository,
+    IInvitationReadRepository _invitationReadRepository,
     ILogger<SendInvitationsCommandHandler> _logger
 ) : IRequestHandler<SendInvitationsCommand, bool>
 {
@@ -47,9 +46,7 @@ public class SendInvitationsCommandHandler(
             throw new BadRequestException("You can only assign roles with permissions that you have.");
         }
 
-        // Use the same expiration date for all invitations
-        var expirationDate = DateTime.UtcNow.AddDays(7);
-        Invitation[] invitations = [];
+        List<Invitation> invitations = [];
 
         foreach (var email in request.Emails)
         {
@@ -73,6 +70,27 @@ public class SendInvitationsCommandHandler(
                 }
             }
 
+            // check if the user has an existing invitation for the estate with the same email
+            var existingInvitation = await _invitationReadRepository.GetByEstateIdAndEmailAsync(request.EstateId, email, cancellationToken);
+            if (existingInvitation != null)
+            {
+                _logger.LogWarning("User has an existing invitation for the estate. {EstateId} {Email}", request.EstateId, email);
+
+                // check if the role is different
+                if (existingInvitation.RoleId != request.RoleId)
+                {
+                    _logger.LogWarning("User has an existing invitation for the estate with a different role. {EstateId} {Email} {RoleId} {ExistingRoleId}", request.EstateId, email, request.RoleId, existingInvitation.RoleId);
+                    existingInvitation.Cancel();
+                }
+                // extend the expiration date if the invitation is pending
+                if (existingInvitation.Status == InvitationStatus.Pending)
+                {
+                    existingInvitation.ResetExpiration();
+                    invitations.Add(existingInvitation);
+                    continue;
+                }
+            }
+
             // add a new invitation and set the user id if the user already exists
             var invitation = new Invitation
             {
@@ -80,22 +98,22 @@ public class SendInvitationsCommandHandler(
                 RoleId = request.RoleId,
                 EstateId = request.EstateId,
                 CreatedBy = request.SenderId,
-                Expiration = expirationDate
             };
 
             if (user != null)
             {
-                invitation.UserId = user.Id;
+                invitation.MapUser(user.Id);
             }
+
+            invitations.Add(invitation);
         }
 
-        // Send invitation emails
         await SendInvitationEmails(invitations);
 
         return true;
     }
 
-    private Task SendInvitationEmails(Invitation[] invitations)
+    private Task SendInvitationEmails(List<Invitation> invitations)
     {
         _logger.LogInformation("Sending invitation emails...");
 

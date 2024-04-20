@@ -12,6 +12,8 @@ using Eros.Persistence.Data.Users.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
+using Eros.Domain.Aggregates.Invitations;
+using Eros.Persistence.Data.Invitations;
 
 namespace Eros.Persistence;
 
@@ -42,6 +44,7 @@ public static class DependencyInjection
         services.AddScoped<IBuildingTypeWriteRepository, BuildingTypeWriteRepository>();
         services.AddScoped<IApartmentReadRepository, ApartmentReadRepository>();
         services.AddScoped<IApartmentWriteRepository, ApartmentWriteRepository>();
+        services.AddScoped<IInvitationReadRepository, InvitationReadRepository>();
 
         return services;
     }
