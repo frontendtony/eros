@@ -4,16 +4,19 @@ using Eros.Domain.Aggregates.Estates;
 using Eros.Domain.Aggregates.Invitations;
 using Eros.Domain.Aggregates.Roles;
 using Eros.Domain.Aggregates.Users;
+using Eros.Persistence;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
 namespace Eros.Application.Features.Invitations.CommandHandlers;
 
 public class SendInvitationsCommandHandler(
+    ErosDbContext _dbContext,
     IRoleReadRepository _roleReadRepository,
     IEstateUserReadRepository _estateUserReadRepository,
     IUserReadRepository _userReadRepository,
     IInvitationReadRepository _invitationReadRepository,
+    IInvitationWriteRepository _invitationWriteRepository,
     ILogger<SendInvitationsCommandHandler> _logger
 ) : IRequestHandler<SendInvitationsCommand, bool>
 {
@@ -46,7 +49,7 @@ public class SendInvitationsCommandHandler(
             throw new BadRequestException("You can only assign roles with permissions that you have.");
         }
 
-        List<Invitation> invitations = [];
+        List<Invitation> invitationsToSend = [];
 
         foreach (var email in request.Emails)
         {
@@ -86,7 +89,10 @@ public class SendInvitationsCommandHandler(
                 if (existingInvitation.Status == InvitationStatus.Pending)
                 {
                     existingInvitation.ResetExpiration();
-                    invitations.Add(existingInvitation);
+
+                    invitationsToSend.Add(existingInvitation);
+                    _invitationWriteRepository.UpdateAsync(existingInvitation, cancellationToken);
+
                     continue;
                 }
             }
@@ -105,10 +111,19 @@ public class SendInvitationsCommandHandler(
                 invitation.MapUser(user.Id);
             }
 
-            invitations.Add(invitation);
+            invitationsToSend.Add(invitation);
+            await _invitationWriteRepository.AddAsync(invitation, cancellationToken);
         }
 
-        await SendInvitationEmails(invitations);
+        if (invitationsToSend.Count == 0)
+        {
+            _logger.LogWarning("No invitations to send.");
+            return false;
+        }
+
+        await _dbContext.SaveChangesAsync(cancellationToken);
+
+        await SendInvitationEmails(invitationsToSend);
 
         return true;
     }

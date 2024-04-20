@@ -45,6 +45,7 @@ public static class DependencyInjection
         services.AddScoped<IApartmentReadRepository, ApartmentReadRepository>();
         services.AddScoped<IApartmentWriteRepository, ApartmentWriteRepository>();
         services.AddScoped<IInvitationReadRepository, InvitationReadRepository>();
+        services.AddScoped<IInvitationWriteRepository, InvitationWriteRepository>();
 
         return services;
     }
