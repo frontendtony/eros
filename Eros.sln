@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eros.Api.Dto", "Eros.Api.Dt
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eros.Common", "Eros.Common\Eros.Common.csproj", "{3B2700CF-F7EA-4849-9CB6-D9C764681241}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eros.Infrastructure", "Eros.Infrastructure\Eros.Infrastructure.csproj", "{A3FB1525-E8A0-43E5-AEF1-9973920BD152}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{3B2700CF-F7EA-4849-9CB6-D9C764681241}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B2700CF-F7EA-4849-9CB6-D9C764681241}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3B2700CF-F7EA-4849-9CB6-D9C764681241}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3FB1525-E8A0-43E5-AEF1-9973920BD152}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3FB1525-E8A0-43E5-AEF1-9973920BD152}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3FB1525-E8A0-43E5-AEF1-9973920BD152}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3FB1525-E8A0-43E5-AEF1-9973920BD152}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

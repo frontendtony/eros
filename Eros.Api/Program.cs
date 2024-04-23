@@ -1,5 +1,6 @@
 using Eros.Api.Extensions;
 using Eros.Application;
+using Eros.Infrastructure;
 using Eros.Auth;
 using Eros.Persistence;
 using Microsoft.OpenApi.Models;
@@ -44,6 +45,7 @@ builder.Services.AddPersistenceServices(configuration);
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddApplicationServices();
 builder.Services.RegisterAuthServices(configuration);
+builder.Services.AddInfrastructureServices(configuration);
 
 var app = builder.Build();
 

@@ -6,6 +6,7 @@ using Eros.Domain.Aggregates.Roles;
 using Eros.Domain.Aggregates.Users;
 using Eros.Persistence;
 using MediatR;
+using Eros.Application.EmailService;
 using Microsoft.Extensions.Logging;
 
 namespace Eros.Application.Features.Invitations.CommandHandlers;
@@ -16,6 +17,7 @@ public class SendInvitationsCommandHandler(
     IEstateUserReadRepository _estateUserReadRepository,
     IUserReadRepository _userReadRepository,
     IInvitationReadRepository _invitationReadRepository,
+    IEmailClient _emailClient,
     IInvitationWriteRepository _invitationWriteRepository,
     ILogger<SendInvitationsCommandHandler> _logger
 ) : IRequestHandler<SendInvitationsCommand, bool>
@@ -123,7 +125,7 @@ public class SendInvitationsCommandHandler(
 
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        await SendInvitationEmails(invitationsToSend);
+        Task.Run(() => SendInvitationEmails(invitationsToSend));
 
         return true;
     }
@@ -134,6 +136,10 @@ public class SendInvitationsCommandHandler(
 
         foreach (var invitation in invitations)
         {
+            //fetch invitation email html content
+            //send email
+            //probably move this to a service that gets the email content
+            //_emailClient.Send();
             _logger.LogInformation("Invitation: {Email} {Id}", invitation.Email, invitation.Id);
         }
         return Task.CompletedTask;

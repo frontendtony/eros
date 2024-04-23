@@ -26,6 +26,7 @@
     <ProjectReference Include="..\Eros.Persistence\Eros.Persistence.csproj" />
     <ProjectReference Include="..\Eros.Domain\Eros.Domain.csproj" />
     <ProjectReference Include="..\Eros.Application\Eros.Application.csproj" />
+    <ProjectReference Include="..\Eros.Infrastructure\Eros.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
