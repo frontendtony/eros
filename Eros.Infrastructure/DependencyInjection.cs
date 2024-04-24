@@ -1,34 +1,29 @@
-using System.Reflection;
-using Eros.Application.Behaviours;
-using FluentValidation;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration;
 using System.Net;
 using System.Net.Mail;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Eros.Infrastructure;
 
 public static class DependencyInjection
 {
-
     public static void AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
         var client = new SmtpClient
         {
-            Host = configuration["FluentEmail:Host"],
-            Port = int.Parse(configuration["FluentEmail:Port"])
+            Host = configuration["EmailConfiguration:Host"] ?? throw new InvalidOperationException("Email host is required."),
+            Port = int.Parse(configuration["EmailConfiguration:Port"] ??
+                             throw new InvalidOperationException("Email port is required."))
         };
 
-        var username = configuration["FluentEmail:Username"];
-        var password = configuration["FluentEmail:Password"];
+        var username = configuration["EmailConfiguration:Username"];
+        var password = configuration["EmailConfiguration:Password"];
+
         if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
-        {
             client.Credentials = new NetworkCredential(username, password);
-        }
 
         services
-            .AddFluentEmail(configuration["FluentEmail:SentFrom"])
+            .AddFluentEmail(configuration["EmailConfiguration:From"])
             .AddSmtpSender(client);
     }
 }
