@@ -10,17 +10,18 @@ using Eros.Domain.Aggregates.Users;
 using Eros.Persistence;
 using MediatR;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace Eros.Application.Features.Invitations.CommandHandlers;
 
 public class SendInvitationsCommandHandler(
+    IServiceProvider serviceProvider,
     ErosDbContext dbContext,
     IRoleReadRepository roleReadRepository,
     IEstateUserReadRepository estateUserReadRepository,
     IUserReadRepository userReadRepository,
     IInvitationReadRepository invitationReadRepository,
-    IEmailClient emailClient,
     IInvitationWriteRepository invitationWriteRepository,
     ILogger<SendInvitationsCommandHandler> logger,
     IConfiguration configuration
@@ -140,17 +141,24 @@ public class SendInvitationsCommandHandler(
 
         await dbContext.SaveChangesAsync(cancellationToken);
 
-        SendInvitationEmails(
+        Task.Run(async () => await SendInvitationEmails(
             invitationsToSend,
             estateUser.Estate.Name,
             estateUser.User.FirstName
-        );
+        ), cancellationToken);
 
         return true;
     }
 
-    private async Task SendInvitationEmails(List<Invitation> invitations, string estateName, string senderName)
+    private async Task SendInvitationEmails(List<Invitation> invitations,
+        string estateName,
+        string senderName)
     {
+        // This is a workaround to resolve an issue with scoped services in a background task
+        // Passing the email client 
+        using var scope = serviceProvider.CreateScope();
+        var emailClient = scope.ServiceProvider.GetRequiredService<IEmailClient>();
+
         logger.LogInformation("Sending invitation emails...");
 
         foreach (var invitation in invitations)
@@ -167,8 +175,10 @@ public class SendInvitationsCommandHandler(
                      """,
                     $"Invitation to join {estateName}"
                 );
-                logger.LogInformation("Invitation sent to: {Email}. InvitationId: {Id}", invitation.Email, invitation.Id);
-            } catch (Exception e)
+                logger.LogInformation("Invitation sent to: {Email}. InvitationId: {Id}", invitation.Email,
+                    invitation.Id);
+            }
+            catch (Exception e)
             {
                 logger.LogError(e, "Failed to send invitation to: {Email}. InvitationId: {Id}", invitation.Email,
                     invitation.Id);
