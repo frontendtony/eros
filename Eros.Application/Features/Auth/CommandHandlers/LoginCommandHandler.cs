@@ -24,7 +24,7 @@ public class LoginCommandHandler(
             throw new BadRequestException("Password is invalid");
         }
 
-        var jwt = jwtService.CreateToken(user);
+        var jwt = await jwtService.CreateToken(user);
 
         var userDto = user.Adapt<UserDto>();
 

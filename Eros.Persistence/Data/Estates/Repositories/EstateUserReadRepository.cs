@@ -16,4 +16,15 @@ public class EstateUserReadRepository(
             .Include(eu => eu.Role)
             .FirstOrDefaultAsync(eu => eu.EstateId == estateId && eu.UserId == userId, cancellationToken);
     }
+    
+    public async Task<EstateUser[]> GetEstateUsersByUserIdAsync(Guid userId, CancellationToken cancellationToken = default)
+    {
+        return await dbContext.EstateUser
+            .Include(eu => eu.Estate)
+            .Include(eu => eu.User)
+            .Include(eu => eu.Role)
+            .ThenInclude(r => r.Permissions)
+            .Where(eu => eu.UserId == userId)
+            .ToArrayAsync(cancellationToken);
+    }
 }
