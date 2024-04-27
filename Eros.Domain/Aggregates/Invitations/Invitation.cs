@@ -21,10 +21,7 @@ public class Invitation
 
     public void MapUser(Guid userId)
     {
-        if (IsExistingUser)
-        {
-            throw new InvalidOperationException("Invitation already has a user id");
-        }
+        if (IsExistingUser) throw new InvalidOperationException("Invitation already has a user id");
 
         UserId = userId;
         UpdatedAt = DateTime.UtcNow;
@@ -53,15 +50,9 @@ public class Invitation
 
     private void UpdateStatus(InvitationStatus status)
     {
-        if (IsExpired)
-        {
-            throw new InvalidOperationException("Invitation is expired");
-        }
+        if (IsExpired) throw new InvalidOperationException("Invitation is expired");
 
-        if (Status != InvitationStatus.Pending)
-        {
-            throw new InvalidOperationException("Invitation is not pending");
-        }
+        if (Status != InvitationStatus.Pending) throw new InvalidOperationException("Invitation is not pending");
 
         Status = status;
         UpdatedAt = DateTime.UtcNow;

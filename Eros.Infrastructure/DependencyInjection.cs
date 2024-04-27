@@ -1,5 +1,7 @@
 using System.Net;
 using System.Net.Mail;
+using Eros.Application.EmailService;
+using Eros.Infrastructure.EmailService;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,9 +13,11 @@ public static class DependencyInjection
     {
         var client = new SmtpClient
         {
-            Host = configuration["EmailConfiguration:Host"] ?? throw new InvalidOperationException("Email host is required."),
+            Host = configuration["EmailConfiguration:Host"] ??
+                   throw new InvalidOperationException("Email host is required."),
             Port = int.Parse(configuration["EmailConfiguration:Port"] ??
-                             throw new InvalidOperationException("Email port is required."))
+                             throw new InvalidOperationException("Email port is required.")),
+            EnableSsl = true
         };
 
         var username = configuration["EmailConfiguration:Username"];
@@ -25,5 +29,7 @@ public static class DependencyInjection
         services
             .AddFluentEmail(configuration["EmailConfiguration:From"])
             .AddSmtpSender(client);
+
+        services.AddScoped<IEmailClient, EmailClient>();
     }
 }

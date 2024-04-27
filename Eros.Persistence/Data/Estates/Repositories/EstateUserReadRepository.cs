@@ -4,12 +4,13 @@ using Microsoft.EntityFrameworkCore;
 namespace Eros.Persistence.Data.Estates.Repositories;
 
 public class EstateUserReadRepository(
-    ErosDbContext _dbContext
+    ErosDbContext dbContext
 ) : IEstateUserReadRepository
 {
-    public async Task<EstateUser?> GetByEstateIdAndUserIdAsync(Guid estateId, Guid userId, CancellationToken cancellationToken)
+    public async Task<EstateUser?> GetByEstateIdAndUserIdAsync(Guid estateId, Guid userId,
+        CancellationToken cancellationToken)
     {
-        return await _dbContext.EstateUser
+        return await dbContext.EstateUser
             .Include(eu => eu.Estate)
             .Include(eu => eu.User)
             .Include(eu => eu.Role)
