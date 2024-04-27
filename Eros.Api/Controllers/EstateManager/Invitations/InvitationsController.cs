@@ -1,4 +1,3 @@
-using Eros.Api.Attributes;
 using Eros.Api.Dto.Invitations;
 using Eros.Application.Features.Invitations.Commands;
 using Mapster;
@@ -19,5 +18,11 @@ public class InvitationsController : EstateManagerControllerBase
 
         var result = await Mediator.Send(command);
         return Ok(result);
+    }
+
+    [HttpGet("{code}")]
+    public async Task<IActionResult> GetInvitationAsync(string code)
+    {
+        return Ok(code);
     }
 }
