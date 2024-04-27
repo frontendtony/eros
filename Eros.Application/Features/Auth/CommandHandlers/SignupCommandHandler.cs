@@ -27,7 +27,7 @@ public class SignupCommandHandler(
         var newUser = await userWriteRepository.AddAsync(user, command.Password, cancellationToken)
             ?? throw new BadRequestException("User could not be created");
 
-        var jwt = jwtService.CreateToken(newUser);
+        var jwt = await jwtService.CreateToken(newUser);
 
         var response = newUser.Adapt<SignupCommandDto>();
         response.Token = jwt.Token;
