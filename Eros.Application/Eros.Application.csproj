@@ -25,6 +25,7 @@
     <Folder Include="Features\Users\CommandHandlers\" />
     <Folder Include="Features\Users\Commands\" />
     <Folder Include="Features\Users\Validators\" />
+    <Folder Include="Infrastructure" />
   </ItemGroup>
 
 </Project>

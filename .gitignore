@@ -17,7 +17,7 @@ nupkg/
 *.user
 *.userosscache
 *.sln.docstates
-*salus*.json
+Eros.Api/appsettings.Development.json
 
 
 # Build results
