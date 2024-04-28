@@ -26,9 +26,10 @@ public class Invitation
         UpdatedAt = DateTime.UtcNow;
     }
 
-    public void Accept()
+    public void Accept(Guid userId)
     {
         UpdateStatus(InvitationStatus.Accepted);
+        MapUser(userId);
     }
 
     public void Reject()

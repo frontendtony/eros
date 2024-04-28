@@ -1,6 +1,7 @@
 using Eros.Api.Dto.Invitations;
 using Eros.Application.Features.Invitations.Commands;
 using Eros.Application.Features.Invitations.Queries;
+using Eros.Domain.Aggregates.Invitations;
 using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -32,8 +33,15 @@ public class InvitationsController : EstateManagerControllerBase
 
     [HttpPatch("{code}")]
     [Authorize]
-    public async Task<IActionResult> AcceptInvitationAsync(AcceptInvitationDto request)
+    public async Task<IActionResult> AcceptInvitationAsync(string code, AcceptInvitationDto request)
     {
-        return Ok(request.Status);
+        var status = Enum.TryParse(request.Status, true, out InvitationStatus invitationStatus)
+            ? invitationStatus
+            : throw new ArgumentException("Invalid status. Accepted values are 'Accepted' or 'Rejected'");
+        var command = new AcceptInvitationCommand(code, status, UserId, UserEmail);
+
+        var result = await Mediator.Send(command);
+
+        return Ok(result);
     }
 }
