@@ -29,4 +29,11 @@ public class InvitationsController : EstateManagerControllerBase
 
         return Ok(invitation);
     }
+
+    [HttpPatch("{code}")]
+    [Authorize]
+    public async Task<IActionResult> AcceptInvitationAsync(AcceptInvitationDto request)
+    {
+        return Ok(request.Status);
+    }
 }
