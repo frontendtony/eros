@@ -8,11 +8,10 @@ public class Invitation
     public required Guid RoleId { get; init; }
     public required Guid CreatedBy { get; init; }
     public Guid? UserId { get; private set; }
+    public string Code { get; init; }
     public DateTime Expiration { get; private set; } = DateTime.UtcNow.AddDays(7);
     public InvitationStatus Status { get; private set; } = InvitationStatus.Pending;
 
-    // this exists to make the invitation code anything other than the Guid, but unique
-    public string Code => Id.ToString().GetHashCode().ToString("X");
     public bool IsExistingUser => UserId.HasValue;
     public bool IsExpired => DateTime.UtcNow > Expiration;
 
