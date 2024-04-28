@@ -1,4 +1,5 @@
 using Eros.Api.Dto.Invitations;
+using Eros.Api.Models;
 using Eros.Application.Features.Invitations.Commands;
 using Eros.Application.Features.Invitations.Queries;
 using Eros.Domain.Aggregates.Invitations;
@@ -13,27 +14,39 @@ public class InvitationsController : EstateManagerControllerBase
 {
     [HttpPost]
     [Authorize]
-    public async Task<IActionResult> SendInvitationsAsync(SendInvitationsDto request)
+    public async Task<ActionResult<SingleResponseModel<bool>>> SendInvitationsAsync(SendInvitationsDto request)
     {
         var command = request.Adapt<SendInvitationsCommand>();
         command.SenderId = UserId;
 
         var result = await Mediator.Send(command);
-        return Ok(result);
+
+        return Ok(
+            new SingleResponseModel<bool>
+            {
+                Data = result
+            }
+        );
     }
 
     [HttpGet("{code}")]
-    public async Task<IActionResult> GetInvitationAsync(string code)
+    public async Task<ActionResult<SingleResponseModel<GetInvitationQueryDto>>> GetInvitationAsync(string code)
     {
         var query = new GetInvitationQuery(code);
         var invitation = await Mediator.Send(query);
 
-        return Ok(invitation);
+        return Ok(
+            new SingleResponseModel<GetInvitationQueryDto>
+            {
+                Data = invitation
+            }
+        );
     }
 
     [HttpPatch("{code}")]
     [Authorize]
-    public async Task<IActionResult> AcceptInvitationAsync(string code, AcceptInvitationDto request)
+    public async Task<ActionResult<SingleResponseModel<AcceptInvitationCommandDto>>> AcceptInvitationAsync(string code,
+        AcceptInvitationDto request)
     {
         var status = Enum.TryParse(request.Status, true, out InvitationStatus invitationStatus)
             ? invitationStatus
@@ -42,6 +55,11 @@ public class InvitationsController : EstateManagerControllerBase
 
         var result = await Mediator.Send(command);
 
-        return Ok(result);
+        return Ok(
+            new SingleResponseModel<AcceptInvitationCommandDto>
+            {
+                Data = result
+            }
+        );
     }
 }
