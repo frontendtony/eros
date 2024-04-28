@@ -124,7 +124,8 @@ public class SendInvitationsCommandHandler(
                 Email = email,
                 RoleId = request.RoleId,
                 EstateId = request.EstateId,
-                CreatedBy = request.SenderId
+                CreatedBy = request.SenderId,
+                Code = Guid.NewGuid().ToString().GetHashCode().ToString("X")
             };
 
             if (user != null) invitation.MapUser(user.Id);
@@ -155,7 +156,7 @@ public class SendInvitationsCommandHandler(
         string senderName)
     {
         // This is a workaround to resolve an issue with scoped services in a background task
-        // Passing the email client 
+        // Passing the email client
         using var scope = serviceProvider.CreateScope();
         var emailClient = scope.ServiceProvider.GetRequiredService<IEmailClient>();
 

@@ -40,6 +40,7 @@ public class ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddlewa
                 ForbiddenException => (int)HttpStatusCode.Forbidden,
                 ConflictException => (int)HttpStatusCode.Conflict,
                 CustomValidationException => (int)HttpStatusCode.BadRequest,
+                InconsistentDataException => (int)HttpStatusCode.InternalServerError,
                 _ => (int)HttpStatusCode.InternalServerError
             };
 
