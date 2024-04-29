@@ -1,28 +1,30 @@
 using Eros.Domain.Aggregates.Apartments;
 using Eros.Domain.Aggregates.Buildings;
 using Eros.Domain.Aggregates.Estates;
+using Eros.Domain.Aggregates.Invitations;
 using Eros.Domain.Aggregates.Roles;
 using Eros.Domain.Aggregates.Users;
 using Eros.Persistence.Data.Apartments.Repositories;
 using Eros.Persistence.Data.Buildings.Repositories;
 using Eros.Persistence.Data.Estates.Repositories;
+using Eros.Persistence.Data.Invitations;
 using Eros.Persistence.Data.Permissions.Repositories;
 using Eros.Persistence.Data.Roles.Repositories;
 using Eros.Persistence.Data.Users.Repositories;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
-using Eros.Domain.Aggregates.Invitations;
-using Eros.Persistence.Data.Invitations;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Eros.Persistence;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddPersistenceServices(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddPersistenceServices(this IServiceCollection services,
+        IConfiguration configuration)
     {
         services.AddDbContext<ErosDbContext>(options =>
         {
+            Console.WriteLine("Connection String " + configuration.GetConnectionString("DefaultConnection"));
             options.UseNpgsql(
                 configuration.GetConnectionString("DefaultConnection"),
                 b => b.MigrationsAssembly("Eros.Persistence")
