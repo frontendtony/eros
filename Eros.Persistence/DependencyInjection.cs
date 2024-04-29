@@ -24,7 +24,6 @@ public static class DependencyInjection
     {
         services.AddDbContext<ErosDbContext>(options =>
         {
-            Console.WriteLine("Connection String " + configuration.GetConnectionString("DefaultConnection"));
             options.UseNpgsql(
                 configuration.GetConnectionString("DefaultConnection"),
                 b => b.MigrationsAssembly("Eros.Persistence")
