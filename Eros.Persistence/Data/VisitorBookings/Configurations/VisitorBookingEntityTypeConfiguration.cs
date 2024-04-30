@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Eros.Persistence.Data.VisitorBookings.Configurations;
 
-public class VisitorBookingsEntityTypeConfiguration : IEntityTypeConfiguration<VisitorBooking>
+public class VisitorBookingEntityTypeConfiguration : IEntityTypeConfiguration<VisitorBooking>
 {
     public void Configure(EntityTypeBuilder<VisitorBooking> builder)
     {

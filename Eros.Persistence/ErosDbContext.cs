@@ -5,6 +5,7 @@ using Eros.Domain.Aggregates.Estates;
 using Eros.Domain.Aggregates.Invitations;
 using Eros.Domain.Aggregates.Roles;
 using Eros.Domain.Aggregates.Users;
+using Eros.Domain.Aggregates.VisitorBookings;
 using Eros.Persistence.Data.Apartments.Configurations;
 using Eros.Persistence.Data.Buildings.Configurations;
 using Eros.Persistence.Data.Estates.Configurations;
@@ -12,6 +13,7 @@ using Eros.Persistence.Data.Invitations;
 using Eros.Persistence.Data.Permissions.Configurations;
 using Eros.Persistence.Data.Roles.Configurations;
 using Eros.Persistence.Data.Users.Configurations;
+using Eros.Persistence.Data.VisitorBookings.Configurations;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,6 +31,7 @@ public class ErosDbContext(DbContextOptions<ErosDbContext> options) : IdentityUs
     public DbSet<Apartment> Apartments { get; init; } = null!;
     public DbSet<ApartmentType> ApartmentTypes { get; init; } = null!;
     public DbSet<Invitation> Invitations { get; init; } = null!;
+    public DbSet<VisitorBooking> VisitorBookings { get; init; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -43,6 +46,7 @@ public class ErosDbContext(DbContextOptions<ErosDbContext> options) : IdentityUs
         modelBuilder.ApplyConfiguration(new ApartmentEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new ApartmentTypeEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new InvitationEntityTypeConfiguration());
+        modelBuilder.ApplyConfiguration(new VisitorBookingEntityTypeConfiguration());
 
         modelBuilder.Entity<Permission>().HasData(
             new Permission(Guid.Parse("8cfdbbb4-cb87-4d78-9806-c20a63b87530"), PermissionConstants.CreateEstate),
