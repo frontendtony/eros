@@ -1,3 +1,5 @@
+using Eros.Domain.Enums;
+
 namespace Eros.Domain.Aggregates.VisitorBookings;
 
 public class VisitorBooking
@@ -8,11 +10,11 @@ public class VisitorBooking
     public required Guid CreatedBy { get; init; }
     public required string Name { get; init; }
     public string? PhoneNumber { get; init; }
-    public required string Gender { get; init; }
+    public required Gender Gender { get; init; }
     public string Purpose { get; init; } = string.Empty;
     public VisitorBookingStatus Status { get; private set; } = VisitorBookingStatus.Pending;
     public bool IsExpired => DateTime.Now > ExpiresAt;
-    public bool IsDeleted { get; private set; }
+    public bool IsDeleted { get; private set; } = false;
     public DateTime CreatedAt { get; init; } = DateTime.Now;
     public required DateTime ExpiresAt { get; init; } = DateTime.Now.Add(TimeSpan.FromHours(1));
     public DateTime? UpdatedAt { get; private set; }
@@ -26,6 +28,23 @@ public class VisitorBooking
     public void Reject(Guid admittedBy)
     {
         UpdateStatus(VisitorBookingStatus.Rejected, admittedBy);
+    }
+
+    public void Delete(Guid deletedBy)
+    {
+        if (IsDeleted)
+        {
+            throw new InvalidOperationException("Visitor booking has already been deleted");
+        }
+
+        if (Status is VisitorBookingStatus.Admitted or VisitorBookingStatus.Rejected)
+        {
+            throw new InvalidOperationException("You cannot delete an admitted or rejected visitor booking");
+        }
+
+        IsDeleted = true;
+        UpdatedBy = deletedBy;
+        UpdatedAt = DateTime.Now;
     }
 
     private void UpdateStatus(VisitorBookingStatus status, Guid updatedBy)
