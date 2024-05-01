@@ -11,10 +11,11 @@ public class VisitorBooking
     public required string Name { get; init; }
     public string? PhoneNumber { get; init; }
     public required Gender Gender { get; init; }
-    public string Purpose { get; init; } = string.Empty;
+    public string? Purpose { get; init; }
     public VisitorBookingStatus Status { get; private set; } = VisitorBookingStatus.Pending;
     public bool IsExpired => DateTime.Now > ExpiresAt;
-    public bool IsDeleted { get; private set; } = false;
+    public bool IsDeleted { get; private set; }
+    public string? RejectionReason { get; private set; }
     public DateTime CreatedAt { get; init; } = DateTime.Now;
     public required DateTime ExpiresAt { get; init; } = DateTime.Now.Add(TimeSpan.FromHours(1));
     public DateTime? UpdatedAt { get; private set; }
@@ -25,9 +26,10 @@ public class VisitorBooking
         UpdateStatus(VisitorBookingStatus.Admitted, admittedBy);
     }
 
-    public void Reject(Guid admittedBy)
+    public void Reject(Guid rejectedBy, string rejectionReason)
     {
-        UpdateStatus(VisitorBookingStatus.Rejected, admittedBy);
+        RejectionReason = rejectionReason;
+        UpdateStatus(VisitorBookingStatus.Rejected, rejectedBy);
     }
 
     public void Delete(Guid deletedBy)

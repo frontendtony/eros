@@ -31,6 +31,9 @@ public class VisitorBookingEntityTypeConfiguration : IEntityTypeConfiguration<Vi
         builder.Property(vb => vb.Purpose)
             .HasMaxLength(200);
 
+        builder.Property(vb => vb.RejectionReason)
+            .HasMaxLength(200);
+
         builder.Property(vb => vb.Status)
             .IsRequired();
 

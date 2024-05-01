@@ -67,7 +67,10 @@ public class ErosDbContext(DbContextOptions<ErosDbContext> options) : IdentityUs
             new Permission(Guid.Parse("1a4b7beb-488b-4666-86d4-991895e0872b"), PermissionConstants.UpdateRole),
             new Permission(Guid.Parse("4c6e1ac5-b00e-41f5-89fa-c801578a9818"), PermissionConstants.DeleteRole),
             new Permission(Guid.Parse("ed64a073-1821-407c-add6-2e88f5d045e1"), PermissionConstants.ViewRole),
-            new Permission(Guid.Parse("e0a2cb5c-28e2-4ee7-8fb9-a00a3e761e5e"), PermissionConstants.ListRole)
+            new Permission(Guid.Parse("e0a2cb5c-28e2-4ee7-8fb9-a00a3e761e5e"), PermissionConstants.ListRole),
+            new Permission(Guid.Parse("ff644b10-f762-403b-b4a9-a511fa0b6e08"), PermissionConstants.CreateVisitorBooking),
+            new Permission(Guid.Parse("c08453b3-f11d-4fe3-ad43-b50b6cb47ec1"), PermissionConstants.AdmitVisitorBooking),
+            new Permission(Guid.Parse("72571cf2-435b-440a-a5c3-d9fb84c550ba"), PermissionConstants.RejectVisitorBooking)
         );
     }
 }
