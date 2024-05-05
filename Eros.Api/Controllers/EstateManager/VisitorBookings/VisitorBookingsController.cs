@@ -1,5 +1,6 @@
 using Eros.Api.Attributes;
 using Eros.Api.Dto.VisitorBookings;
+using Eros.Api.Models;
 using Eros.Application.Exceptions;
 using Eros.Application.Features.VisitorBookings.Commands;
 using Eros.Common.Constants;
@@ -15,7 +16,8 @@ namespace Eros.Api.Controllers.EstateManager.VisitorBookings;
 public class VisitorBookingsController : EstateManagerControllerBase
 {
     [HttpPost]
-    public async Task<IActionResult> CreateVisitorBookingAsync(CreateVisitorBookingDto request)
+    public async Task<ActionResult<SingleResponseModel<CreateVisitorBookingCommandDto>>> CreateVisitorBookingAsync(
+        CreateVisitorBookingDto request)
     {
         if (EstateId is null) throw new BadRequestException("EstateId is required");
 
@@ -24,8 +26,11 @@ public class VisitorBookingsController : EstateManagerControllerBase
         command.EstateId = EstateId.Value;
         command.CreatedBy = UserId;
 
-        await Mediator.Send(command);
+        var visitorBooking = await Mediator.Send(command);
 
-        return Ok();
+        return new SingleResponseModel<CreateVisitorBookingCommandDto>
+        {
+            Data = visitorBooking
+        };
     }
 }

@@ -16,8 +16,8 @@ public class VisitorBooking
     public bool IsExpired => DateTime.Now > ExpiresAt;
     public bool IsDeleted { get; private set; }
     public string? RejectionReason { get; private set; }
-    public DateTime CreatedAt { get; init; } = DateTime.Now;
-    public required DateTime ExpiresAt { get; init; } = DateTime.Now.Add(TimeSpan.FromHours(1));
+    public DateTime CreatedAt { get; init; } = DateTime.UtcNow;
+    public DateTime ExpiresAt { get; init; } = DateTime.UtcNow.Add(TimeSpan.FromHours(1));
     public DateTime? UpdatedAt { get; private set; }
     public Guid? UpdatedBy { get; private set; }
 
@@ -34,40 +34,27 @@ public class VisitorBooking
 
     public void Delete(Guid deletedBy)
     {
-        if (IsDeleted)
-        {
-            throw new InvalidOperationException("Visitor booking has already been deleted");
-        }
+        if (IsDeleted) throw new InvalidOperationException("Visitor booking has already been deleted");
 
         if (Status is VisitorBookingStatus.Admitted or VisitorBookingStatus.Rejected)
-        {
             throw new InvalidOperationException("You cannot delete an admitted or rejected visitor booking");
-        }
 
         IsDeleted = true;
         UpdatedBy = deletedBy;
-        UpdatedAt = DateTime.Now;
+        UpdatedAt = DateTime.UtcNow;
     }
 
     private void UpdateStatus(VisitorBookingStatus status, Guid updatedBy)
     {
         if (Status is VisitorBookingStatus.Admitted or VisitorBookingStatus.Rejected)
-        {
             throw new InvalidOperationException("Visitor has already been admitted or rejected");
-        }
 
-        if (IsExpired)
-        {
-            throw new InvalidOperationException("Visitor booking has expired");
-        }
+        if (IsExpired) throw new InvalidOperationException("Visitor booking has expired");
 
-        if (IsDeleted)
-        {
-            throw new InvalidOperationException("Visitor booking has been deleted");
-        }
+        if (IsDeleted) throw new InvalidOperationException("Visitor booking has been deleted");
 
         Status = status;
         UpdatedBy = updatedBy;
-        UpdatedAt = DateTime.Now;
+        UpdatedAt = DateTime.UtcNow;
     }
 }
