@@ -18,7 +18,18 @@ public class ApiControllerBase : ControllerBase
 
     protected Guid UserId => GetUserId();
     protected string UserEmail => GetUserEmail();
+    protected Guid? EstateId => GetEstateId();
+
     protected bool IsAdmin => IsAdminUser();
+
+    private Guid? GetEstateId()
+    {
+        if (HttpContextAccessor?.HttpContext?.User is null) throw new InvalidDataException("HttpContext is null.");
+
+        var estateId = HttpContextAccessor.HttpContext.Request.Headers["EstateId"];
+
+        return Guid.TryParse(estateId.ToString(), out var result) ? result : null;
+    }
 
     private Guid GetUserId()
     {
