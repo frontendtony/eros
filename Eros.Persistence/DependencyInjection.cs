@@ -50,6 +50,7 @@ public static class DependencyInjection
         services.AddScoped<IInvitationReadRepository, InvitationReadRepository>();
         services.AddScoped<IInvitationWriteRepository, InvitationWriteRepository>();
         services.AddScoped<IVisitorBookingWriteRepository, VisitorBookingWriteRepository>();
+        services.AddScoped<IVisitorBookingReadRepository, VisitorBookingReadRepository>();
 
         return services;
     }
