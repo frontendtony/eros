@@ -1,6 +1,6 @@
 using Eros.Api.Attributes;
+using Eros.Api.Dto.ApiResponseModels;
 using Eros.Api.Dto.VisitorBookings;
-using Eros.Api.Models;
 using Eros.Application.Exceptions;
 using Eros.Application.Features.VisitorBookings.Commands;
 using Eros.Application.Features.VisitorBookings.Queries;
@@ -44,5 +44,24 @@ public class VisitorBookingsController : EstateManagerControllerBase
         {
             Data = visitorBooking
         };
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<PaginatedResponseModel<VisitorBookingDto>>> GetVisitorBookingsAsync(
+        [FromQuery] PaginationQueryModel queryParams
+    )
+    {
+        var estateId = EstateId ?? throw new BadRequestException("EstateId is required");
+
+        var query = new GetUserVisitorBookingsQuery
+        {
+            UserId = UserId,
+            EstateId = estateId,
+            Page = queryParams.PageNumber,
+            PageSize = queryParams.PageSize
+        };
+        var visitorBookings = await Mediator.Send(query);
+
+        return Ok(visitorBookings);
     }
 }

@@ -1,4 +1,4 @@
-namespace Eros.Api.Models;
+namespace Eros.Api.Dto.ApiResponseModels;
 
 public class PaginatedResponseModel<T> : BaseResponseModel
 {
