@@ -33,6 +33,7 @@ public class UsersController : EstateManagerControllerBase
     }
 
     [HttpGet("{id:guid}/visitor-bookings")]
+    [RequirePermission(PermissionConstants.ListVisitorBooking)]
     public async Task<ActionResult<PaginatedResponseModel<VisitorBookingDto>>> GetUserVisitorBookings(
         Guid id,
         [FromQuery] PaginationQueryModel queryParams

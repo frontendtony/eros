@@ -28,4 +28,5 @@ public static class PermissionConstants
     public const string CreateVisitorBooking = "VisitorBooking.Create";
     public const string AdmitVisitorBooking = "VisitorBooking.Admit";
     public const string RejectVisitorBooking = "VisitorBooking.Reject";
+    public const string ListVisitorBooking = "VisitorBooking.List";
 }
