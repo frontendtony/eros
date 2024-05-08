@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.8" />
+    <ProjectReference Include="..\Eros.Api.Dto\Eros.Api.Dto.csproj"/>
   </ItemGroup>
 
 </Project>

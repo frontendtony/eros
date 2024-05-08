@@ -8,7 +8,6 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Eros.Common\Eros.Common.csproj"/>
-        <ProjectReference Include="..\Eros.Domain\Eros.Domain.csproj"/>
     </ItemGroup>
 
 </Project>

@@ -1,9 +1,11 @@
+using Eros.Api.Attributes;
 using Eros.Api.Dto.ApiResponseModels;
 using Eros.Api.Dto.VisitorBookings;
 using Eros.Application.Exceptions;
 using Eros.Application.Features.Users.Models;
 using Eros.Application.Features.Users.Queries;
 using Eros.Application.Features.VisitorBookings.Queries;
+using Eros.Common.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
