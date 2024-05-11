@@ -1,5 +1,5 @@
 using Eros.Api.Contracts.Buildings;
-using Eros.Api.Models;
+using Eros.Api.Dto.ApiResponseModels;
 using Eros.Application.Features.Estates.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -16,7 +16,8 @@ public class EstateBuildingsController(ISender mediator) : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<SingleResponseModel<BuildingResponse>>> CreateEstateBuilding(Guid estateId, [FromBody] CreateBuildingRequest request)
+    public async Task<ActionResult<SingleResponseModel<BuildingResponse>>> CreateEstateBuilding(Guid estateId,
+        [FromBody] CreateBuildingRequest request)
     {
         var response = await mediator.Send(new CreateEstateBuildingCommand(
             request.Name,
@@ -27,26 +28,28 @@ public class EstateBuildingsController(ISender mediator) : ControllerBase
         ));
 
         // return SingleResponseModel with BuildingResponse and 201 Created status code
-        return CreatedAtRoute("CreateEstateBuilding", new { estateId, buildingId = response.Id }, new SingleResponseModel<BuildingResponse>
-        {
-            Data = new BuildingResponse(
-                response.Id,
-                response.Name,
-                response.Description,
-                response.Address,
-                response.BuildingType,
-                response.EstateId,
-                response.CreatedAt,
-                response.UpdatedAt
-            )
-        });
+        return CreatedAtRoute("CreateEstateBuilding", new { estateId, buildingId = response.Id },
+            new SingleResponseModel<BuildingResponse>
+            {
+                Data = new BuildingResponse(
+                    response.Id,
+                    response.Name,
+                    response.Description,
+                    response.Address,
+                    response.BuildingType,
+                    response.EstateId,
+                    response.CreatedAt,
+                    response.UpdatedAt
+                )
+            });
     }
 
     [HttpPut("{buildingId:guid}", Name = "UpdateEstateBuilding")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<SingleResponseModel<BuildingResponse>>> UpdateEstateBuilding(Guid estateId, Guid buildingId, [FromBody] UpdateBuildingRequest request)
+    public async Task<ActionResult<SingleResponseModel<BuildingResponse>>> UpdateEstateBuilding(Guid estateId,
+        Guid buildingId, [FromBody] UpdateBuildingRequest request)
     {
         var response = await mediator.Send(new UpdateEstateBuildingCommand(
             buildingId,

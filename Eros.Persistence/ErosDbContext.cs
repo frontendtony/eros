@@ -5,6 +5,7 @@ using Eros.Domain.Aggregates.Estates;
 using Eros.Domain.Aggregates.Invitations;
 using Eros.Domain.Aggregates.Roles;
 using Eros.Domain.Aggregates.Users;
+using Eros.Domain.Aggregates.VisitorBookings;
 using Eros.Persistence.Data.Apartments.Configurations;
 using Eros.Persistence.Data.Buildings.Configurations;
 using Eros.Persistence.Data.Estates.Configurations;
@@ -12,6 +13,7 @@ using Eros.Persistence.Data.Invitations;
 using Eros.Persistence.Data.Permissions.Configurations;
 using Eros.Persistence.Data.Roles.Configurations;
 using Eros.Persistence.Data.Users.Configurations;
+using Eros.Persistence.Data.VisitorBookings.Configurations;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,6 +31,7 @@ public class ErosDbContext(DbContextOptions<ErosDbContext> options) : IdentityUs
     public DbSet<Apartment> Apartments { get; init; } = null!;
     public DbSet<ApartmentType> ApartmentTypes { get; init; } = null!;
     public DbSet<Invitation> Invitations { get; init; } = null!;
+    public DbSet<VisitorBooking> VisitorBookings { get; init; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -43,6 +46,7 @@ public class ErosDbContext(DbContextOptions<ErosDbContext> options) : IdentityUs
         modelBuilder.ApplyConfiguration(new ApartmentEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new ApartmentTypeEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new InvitationEntityTypeConfiguration());
+        modelBuilder.ApplyConfiguration(new VisitorBookingEntityTypeConfiguration());
 
         modelBuilder.Entity<Permission>().HasData(
             new Permission(Guid.Parse("8cfdbbb4-cb87-4d78-9806-c20a63b87530"), PermissionConstants.CreateEstate),
@@ -63,7 +67,11 @@ public class ErosDbContext(DbContextOptions<ErosDbContext> options) : IdentityUs
             new Permission(Guid.Parse("1a4b7beb-488b-4666-86d4-991895e0872b"), PermissionConstants.UpdateRole),
             new Permission(Guid.Parse("4c6e1ac5-b00e-41f5-89fa-c801578a9818"), PermissionConstants.DeleteRole),
             new Permission(Guid.Parse("ed64a073-1821-407c-add6-2e88f5d045e1"), PermissionConstants.ViewRole),
-            new Permission(Guid.Parse("e0a2cb5c-28e2-4ee7-8fb9-a00a3e761e5e"), PermissionConstants.ListRole)
+            new Permission(Guid.Parse("e0a2cb5c-28e2-4ee7-8fb9-a00a3e761e5e"), PermissionConstants.ListRole),
+            new Permission(Guid.Parse("ff644b10-f762-403b-b4a9-a511fa0b6e08"), PermissionConstants.CreateVisitorBooking),
+            new Permission(Guid.Parse("c08453b3-f11d-4fe3-ad43-b50b6cb47ec1"), PermissionConstants.AdmitVisitorBooking),
+            new Permission(Guid.Parse("72571cf2-435b-440a-a5c3-d9fb84c550ba"), PermissionConstants.RejectVisitorBooking),
+            new Permission(Guid.Parse("c7837520-c674-4dfa-bc4b-9d03e3753125"), PermissionConstants.ListVisitorBooking)
         );
     }
 }

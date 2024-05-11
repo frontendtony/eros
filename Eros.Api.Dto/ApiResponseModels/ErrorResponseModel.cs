@@ -1,6 +1,4 @@
-using FluentValidation.Results;
-
-namespace Eros.Api.Models;
+namespace Eros.Api.Dto.ApiResponseModels;
 
 public class ErrorResponseModel : BaseResponseModel
 {

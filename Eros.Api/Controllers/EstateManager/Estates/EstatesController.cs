@@ -1,7 +1,7 @@
 using Eros.Api.Attributes;
 using Eros.Api.Contracts.Estates;
+using Eros.Api.Dto.ApiResponseModels;
 using Eros.Api.Dto.Estates;
-using Eros.Api.Models;
 using Eros.Application.Features.Estates.Commands;
 using Eros.Application.Features.Estates.Queries;
 using Eros.Domain.Aggregates.Estates;
@@ -24,7 +24,7 @@ public class EstatesController : EstateManagerControllerBase
         var response = await Mediator.Send(new GetEstateQuery(id));
 
         return Ok(
-            new SingleResponseModel<EstateResponse>()
+            new SingleResponseModel<EstateResponse>
             {
                 Data = new EstateResponse(
                     response.Id,
@@ -55,9 +55,9 @@ public class EstatesController : EstateManagerControllerBase
 
         return Created(
             Url.Link("GetEstate", new { id = estate.Id }),
-            new SingleResponseModel<CreateEstateCommandDto>()
+            new SingleResponseModel<CreateEstateCommandDto>
             {
-                Data = estate,
+                Data = estate
             }
         );
     }
@@ -71,7 +71,7 @@ public class EstatesController : EstateManagerControllerBase
         var response = await Mediator.Send(new UpdateEstateCommand(id, estate.Name, estate.Address, estate.LatLng));
 
         return Ok(
-            new SingleResponseModel<EstateResponse>()
+            new SingleResponseModel<EstateResponse>
             {
                 Data = new EstateResponse(
                     response.Id,

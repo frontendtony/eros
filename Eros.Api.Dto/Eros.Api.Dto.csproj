@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Eros.Domain\Eros.Domain.csproj" />
+        <ProjectReference Include="..\Eros.Common\Eros.Common.csproj"/>
     </ItemGroup>
 
 </Project>
