@@ -78,18 +78,20 @@ public class JwtService(
         };
 
         if (estateUsers.Length == 0) return claims;
-        
+
         // add a claim for each estate the user is a member of with the permissions they have for each estate
-        var estateRoles = new Dictionary<string, object>();
+        var estateRoles = new Dictionary<string, Dictionary<string, string[]>>();
 
         foreach (var membership in estateUsers)
         {
-            var estateId = membership.EstateId.ToString(); 
+            var estateId = membership.EstateId.ToString();
+            var roleId = membership.Role.Id.ToString();
+            var permissions = membership.Role.Permissions.Select(p => p.Name).ToArray();
 
-            estateRoles[estateId] = new
+            estateRoles[estateId] = new Dictionary<string, string[]>()
             {
-                RoleId = membership.Role.Id.ToString(), 
-                Permissions = membership.Role.Permissions.Select(p => p.Name).ToArray()
+                { "RoleId", new[] { roleId } },
+                { "Permissions", permissions }
             };
         }
 
@@ -98,7 +100,7 @@ public class JwtService(
 
         return claims;
     }
-        
+
 
     private SigningCredentials CreateSigningCredentials()
     {
