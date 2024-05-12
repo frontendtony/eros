@@ -1,31 +1,32 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="FluentValidation" Version="11.5.1" />
-    <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
-    <PackageReference Include="Mapster" Version="7.4.1-pre01" />
-    <PackageReference Include="MediatR" Version="12.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="FluentValidation" Version="11.5.1"/>
+        <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0"/>
+        <PackageReference Include="Mapster" Version="7.4.1-pre01"/>
+        <PackageReference Include="MediatR" Version="12.2.0"/>
+        <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Eros.Api.Dto\Eros.Api.Dto.csproj" />
-    <ProjectReference Include="..\Eros.Auth\Eros.Auth.csproj" />
-    <ProjectReference Include="..\Eros.Domain\Eros.Domain.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Eros.Api.Dto\Eros.Api.Dto.csproj"/>
+        <ProjectReference Include="..\Eros.Auth\Eros.Auth.csproj"/>
+        <ProjectReference Include="..\Eros.Domain\Eros.Domain.csproj"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\Users\CommandHandlers\" />
-    <Folder Include="Features\Users\Commands\" />
-    <Folder Include="Features\Users\Validators\" />
-    <Folder Include="Infrastructure" />
-  </ItemGroup>
+    <ItemGroup>
+        <Folder Include="Constants\"/>
+        <Folder Include="Features\Users\CommandHandlers\"/>
+        <Folder Include="Features\Users\Commands\"/>
+        <Folder Include="Features\Users\Validators\"/>
+        <Folder Include="Infrastructure"/>
+    </ItemGroup>
 
 </Project>

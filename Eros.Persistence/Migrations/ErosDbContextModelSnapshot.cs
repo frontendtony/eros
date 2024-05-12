@@ -401,6 +401,26 @@ namespace Eros.Persistence.Migrations
                         {
                             Id = new Guid("e0a2cb5c-28e2-4ee7-8fb9-a00a3e761e5e"),
                             Name = "Role.List"
+                        },
+                        new
+                        {
+                            Id = new Guid("ff644b10-f762-403b-b4a9-a511fa0b6e08"),
+                            Name = "VisitorBooking.Create"
+                        },
+                        new
+                        {
+                            Id = new Guid("c08453b3-f11d-4fe3-ad43-b50b6cb47ec1"),
+                            Name = "VisitorBooking.Admit"
+                        },
+                        new
+                        {
+                            Id = new Guid("72571cf2-435b-440a-a5c3-d9fb84c550ba"),
+                            Name = "VisitorBooking.Reject"
+                        },
+                        new
+                        {
+                            Id = new Guid("c7837520-c674-4dfa-bc4b-9d03e3753125"),
+                            Name = "VisitorBooking.List"
                         });
                 });
 
@@ -542,6 +562,64 @@ namespace Eros.Persistence.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("Users", (string)null);
+                });
+
+            modelBuilder.Entity("Eros.Domain.Aggregates.VisitorBookings.VisitorBooking", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Code")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("EstateId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Gender")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<string>("Purpose")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<string>("RejectionReason")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("VisitorBookings", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>

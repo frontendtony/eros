@@ -1,5 +1,5 @@
+using Eros.Api.Dto.ApiResponseModels;
 using Eros.Api.Dto.Invitations;
-using Eros.Api.Models;
 using Eros.Application.Features.Invitations.Commands;
 using Eros.Application.Features.Invitations.Queries;
 using Eros.Domain.Aggregates.Invitations;

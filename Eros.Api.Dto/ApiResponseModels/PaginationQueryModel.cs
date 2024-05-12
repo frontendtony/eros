@@ -1,6 +1,6 @@
-using Eros.Application.Constants;
+using Eros.Common.Constants;
 
-namespace Eros.Api.Models;
+namespace Eros.Api.Dto.ApiResponseModels;
 
 public record PaginationQueryModel
 {

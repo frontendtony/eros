@@ -1,8 +1,8 @@
 using System.Net;
+using Eros.Api.Dto.ApiResponseModels;
+using Eros.Application.Exceptions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using Eros.Api.Models;
-using Eros.Application.Exceptions;
 
 namespace Eros.Api.Middlewares;
 
@@ -19,7 +19,7 @@ public class ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddlewa
             var response = context.Response;
             response.ContentType = "application/json";
 
-            var responseModel = new ErrorResponseModel()
+            var responseModel = new ErrorResponseModel
             {
                 Message = error?.Message ?? string.Empty
             };
@@ -27,7 +27,8 @@ public class ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddlewa
             if (error is CustomValidationException validationException)
             {
                 responseModel.Message = validationException.Errors.First().ErrorMessage;
-                responseModel.ValidationErrors = validationException.Errors.Select(e => new ValidationErrorModel(e.PropertyName, e.ErrorMessage));
+                responseModel.ValidationErrors =
+                    validationException.Errors.Select(e => new ValidationErrorModel(e.PropertyName, e.ErrorMessage));
             }
 
             logger.LogError(error, error?.Message);

@@ -1,4 +1,4 @@
-namespace Eros.Application.Constants;
+namespace Eros.Common.Constants;
 
 public static class GlobalConstants
 {

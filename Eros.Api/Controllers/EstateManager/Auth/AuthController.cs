@@ -1,5 +1,5 @@
+using Eros.Api.Dto.ApiResponseModels;
 using Eros.Api.Dto.Auth;
-using Eros.Api.Models;
 using Eros.Application.Exceptions;
 using Eros.Application.Features.Auth.Commands;
 using Mapster;
@@ -18,13 +18,10 @@ public class AuthController : ApiControllerBase
         var loginCommand = dto.Adapt<LoginCommand>();
         var loginCommandResponse = await Mediator.Send(loginCommand);
 
-        if (loginCommandResponse.User.IsAdmin)
-        {
-            throw new ForbiddenException("User is an admin");
-        }
+        if (loginCommandResponse.User.IsAdmin) throw new ForbiddenException("User is an admin");
 
         return Ok(
-            new SingleResponseModel<LoginCommandDto>()
+            new SingleResponseModel<LoginCommandDto>
             {
                 Data = loginCommandResponse,
                 Message = "Token created successfully"
@@ -42,7 +39,7 @@ public class AuthController : ApiControllerBase
         var signupCommandResponse = await Mediator.Send(signupCommand);
 
         return Ok(
-            new SingleResponseModel<SignupCommandDto>()
+            new SingleResponseModel<SignupCommandDto>
             {
                 Data = signupCommandResponse,
                 Message = "User created successfully"

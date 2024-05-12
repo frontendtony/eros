@@ -2,9 +2,9 @@ namespace Eros.Api.Dto.Invitations;
 
 public record AcceptInvitationCommandDto
 {
-    public string Code { get; init; }
-    public string Status { get; init; }
-    public string UserId { get; init; }
-    public string EstateId { get; init; }
-    public string RoleId { get; init; }
+    public required string Code { get; init; }
+    public required string Status { get; init; }
+    public required string UserId { get; init; }
+    public required string EstateId { get; init; }
+    public required string RoleId { get; init; }
 }

@@ -1,6 +1,6 @@
 using System.Security.Claims;
-using Eros.Application.Constants;
 using Eros.Application.Exceptions;
+using Eros.Common.Constants;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,9 +13,7 @@ public class ErosBaseHandler(IHttpContextAccessor httpContextAccessor) : Control
         var id = httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
         if (string.IsNullOrWhiteSpace(id) || !Guid.TryParse(id, out var userId))
-        {
             throw new UnauthorizedException("Unauthorized");
-        }
 
         return userId;
     }
@@ -30,9 +28,7 @@ public class ErosBaseHandler(IHttpContextAccessor httpContextAccessor) : Control
         var role = HttpContext.User.FindFirst(CustomClaimTypes.IsAdmin)?.Value;
 
         if (string.IsNullOrWhiteSpace(role) || !bool.TryParse(role, out var result))
-        {
             throw new UnauthorizedException("Unauthorized");
-        }
 
         return result;
     }
