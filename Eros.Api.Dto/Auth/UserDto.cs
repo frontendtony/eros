@@ -6,5 +6,6 @@ public sealed record UserDto
     string Email,
     string FirstName,
     string LastName,
+    bool IsEmailVerified,
     bool IsAdmin
 );
