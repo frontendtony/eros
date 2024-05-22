@@ -172,7 +172,7 @@ public class SendInvitationsCommandHandler(
                     $"""
                      {senderName} has invited to join {estateName}.
 
-                     Click <em><a href='{baseUrl}/accept-invitation?code={invitation.Code}'>here</a></em> to accept the invitation.
+                     Click <em><a href='{baseUrl}/invitation?code={invitation.Code}'>here</a></em> to accept the invitation.
                      """,
                     $"Invitation to join {estateName}"
                 );

@@ -5,34 +5,36 @@ namespace Eros.Domain.Aggregates.Users;
 
 public class User : IdentityUser<Guid>
 {
-    private User(string email, string firstName, string lastName, bool isAdmin = false)
-    {
-        Email = email;
-        UserName = email;
-        FirstName = firstName;
-        LastName = lastName;
-        IsAdmin = isAdmin;
-        CreatedAt = DateTime.UtcNow;
-        UpdatedAt = DateTime.UtcNow;
-    }
-    public sealed override string? Email { get; set; }
-    public sealed override string? UserName { get; set; }
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
-    public string? Avatar { get; set; }
-    public bool IsAdmin { get; set; }
-    public List<Estate> Estates { get; } = [];
-    public List<EstateUser> EstateUsers { get; } = [];
-    public DateTime CreatedAt { get; set; }
-    public DateTime? UpdatedAt { get; set; }
+  private User(string email, string firstName, string lastName, bool isAdmin = false)
+  {
+    Email = email;
+    UserName = email;
+    FirstName = firstName;
+    LastName = lastName;
+    IsAdmin = isAdmin;
+    CreatedAt = DateTime.UtcNow;
+    UpdatedAt = DateTime.UtcNow;
+  }
 
-    public static User Create(string email, string firstName, string lastName)
-    {
-        return new User(email, firstName, lastName);
-    }
+  public sealed override string? Email { get; set; }
+  public sealed override string? UserName { get; set; }
+  public string FirstName { get; set; }
+  public string LastName { get; set; }
+  public string Name => $"{FirstName} {LastName}";
+  public string? Avatar { get; set; }
+  public bool IsAdmin { get; set; }
+  public List<Estate> Estates { get; } = [];
+  public List<EstateUser> EstateUsers { get; } = [];
+  public DateTime CreatedAt { get; set; }
+  public DateTime? UpdatedAt { get; set; }
 
-    public static User CreateAdmin(string email, string firstName, string lastName, string? avatar)
-    {
-        return new User(email, firstName, lastName, true);
-    }
+  public static User Create(string email, string firstName, string lastName)
+  {
+    return new User(email, firstName, lastName);
+  }
+
+  public static User CreateAdmin(string email, string firstName, string lastName, string? avatar)
+  {
+    return new User(email, firstName, lastName, true);
+  }
 }
