@@ -9,25 +9,28 @@ using MediatR;
 namespace Eros.Application.Features.Auth.CommandHandlers;
 
 public class LoginCommandHandler(
-    JwtService jwtService,
-    IUserReadRepository userReadRepository) : IRequestHandler<LoginCommand, LoginCommandDto>
+  JwtService jwtService,
+  IUserWriteRepository userWriteRepository,
+  IUserReadRepository userReadRepository) : IRequestHandler<LoginCommand, LoginCommandDto>
 {
-    public async Task<LoginCommandDto> Handle(LoginCommand request, CancellationToken cancellationToken)
-    {
-        var user = await userReadRepository.GetByEmailAsync(request.Email)
-            ?? throw new BadRequestException("Incorrect email address");
+  public async Task<LoginCommandDto> Handle(LoginCommand request, CancellationToken cancellationToken)
+  {
+    var user = await userReadRepository.GetByEmailAsync(request.Email)
+               ?? throw new BadRequestException("Incorrect email address");
 
-        var isPasswordValid = await userReadRepository.CheckPassword(user, request.Password);
+    var isPasswordValid = await userReadRepository.CheckPassword(user, request.Password);
 
-        if (!isPasswordValid)
-        {
-            throw new BadRequestException("Password is invalid");
-        }
+    if (!isPasswordValid) throw new BadRequestException("Password is invalid");
 
-        var jwt = await jwtService.CreateToken(user);
+    var jwt = await jwtService.CreateToken(user);
 
-        var userDto = user.Adapt<UserDto>();
+    user.RefreshToken = jwt.RefreshToken;
 
-        return new LoginCommandDto(jwt.Token, jwt.ExpiresAt, userDto);
-    }
+    await userWriteRepository.UpdateAsync(user, cancellationToken);
+    await userWriteRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
+
+    var userDto = user.Adapt<UserDto>();
+
+    return new LoginCommandDto(jwt.Token, jwt.ExpiresAt, userDto, jwt.RefreshToken);
+  }
 }

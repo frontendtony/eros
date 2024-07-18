@@ -1,4 +1,5 @@
 using Eros.Common.Constants;
+using Eros.Domain;
 using Eros.Domain.Aggregates.Apartments;
 using Eros.Domain.Aggregates.Buildings;
 using Eros.Domain.Aggregates.Estates;
@@ -19,7 +20,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Eros.Persistence;
 
-public class ErosDbContext(DbContextOptions<ErosDbContext> options) : IdentityUserContext<User, Guid>(options)
+public class ErosDbContext(DbContextOptions<ErosDbContext> options) : IdentityUserContext<User, Guid>(options), IUnitOfWork
 {
     public DbSet<Role> Roles { get; init; } = null!;
     public DbSet<Permission> Permissions { get; init; } = null!;

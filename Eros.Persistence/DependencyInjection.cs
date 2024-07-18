@@ -1,3 +1,4 @@
+using Eros.Domain;
 using Eros.Domain.Aggregates.Apartments;
 using Eros.Domain.Aggregates.Buildings;
 using Eros.Domain.Aggregates.Estates;
@@ -51,6 +52,8 @@ public static class DependencyInjection
         services.AddScoped<IInvitationWriteRepository, InvitationWriteRepository>();
         services.AddScoped<IVisitorBookingWriteRepository, VisitorBookingWriteRepository>();
         services.AddScoped<IVisitorBookingReadRepository, VisitorBookingReadRepository>();
+
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         return services;
     }

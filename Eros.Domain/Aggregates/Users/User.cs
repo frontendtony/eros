@@ -23,6 +23,7 @@ public class User : IdentityUser<Guid>
   public string Name => $"{FirstName} {LastName}";
   public string? Avatar { get; set; }
   public bool IsAdmin { get; set; }
+  public string? RefreshToken { get; set; }
   public List<Estate> Estates { get; } = [];
   public List<EstateUser> EstateUsers { get; } = [];
   public DateTime CreatedAt { get; set; }
