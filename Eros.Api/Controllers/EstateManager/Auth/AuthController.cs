@@ -11,7 +11,7 @@ namespace Eros.Api.Controllers.EstateManager.Auth;
 public class AuthController : ApiControllerBase
 {
   [HttpPost("login")]
-  [ProducesResponseType(typeof(SingleResponseModel<string>), StatusCodes.Status200OK)]
+  [ProducesResponseType(typeof(SingleResponseModel<LoginCommandDto>), StatusCodes.Status200OK)]
   [ProducesResponseType(StatusCodes.Status400BadRequest)]
   public async Task<IActionResult> Login(LoginDto dto)
   {
@@ -30,7 +30,7 @@ public class AuthController : ApiControllerBase
   }
 
   [HttpPost("refresh-token")]
-  [ProducesResponseType(typeof(SingleResponseModel<string>), StatusCodes.Status200OK)]
+  [ProducesResponseType(typeof(SingleResponseModel<RefreshTokenResponseDto>), StatusCodes.Status200OK)]
   [ProducesResponseType(StatusCodes.Status400BadRequest)]
   public async Task<ActionResult<RefreshTokenResponseDto>> RefreshToken(RefreshTokenDto dto)
   {
