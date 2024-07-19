@@ -133,7 +133,7 @@ public class JwtService(
   {
     return
     [
-      new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+      new Claim("sub", user.Id.ToString()),
       new Claim(JwtRegisteredClaimNames.Exp,
         DateTime.UtcNow.AddMinutes(RefreshExpirationMinutes).ToString(CultureInfo.InvariantCulture))
     ];
@@ -149,5 +149,33 @@ public class JwtService(
     var signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
     return signingCredentials;
+  }
+
+  public JwtSecurityToken? ValidateRefreshToken(string token)
+  {
+    var tokenHandler = new JwtSecurityTokenHandler();
+    var key = Encoding.ASCII.GetBytes(configuration["Jwt:SecretKey"]!);
+    var validationParameters = new TokenValidationParameters
+    {
+      ValidateIssuerSigningKey = true,
+      IssuerSigningKey = new SymmetricSecurityKey(key),
+      ValidateIssuer = true,
+      ValidIssuer = configuration["Jwt:Issuer"],
+      ValidateAudience = true,
+      ValidAudience = configuration["Jwt:Audience"],
+      ValidateLifetime = true,
+      ClockSkew = TimeSpan.Zero
+    };
+
+    try
+    {
+      tokenHandler.ValidateToken(token, validationParameters, out _);
+
+      return tokenHandler.ReadToken(token) as JwtSecurityToken;
+    }
+    catch
+    {
+      return null;
+    }
   }
 }
