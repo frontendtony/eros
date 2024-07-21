@@ -1,9 +1,8 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using Eros.Api.Dto.Auth;
 using Eros.Application.Exceptions;
 using Eros.Application.Features.Auth.Commands;
 using Eros.Auth.Services;
+using Eros.Common.Utils;
 using Eros.Domain.Aggregates.Users;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -50,7 +49,7 @@ public class RefreshTokenCommandHandler(
       throw new UnauthorizedException("User not found");
     }
 
-    if (user.RefreshToken != request.RefreshToken)
+    if (user.RefreshToken is not null && !Crypto.Verify(request.RefreshToken, user.RefreshToken))
     {
       logger.LogError("Refresh token mismatch for user {UserId}", request.UserId);
       throw new BadRequestException("Invalid refresh token");
@@ -58,7 +57,9 @@ public class RefreshTokenCommandHandler(
 
     var jwt = await jwtService.CreateToken(user);
 
-    user.RefreshToken = jwt.RefreshToken;
+    var hashedRefreshToken = Crypto.Hash(jwt.RefreshToken);
+
+    user.RefreshToken = hashedRefreshToken;
 
     await userWriteRepository.UpdateAsync(user, cancellationToken);
     await userWriteRepository.UnitOfWork.SaveChangesAsync(cancellationToken);

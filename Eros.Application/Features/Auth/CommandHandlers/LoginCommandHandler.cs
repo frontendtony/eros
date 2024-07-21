@@ -2,6 +2,7 @@ using Eros.Api.Dto.Auth;
 using Eros.Application.Exceptions;
 using Eros.Application.Features.Auth.Commands;
 using Eros.Auth.Services;
+using Eros.Common.Utils;
 using Eros.Domain.Aggregates.Users;
 using Mapster;
 using MediatR;
@@ -24,7 +25,9 @@ public class LoginCommandHandler(
 
     var jwt = await jwtService.CreateToken(user);
 
-    user.RefreshToken = jwt.RefreshToken;
+    var hashedRefreshToken = Crypto.Hash(jwt.RefreshToken);
+
+    user.RefreshToken = hashedRefreshToken;
 
     await userWriteRepository.UpdateAsync(user, cancellationToken);
     await userWriteRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
